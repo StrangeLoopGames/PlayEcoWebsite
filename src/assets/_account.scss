@@ -1,0 +1,14 @@
+.profile-wrap {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+
+    img.avatar-img {
+        height: 140px;
+        width: 140px;
+        margin: 0;
+        padding: 0;
+        box-shadow: none;
+    }
+}

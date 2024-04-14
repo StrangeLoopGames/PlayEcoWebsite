@@ -1,0 +1,14 @@
+section#login {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-grow: 1;
+
+    .login-wrap {
+        min-width: 400px;
+
+        form {
+            width: 100%;
+        }
+    }
+}

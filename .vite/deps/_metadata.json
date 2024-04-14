@@ -1,0 +1,73 @@
+{
+  "hash": "39ca29bf",
+  "configHash": "9e8aca14",
+  "lockfileHash": "441be86c",
+  "browserHash": "5d4faf23",
+  "optimized": {
+    "react/jsx-dev-runtime": {
+      "src": "../../node_modules/react/jsx-dev-runtime.js",
+      "file": "react_jsx-dev-runtime.js",
+      "fileHash": "731cdde2",
+      "needsInterop": true
+    },
+    "react": {
+      "src": "../../node_modules/react/index.js",
+      "file": "react.js",
+      "fileHash": "ad1fdd1c",
+      "needsInterop": true
+    },
+    "react-dom/client": {
+      "src": "../../node_modules/react-dom/client.js",
+      "file": "react-dom_client.js",
+      "fileHash": "a09a3889",
+      "needsInterop": true
+    },
+    "@tanstack/react-query": {
+      "src": "../../node_modules/@tanstack/react-query/build/modern/index.js",
+      "file": "@tanstack_react-query.js",
+      "fileHash": "6255bf59",
+      "needsInterop": false
+    },
+    "@tanstack/react-query-devtools": {
+      "src": "../../node_modules/@tanstack/react-query-devtools/build/modern/index.js",
+      "file": "@tanstack_react-query-devtools.js",
+      "fileHash": "a52afb97",
+      "needsInterop": false
+    },
+    "@tanstack/react-router": {
+      "src": "../../node_modules/@tanstack/react-router/dist/esm/index.js",
+      "file": "@tanstack_react-router.js",
+      "fileHash": "9794c5dc",
+      "needsInterop": false
+    },
+    "@tanstack/router-devtools": {
+      "src": "../../node_modules/@tanstack/router-devtools/dist/esm/index.js",
+      "file": "@tanstack_router-devtools.js",
+      "fileHash": "e9456f1f",
+      "needsInterop": false
+    }
+  },
+  "chunks": {
+    "chunk-45MHIITR": {
+      "file": "chunk-45MHIITR.js"
+    },
+    "chunk-BX6F6CEY": {
+      "file": "chunk-BX6F6CEY.js"
+    },
+    "chunk-JOIKUS3V": {
+      "file": "chunk-JOIKUS3V.js"
+    },
+    "chunk-NNCLXYIK": {
+      "file": "chunk-NNCLXYIK.js"
+    },
+    "WIIHGP5G-UUZMV5A6": {
+      "file": "WIIHGP5G-UUZMV5A6.js"
+    },
+    "chunk-23WS2YNJ": {
+      "file": "chunk-23WS2YNJ.js"
+    },
+    "chunk-3SPBDNLE": {
+      "file": "chunk-3SPBDNLE.js"
+    }
+  }
+}
