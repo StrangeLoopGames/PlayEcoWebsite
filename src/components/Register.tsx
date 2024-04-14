@@ -1,6 +1,6 @@
 import { useNavigate } from '@tanstack/react-router';
 import React, { useState } from 'react';
-import { storeToken } from '@/utils/authentication';
+import { storeToken } from '../utils/authentication';
 type Register = {
     username: string;
     email: string;
@@ -20,7 +20,7 @@ function LoginForm() {
     });
     const [error, setError] = useState<string>('');
     const navigate = useNavigate();
-    function doRegistration(e): void {
+    function doRegistration(e: React.FormEvent): void  {
         e.preventDefault()
         const queryString: string = `username=${registerData.username}&email=${registerData.email}&password=${registerData.password}&passwordConfirm=${registerData.passwordConfirm}&ageConfirm=${registerData.ageConfirm}&newsletter=${registerData.newsletter}`
         const url = `https://cloud.strangeloopgames.com/api/Registration/RegisterUser?${queryString}`;

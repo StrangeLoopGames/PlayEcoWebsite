@@ -35,10 +35,10 @@ export function checkTokenExpiry(): boolean {
 	const session: sessionStore = JSON.parse(item);
 	return session.expiry > new Date().getTime();
 }
-export function isVerified(user): boolean {
-	if(!user || !user.verified) {
-		removeToken();
-		return false;
-	}
-	return user.verified;
-}
+// export function isVerified(user: { verified: boolean; }): boolean {
+// 	if(!user || !user.verified) {
+// 		removeToken();
+// 		return false;
+// 	}
+// 	return user.verified;
+// }

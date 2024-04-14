@@ -1,6 +1,6 @@
 import { useNavigate } from '@tanstack/react-router';
 import React, { useState } from 'react';
-import {storeToken} from '@/utils/authentication';
+import {storeToken} from '../utils/authentication';
 function LoginForm() {
     const [loginData, setLoginData] = useState({
         username: "",
@@ -8,7 +8,7 @@ function LoginForm() {
     });
     const [error, setError] = useState<string>('');
     const navigate = useNavigate();
-    function doSignIn(e): Promise<void> {
+    function doSignIn(e: React.FormEvent): void {
         e.preventDefault()
         const url = `https://cloud.strangeloopgames.com/Authentication/AuthenticateSLGUser?username=${loginData.username}&password=${loginData.password}`;
         fetch(url, {

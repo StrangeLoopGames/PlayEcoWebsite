@@ -1,16 +1,15 @@
 import { createLazyFileRoute } from '@tanstack/react-router';
-import UserCard from '@/components/account/UserCard';
-import InviteCard from '@/components/account/InviteCard';
-import SteamCard from '@/components/account/SteamCard';
-import TwitchCard from '@/components/account/TwitchCard';
-import GameCard from '@/components/account/GameCard';
-import TeacherCard from '@/components/account/TeacherCard';
-import TermsCard from '@/components/account/TermsCard';
-import ArtCard from '@/components/account/ArtCard';
+import UserCard from '../components/account/UserCard';
+import InviteCard from '../components/account/InviteCard';
+import SteamCard from '../components/account/SteamCard';
+import TwitchCard from '../components/account/TwitchCard';
+import GameCard from '../components/account/GameCard';
+import TeacherCard from '../components/account/TeacherCard';
+import TermsCard from '../components/account/TermsCard';
+import ArtCard from '../components/account/ArtCard';
 import { useQuery } from "@tanstack/react-query";
-import { AuthenticatedUser, removeToken } from "@/utils/authentication";
-import "@/assets/_account.scss";
-import { isVerified } from '../utils/authentication';
+import { AuthenticatedUser } from "../utils/authentication";
+import "../assets/_account.scss";
 
 export const Route = createLazyFileRoute('/account')({
   component: () => {
@@ -28,7 +27,7 @@ export const Route = createLazyFileRoute('/account')({
 })
 
 function Account() {
-  const userJWT: string = AuthenticatedUser();
+  const userJWT = AuthenticatedUser();
   const { data: user, error, isLoading } = useQuery({
     queryKey: ["user"],
     queryFn: () =>
@@ -56,12 +55,12 @@ function Account() {
   return (
     <>
       <UserCard user={user} />
-      <InviteCard user={user} />
-      <SteamCard user={user} />
+      <InviteCard />
+      <SteamCard />
       <TwitchCard user={user} />
-      <GameCard user={user} />
+      <GameCard/>
       <ArtCard />
-      <TeacherCard user={user} />
+      <TeacherCard />
       <TermsCard />
     </>
   )

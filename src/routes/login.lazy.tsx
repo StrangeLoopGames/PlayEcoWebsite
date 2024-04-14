@@ -1,6 +1,6 @@
 import { createLazyFileRoute } from '@tanstack/react-router'
-import Login from '@/components/Login';
-import { AuthenticatedUser } from "@/utils/authentication";
+import Login from '../components/Login';
+import { AuthenticatedUser } from "../utils/authentication";
 export const Route = createLazyFileRoute('/login')({
   component: () => {
     document.title = 'Eco - Login';
