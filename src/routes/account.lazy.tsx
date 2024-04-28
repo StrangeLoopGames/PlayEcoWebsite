@@ -1,19 +1,24 @@
-import { createLazyFileRoute } from '@tanstack/react-router';
+import { createFileRoute } from '@tanstack/react-router';
 import UserCard from '../components/account/UserCard';
-import InviteCard from '../components/account/InviteCard';
 import SteamCard from '../components/account/SteamCard';
 import TwitchCard from '../components/account/TwitchCard';
-import GameCard from '../components/account/GameCard';
-import TeacherCard from '../components/account/TeacherCard';
+import DownloadsCard from '../components/account/DownloadsCard';
 import TermsCard from '../components/account/TermsCard';
 import ArtCard from '../components/account/ArtCard';
-import { useQuery } from "@tanstack/react-query";
-import { AuthenticatedUser } from "../utils/authentication";
+import { AuthenticatedUser, useUserQuery, removeToken } from "../utils/authentication";
 import "../assets/_account.scss";
+import { Modal } from '../components/Modal';
 
-export const Route = createLazyFileRoute('/account')({
+type AccountParams = {
+  refType: string;
+  token: string;
+}
+export const Route = createFileRoute('/account')({
+  validateSearch: (search: Record<string, unknown>): AccountParams => {
+    return { refType: search.type as string, token: search.token as string };
+  },
   component: () => {
-    document.title = 'Eco - Account';
+    document.title = 'Eco - Account';    
     if (!AuthenticatedUser()) {
       window.location.href = '/login';
     } else {
@@ -24,43 +29,30 @@ export const Route = createLazyFileRoute('/account')({
       )
     }
   }
-})
+  })
+
 
 function Account() {
-  const userJWT = AuthenticatedUser();
-  const { data: user, error, isLoading } = useQuery({
-    queryKey: ["user"],
-    queryFn: () =>
-      fetch("https://cloud.strangeloopgames.com/UserAccount/GetAccount", {
-        headers: {
-          'Authorization': `Bearer ${userJWT}`,
-          'Content-Type': 'application/json'
-        }
-      }).then((res) =>
-        res.json()
-      ),
-
-
-  });
-  if (isLoading) return <div> Loading</div>
-  // if(isVerified(user)) {
-  //   window.location.href = '/login?error=unverified';
-  // }
+  const userJWT = (AuthenticatedUser()) ? AuthenticatedUser() : '';
+  const { data: user, error, isLoading } = useUserQuery(userJWT as string);
+  if (isLoading) return <Modal type="Loading" message="Please wait while we load your account information." />;
+  if(user && !user.verified) {
+    removeToken();
+    window.location.href = '/login?error=unverified';
+  }
   if (error) {
     console.log(error);
-    return <div>Error: {error.message}</div>
+    return <Modal type="Error" message={error.message} />
   }
   console.log(user)
 
   return (
     <>
       <UserCard user={user} />
-      <InviteCard />
+      <DownloadsCard />
       <SteamCard />
       <TwitchCard user={user} />
-      <GameCard/>
       <ArtCard />
-      <TeacherCard />
       <TermsCard />
     </>
   )

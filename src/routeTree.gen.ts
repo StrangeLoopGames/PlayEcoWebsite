@@ -16,16 +16,23 @@ import { Route as rootRoute } from './routes/__root'
 
 // Create Virtual Routes
 
+const ResetpasswordLazyImport = createFileRoute('/resetpassword')()
 const RegisterLazyImport = createFileRoute('/register')()
 const LogoutLazyImport = createFileRoute('/logout')()
 const LoginLazyImport = createFileRoute('/login')()
 const JobsLazyImport = createFileRoute('/jobs')()
+const ForgotLazyImport = createFileRoute('/forgot')()
 const ContactLazyImport = createFileRoute('/contact')()
 const CloudhostingLazyImport = createFileRoute('/cloudhosting')()
 const AccountLazyImport = createFileRoute('/account')()
 const IndexLazyImport = createFileRoute('/')()
 
 // Create/Update Routes
+
+const ResetpasswordLazyRoute = ResetpasswordLazyImport.update({
+  path: '/resetpassword',
+  getParentRoute: () => rootRoute,
+} as any).lazy(() => import('./routes/resetpassword.lazy').then((d) => d.Route))
 
 const RegisterLazyRoute = RegisterLazyImport.update({
   path: '/register',
@@ -46,6 +53,11 @@ const JobsLazyRoute = JobsLazyImport.update({
   path: '/jobs',
   getParentRoute: () => rootRoute,
 } as any).lazy(() => import('./routes/jobs.lazy').then((d) => d.Route))
+
+const ForgotLazyRoute = ForgotLazyImport.update({
+  path: '/forgot',
+  getParentRoute: () => rootRoute,
+} as any).lazy(() => import('./routes/forgot.lazy').then((d) => d.Route))
 
 const ContactLazyRoute = ContactLazyImport.update({
   path: '/contact',
@@ -87,6 +99,10 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ContactLazyImport
       parentRoute: typeof rootRoute
     }
+    '/forgot': {
+      preLoaderRoute: typeof ForgotLazyImport
+      parentRoute: typeof rootRoute
+    }
     '/jobs': {
       preLoaderRoute: typeof JobsLazyImport
       parentRoute: typeof rootRoute
@@ -103,6 +119,10 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof RegisterLazyImport
       parentRoute: typeof rootRoute
     }
+    '/resetpassword': {
+      preLoaderRoute: typeof ResetpasswordLazyImport
+      parentRoute: typeof rootRoute
+    }
   }
 }
 
@@ -113,10 +133,12 @@ export const routeTree = rootRoute.addChildren([
   AccountLazyRoute,
   CloudhostingLazyRoute,
   ContactLazyRoute,
+  ForgotLazyRoute,
   JobsLazyRoute,
   LoginLazyRoute,
   LogoutLazyRoute,
   RegisterLazyRoute,
+  ResetpasswordLazyRoute,
 ])
 
 /* prettier-ignore-end */

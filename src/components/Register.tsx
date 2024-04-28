@@ -9,7 +9,7 @@ type Register = {
     ageConfirm: boolean;
     newsletter: boolean;
 }
-function LoginForm() {
+function RegisterForm() {  
     const [registerData, setRegisterData] = useState<Register>({
         username: "",
         email: "",
@@ -22,7 +22,7 @@ function LoginForm() {
     const navigate = useNavigate();
     function doRegistration(e: React.FormEvent): void  {
         e.preventDefault()
-        const queryString: string = `username=${registerData.username}&email=${registerData.email}&password=${registerData.password}&passwordConfirm=${registerData.passwordConfirm}&ageConfirm=${registerData.ageConfirm}&newsletter=${registerData.newsletter}`
+        const queryString: string = `username=${registerData.username}&email=${registerData.email}&password=${registerData.password}    `
         const url = `https://cloud.strangeloopgames.com/api/Registration/RegisterUser?${queryString}`;
         fetch(url, {
             method: 'POST',
@@ -63,11 +63,11 @@ function LoginForm() {
     return (
         <div className='login-wrap d-flex flex-column align-items-center'>
             <h1>Eco Login</h1>
-            <p>Log in to access your account</p>
+            <p>Register an Eco account</p>
             {error && <p className="alert alert-info">{error}</p>}
             <form onSubmit={doRegistration}>
                 <div className="form-group mb-3">
-                    <input onChange={handleInputChange} className="w-100 form-control" type="text" name="username" id="username" title="username" placeholder="Username" />
+                    <input onChange={handleInputChange} className="w-100 form-control" type="text" name="username" id="username" title="username" placeholder="Username" value={registerData.username} />
                 </div>
                 <div className="form-group mb-3">
                     <input onChange={handleInputChange} className="w-100 form-control" type="text" name="email" id="email" title="email" placeholder="Email" />
@@ -92,7 +92,16 @@ function LoginForm() {
                 </div>
                 <button className="btn login-button w-100" type="submit">Register</button>
             </form>
+            {
+    Object.entries(registerData).map(([key, value]) => {
+        return (
+            <div key={key}>
+                <p><span>{key}</span> {value}</p>
+            </div>
+        )
+    })
+}
         </div>
     );
 }
-export default LoginForm
+export default RegisterForm;

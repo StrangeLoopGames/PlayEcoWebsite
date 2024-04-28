@@ -14,6 +14,27 @@
     margin: 0;
     align-items: center;
 }
+#loading-modal {
+  display: flex;
+  height: 100%;
+  width: 100%;
+  background: rgba(0, 0, 0, 0.3411764706);
+  justify-content: center;
+  align-items: center;
+
+  .modal-content {
+    background: #ffffff;
+    min-height: 200px;
+    min-width: 400px;
+    max-width: -moz-fit-content;
+    max-width: fit-content;
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+}
 }
 
 header {

@@ -1,6 +1,8 @@
 import { useNavigate } from '@tanstack/react-router';
 import React, { useState } from 'react';
-import {storeToken} from '../utils/authentication';
+import { storeToken } from '../utils/authentication';
+import steamLogin from '../assets/images/steam_small.png';
+
 function LoginForm() {
     const [loginData, setLoginData] = useState({
         username: "",
@@ -43,11 +45,11 @@ function LoginForm() {
         setLoginData({ ...loginData, [name]: value });
     }
     return (
-        <div className='login-wrap d-flex flex-column align-items-center'>
+        <div className='login-wrap d-flex flex-column align-items-center w-25'>
             <h1>Eco Login</h1>
             <p>Log in to access your account</p>
             {error && <p className="alert alert-info">{error}</p>}
-            <form onSubmit={doSignIn}>
+            <form className="w-100" onSubmit={doSignIn}>
                 <div className="form-group mb-3">
                     <input onChange={handleInputChange} className="w-100 form-control" type="text" name="username" id="username" title="username" placeholder="Username" />
                 </div>
@@ -56,6 +58,12 @@ function LoginForm() {
                 </div>
                 <button className="btn login-button w-100" type="submit">Login</button>
             </form>
+            <div className="login-forgot-wrapper d-flex flex-wrap justify-content-center">
+                <a className="login-forgot w-50" href="/forgot">Forgot Password</a>
+                <a className="login-forgot w-50" href="/register">Register an Account</a>
+                <a className="steam-login" href="https://localhost:7094/api/Registration/RegisterWithSteam"><img src={steamLogin} alt="" /></a>
+                
+            </div>
         </div>
     );
 }

@@ -1,3 +1,6 @@
+body {
+    background : url("../assets/images/textures/cubes.png");
+}
 .profile-wrap {
     display: flex;
     flex-direction: row;
@@ -10,5 +13,26 @@
         margin: 0;
         padding: 0;
         box-shadow: none;
+    }
+}
+.update-account {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    gap: 10px;
+}
+
+section#login {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-grow: 1;
+
+    .login-wrap {
+        min-width: 400px;
+
+        form {
+            width: 100%;
+        }
     }
 }
