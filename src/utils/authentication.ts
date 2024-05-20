@@ -1,33 +1,35 @@
-import { useQuery, UseQueryResult } from "@tanstack/react-query";
+import { useQuery, useQueryClient, UseQueryResult } from "@tanstack/react-query";
+import { redirect } from "@tanstack/react-router";
 type sessionStore = {
 	token: string;
 	expiry: number;
 };
 interface User {
-    id: string;
-    steamId: string;
-    twitchId: string;
-    twitchUsername: string;
-    username: string;
-    avatarUrl: string;
-    avatarDna: string;
-    achievements: string[];
-    ecoCredits: number;
+    id: string | number;
+    steamId: string | null;
+    twitchId: string | null;
+    twitchUsername: string | null;
+    username: string | null;
+    avatarUrl: string | null;
+    avatarDna: string | null;
+    achievements: { name: string, worldSource: string, worldName: string, description: string, timeAchieved: string }[] | null;
+    ecoCredits: number | null;
     ownsEco: boolean;
     verified: boolean;
-    items: string;
+    items: { type: string, worldSource: string, worldName: string, description: string, timeAchieved: string }[] | null;
+	blockPurchasing: boolean | null;
     isDeveloper: boolean;
     isCloudAdmin: boolean;
-    bannedUntil: string;
-    bannedReason: string;
+    bannedUntil: string | null;
+    bannedReason: string | null;
     isBanned: boolean;
-    lastWorldId: string;
-    lastWorldJoinTime: string;
-    heartBeatTime: string;
-    creationTime: string;
+    lastWorldId: string | null;
+    lastWorldJoinTime: string | null;
+    heartBeatTime: string | null;
+    creationTime: string | null;
     online: boolean;
-    timeOnlineTotal: string;
-    lastEmailSent: string;
+    timeOnlineTotal: string | null;
+    lastEmailSent: string | null;
 }
 
 export function AuthenticatedUser(): string | boolean {
@@ -42,7 +44,7 @@ export function AuthenticatedUser(): string | boolean {
 }
 
 export function storeToken(token: string): string {
-	const thirtyDays = new Date().getTime() + 30 * 24 * 60 * 60 * 1000;
+	const thirtyDays = new Date().getTime() + 1 * 24 * 60 * 60 * 1000;
 	const item: sessionStore = {
 		token: token,
 		expiry: thirtyDays,
@@ -74,8 +76,20 @@ export function useUserQuery(userJWT: string): UseQueryResult<User>  {
 					Authorization: `Bearer ${userJWT}`,
 					"Content-Type": "application/json",
 				},
-			}).then((res) => res.json()),
+			}).then((res) => {
+				if (!res.ok) {
+					if(res.status === 401) {
+						removeToken();
+						location.href = '/login';
+				}
+			}
+				return res.json();
+			}).catch((error) => {
+				removeToken();
+				location.href = '/login?error=authenication_error';
+			}),
 		refetchOnWindowFocus: false,
+		staleTime: 5 * 60 * 1000,
 	});
 }
 
@@ -90,6 +104,14 @@ export function isValidUsername(username: string): boolean {
 		}
 }
 
+export function useIsUserAdmin(userJWT: string): boolean {
+	const {data: user} = useUserQuery(userJWT);
+	if(user && user.isDeveloper) {
+		return true;
+	} else {
+		return false;
+	}
+}
 // Check if the user is a new user when using steam to register
 export function checkNewSteamUserStatus (user: User): boolean{
 // Using regex to check if the string starts with "steam:"

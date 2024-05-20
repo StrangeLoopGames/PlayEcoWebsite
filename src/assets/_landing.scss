@@ -1,0 +1,27 @@
+.landingpage {
+
+    .hero-logo {
+        box-shadow: none;
+        width: 350px;
+        margin: -50px auto 30px;
+        display: block;
+    }
+
+    .trailer-wrap {
+        margin-top: 80px;
+        font-size: 22px;
+        line-height: 38px;
+    }
+
+    .social-links {
+        text-align: center;
+        opacity: .9;
+        white-space: nowrap;
+    }
+
+    .first-section {
+        padding: 0 0 50px;
+        display: flex;
+        justify-content: center;
+    }
+}

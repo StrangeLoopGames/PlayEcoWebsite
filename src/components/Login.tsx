@@ -3,12 +3,13 @@ import React, { useState } from 'react';
 import { storeToken } from '../utils/authentication';
 import steamLogin from '../assets/images/steam_small.png';
 
-function LoginForm() {
+function LoginForm(props : {error: string}) {
     const [loginData, setLoginData] = useState({
         username: "",
         password: "",
     });
     const [error, setError] = useState<string>('');
+    if(props.error && props.error == "authenication_error" && error == '') setError("There was an error authenicating your, please login again,");
     const navigate = useNavigate();
     function doSignIn(e: React.FormEvent): void {
         e.preventDefault()

@@ -1,6 +1,6 @@
 import { useNavigate } from '@tanstack/react-router';
 import React, { useState } from 'react';
-import { storeToken } from '../utils/authentication';
+import { useMutation } from '@tanstack/react-query';
 type Register = {
     username: string;
     email: string;
@@ -20,35 +20,36 @@ function RegisterForm() {
     });
     const [error, setError] = useState<string>('');
     const navigate = useNavigate();
-    function doRegistration(e: React.FormEvent): void  {
-        e.preventDefault()
-        const queryString: string = `username=${registerData.username}&email=${registerData.email}&password=${registerData.password}    `
-        const url = `https://cloud.strangeloopgames.com/api/Registration/RegisterUser?${queryString}`;
-        fetch(url, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        })
-            .then(response => {
-                if (!response.ok) {
-                    setError('There was an error with your registration. Please try again later.')
-                    throw new Error('Network response was not ok');
-                }
-                return response.json();
-            })
-            .then(data => {
-                // Store the response data in a variable
-                console.log(data);
 
-                storeToken(data.token)
+    const registerMutate = useMutation({
+        mutationFn: (url: string) => {
+            return fetch(url, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            });
+        }
+    });
+    
+    function doRegistration(e: React.FormEvent): void {
+        e.preventDefault();
+        if (registerData.password != registerData.passwordConfirm) {
+            setError('Passwords do not match');
+            return;
+        } else {
+            const queryString: string = `username=${registerData.username}&email=${registerData.email}&password=${registerData.password}`
+            registerMutate.mutate(`https://cloud.strangeloopgames.com/api/Registration/RegisterUser?${queryString}`);
+            if (registerMutate.isSuccess) {
                 navigate({
                     to: '/account',
-                })
-            })
-            .catch(error => {
-                console.log(error);
-            });
+                });
+            }
+            if (registerMutate.isError || error) {
+                console.log(registerMutate.error);
+                setError("There was an error registering your account.");
+            }
+        }
     }
 
     function handleInputChange(e: React.ChangeEvent<HTMLInputElement>) {

@@ -8,6 +8,7 @@ import ArtCard from '../components/account/ArtCard';
 import { AuthenticatedUser, useUserQuery, removeToken } from "../utils/authentication";
 import "../assets/_account.scss";
 import { Modal } from '../components/Modal';
+import InviteCard from '../components/account/InviteCard';
 
 type AccountParams = {
   refType: string;
@@ -18,7 +19,7 @@ export const Route = createFileRoute('/account')({
     return { refType: search.type as string, token: search.token as string };
   },
   component: () => {
-    document.title = 'Eco - Account';    
+    document.title = 'Eco - Account';
     if (!AuthenticatedUser()) {
       window.location.href = '/login';
     } else {
@@ -44,12 +45,12 @@ function Account() {
     console.log(error);
     return <Modal type="Error" message={error.message} />
   }
-  console.log(user)
 
   return (
     <>
       <UserCard user={user} />
       <DownloadsCard />
+      <InviteCard />
       <SteamCard />
       <TwitchCard user={user} />
       <ArtCard />

@@ -100,16 +100,9 @@ function SteamRegister() {
             </div>
             {
                 userLoading || registerMutate.isPending ? (
-                    <Modal type="Loading" message="Please wait while we load your account information." />
+                    <Modal type="Loading" message="Please wait while we load your account information." data={undefined} />
                 ) : null
 
-            }
-            {
-                Object.entries(registerData).map(([key, value]) => {
-                    return (
-                        <p key={key}>{key}: {value}</p>
-                    );
-                })
             }
         </>
     );

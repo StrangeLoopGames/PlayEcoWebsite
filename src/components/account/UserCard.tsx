@@ -1,22 +1,54 @@
 import { useState } from 'react';
+import { AuthenticatedUser, useIsUserAdmin } from '../../utils/authentication';
+import { useMutation } from '@tanstack/react-query';
 function UserCard(props: any) {
-    const [error, setError] = useState<{type: string | null, message: string | null}>({ type: null, message: null });
-    const [userEdit, setUserEdit] = useState({ edit: false, user: props.user });
+    const [error, setError] = useState("");
+    const [userEdit, setUserEdit] = useState({ edit: false, user: {
+        password: "",
+        passwordConfirm: ""
+    } });
+
+
+    
+    const updateUserMutate = useMutation({
+        mutationFn: (url: string) => {
+            return fetch(url, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            });
+        }
+    });
+    
+    function doUpdateUser(): void {
+        if (userEdit.user.password != userEdit.user.passwordConfirm) {
+            setError("Passwords do not match");
+            return;
+        } else {
+            const userJWT = AuthenticatedUser();
+            const queryString: string = `?token=${userJWT}&newpassword${userEdit.user.password}`
+            updateUserMutate.mutate(`https://cloud.strangeloopgames.com/PasswordReset/ResetPassword?${queryString}`);
+            if (updateUserMutate.isSuccess) {
+                location.reload();
+            }
+            if (updateUserMutate.isError || error) {
+                console.log(updateUserMutate.error);
+                setError("There was an error registering your account.");
+            }
+        }
+    }
+
 
     function handleInputChange(e: React.ChangeEvent<HTMLInputElement>) {
         const { name, value } = e.target;
         setUserEdit({ edit: userEdit.edit, user: { ...userEdit.user, [name]: value } });
-        if(userEdit.user.password != userEdit.user.passwordConfirm) {
-            setError({type: "password", message: "Passwords do not match"});
-        } else {
-            setError({type: null, message: null});
-        }
     }
 
     function handleSubmit(e: React.FormEvent) {
         e.preventDefault();
         console.log("submitting");
-        //console.log(userEdit);
+        doUpdateUser();
     }
     function enableEdit(){
         setUserEdit({edit: !userEdit.edit, user: props.user})
@@ -40,28 +72,23 @@ function UserCard(props: any) {
                 <button className="btn btn-small">Change Icon</button>
                 <button className="btn btn-small" id="account-edit" onClick={enableEdit}>Edit Account</button>
                 <a className="btn btn-small" href="/logout">Logout</a>
+                {
+                    // display admin button if user is admin
+                    useIsUserAdmin(AuthenticatedUser() as string) ? (
+                        <a className="btn btn-small" href="/admin">Admin</a>
+                    ) : null
+                }
             </div>
             {
                 // display edit form if edit is true 
                 userEdit.edit ? (
                     <div className="">
-                        { error.type != null ? (<p>{error.message}</p>) : null }
+                        { error != null ? (<p>{error}</p>) : null }
                         <div className="update-account pt-2">
-                            <input onChange={handleInputChange} className="form-control" type="email" title="email" name="email" placeholder="Enter Email" />
-                            <input onChange={handleInputChange} className="form-control" type="text" title="username" name="username" placeholder="Enter Username" value={userEdit.user.username} />
                             <input onChange={handleInputChange} className="form-control" type="password" name="password" title="password" placeholder="Enter New Password" />
                             <input onChange={handleInputChange} className="form-control" type="password" name="passwordConfirm" placeholder="Confirm New Password" />
                             <input onSubmit={handleSubmit} className="btn btn-small" type="submit" value="Update" />
-                        </div>
-                        {
-                            Object.keys(userEdit.user).map((key, index) => {
-                                return (
-                                    <div key={index}>
-                                        <li>{key}: {userEdit.user[key]}</li>
-                                    </div>
-                                )
-                            })
-                        }
+                        </div> 
                     </div>
                 ) : null
             }

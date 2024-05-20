@@ -23,7 +23,7 @@ const LoginLazyImport = createFileRoute('/login')()
 const JobsLazyImport = createFileRoute('/jobs')()
 const ForgotLazyImport = createFileRoute('/forgot')()
 const ContactLazyImport = createFileRoute('/contact')()
-const CloudhostingLazyImport = createFileRoute('/cloudhosting')()
+const AdminLazyImport = createFileRoute('/admin')()
 const AccountLazyImport = createFileRoute('/account')()
 const IndexLazyImport = createFileRoute('/')()
 
@@ -64,10 +64,10 @@ const ContactLazyRoute = ContactLazyImport.update({
   getParentRoute: () => rootRoute,
 } as any).lazy(() => import('./routes/contact.lazy').then((d) => d.Route))
 
-const CloudhostingLazyRoute = CloudhostingLazyImport.update({
-  path: '/cloudhosting',
+const AdminLazyRoute = AdminLazyImport.update({
+  path: '/admin',
   getParentRoute: () => rootRoute,
-} as any).lazy(() => import('./routes/cloudhosting.lazy').then((d) => d.Route))
+} as any).lazy(() => import('./routes/admin.lazy').then((d) => d.Route))
 
 const AccountLazyRoute = AccountLazyImport.update({
   path: '/account',
@@ -91,8 +91,8 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AccountLazyImport
       parentRoute: typeof rootRoute
     }
-    '/cloudhosting': {
-      preLoaderRoute: typeof CloudhostingLazyImport
+    '/admin': {
+      preLoaderRoute: typeof AdminLazyImport
       parentRoute: typeof rootRoute
     }
     '/contact': {
@@ -131,7 +131,7 @@ declare module '@tanstack/react-router' {
 export const routeTree = rootRoute.addChildren([
   IndexLazyRoute,
   AccountLazyRoute,
-  CloudhostingLazyRoute,
+  AdminLazyRoute,
   ContactLazyRoute,
   ForgotLazyRoute,
   JobsLazyRoute,
