@@ -21,8 +21,8 @@ function Index() {
                             <a href="#tree" className="tree-pointer zoomin"></a>
                             <img className="zoomin hero-logo" src={logo} alt="" />
 
-                            <h1 className="darkmode-title"><Trans id='home_title'>Build a Civilization in a Simulated Ecosystem.</Trans></h1>
-                            <h3 className="subtitle-big"><Trans id='home_description'>Eco is an online game where players must collaborate to build a civilization </Trans></h3>
+                            <h1 className="darkmode-title">Build a Civilization in a Simulated Ecosystem.</h1>
+                            <h3 className="subtitle-big">Eco is an online game where players must collaborate to build a civilization</h3>
                             <div className="col-sm-10 col-sm-offset-1 col-md-12 col-md-offset-0 trailer-wrap">
                                 <div className="col-md-6">
                                     <div className="image trailer-main">
@@ -34,11 +34,11 @@ function Index() {
                                     </div>
                                 </div>
                                 <div className="col-md-6">
-                                    <h4 className='trailer-title'><Trans id='home_videoDescr_title'>Create a virtual society</Trans></h4>
-                                    <p> <Trans id='home_videoDescr_copy'>with your fellow Citizens, complete with a government, economy, and culture.
+                                    <h4 className='trailer-title'>Create a virtual society</h4>
+                                    <p> with your fellow Citizens, complete with a government, economy, and culture.
                                         Work together to achieve society level goals, transforming the natural world while working to live in harmony with it.
-                                        Eco is an online multiplayer game where players must collaborate to survive global threats, without creating one of their own in the process.</Trans></p>
-                                    <p><Trans id='home_videoDescr_status'><b>Current Status:</b> Eco is released in Early Access and available for purchase.</Trans></p>"
+                                        Eco is an online multiplayer game where players must collaborate to survive global threats, without creating one of their own in the process.</p>
+                                    <p><b>Current Status:</b> Eco is released in Early Access and available for purchase.</p>"
                                 </div>
                             </div>
                             <div className="landing-banner">
