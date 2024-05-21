@@ -30,9 +30,7 @@ function LoginForm(props : {error: string}) {
             .then(data => {
                 // Store the response data in a variable
                 storeToken(data.token)
-                navigate({
-                    to: '/account',
-                })
+                window.location.href = '/account';
             })
             .catch(error => {
                 console.error('There was a problem with your fetch operation:', error);

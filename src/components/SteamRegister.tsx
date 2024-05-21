@@ -38,9 +38,7 @@ function SteamRegister() {
     });
     // If the user is not new, redirect them to the account page
     if (user && !checkNewSteamUserStatus(user)) {
-        navigate({
-            to: '/account',
-        });
+        window.location.href = '/account';
     }
     function doSteamRegister(e: React.FormEvent): void {
         e.preventDefault();
@@ -52,9 +50,7 @@ function SteamRegister() {
             registerMutate.mutate(`https://cloud.strangeloopgames.com/api/Registration/SetUsernameAndPassword?${queryString}`);
             console.log(registerMutate);
             if (registerMutate.isSuccess) {
-                navigate({
-                    to: '/account',
-                });
+                window.location.href = '/account';
             }
             if (registerMutate.isError || userError) {
                 console.log(registerMutate.error);
