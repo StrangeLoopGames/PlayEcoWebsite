@@ -62,8 +62,6 @@ export default function CorsTable({users, selectedKey, toggleModalEvent, updateU
         pageSize: 5, //default page size
     });
     const data = (selectedKey == null) ? users : users[selectedKey];
-    console.log(data);
-    console.log(data[selectedKey])
     
     const columns = generateColumns(data);
     const table = useReactTable({

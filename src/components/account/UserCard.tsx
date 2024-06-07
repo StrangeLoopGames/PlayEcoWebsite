@@ -1,15 +1,18 @@
 import { useState } from 'react';
 import { AuthenticatedUser, useIsUserAdmin } from '../../utils/authentication';
 import { useMutation } from '@tanstack/react-query';
+import { getIcon } from '../../utils/account';
+// Temporary icons until we have a proper icon migration of teirs
+const icons = "alphaicon;alpha4packicon;alpha2packicon;devicon;hareicon;bannericon;wolficon;hareicon;supericon;slgicon";
+
 function UserCard(props: any) {
     const [error, setError] = useState("");
     const [userEdit, setUserEdit] = useState({ edit: false, user: {
         password: "",
         passwordConfirm: ""
     } });
-
-
-    
+    const selectedIcon = (props.user.isDeveloper) ? "slgicon" : "betaicon";
+    const icon = `/images/icons/${getIcon(selectedIcon, icons)}.png`;
     const updateUserMutate = useMutation({
         mutationFn: (url: string) => {
             return fetch(url, {
@@ -57,7 +60,7 @@ function UserCard(props: any) {
         <div id="userDetails" className="account-feature">
             <h2>Account</h2>
             <div className="profile-wrap">
-                <img className="avatar-img " src={props.user.avatarUrl} alt="" />
+                <img className="avatar-img " src={icon} alt="" />
                 <div className="profile-details">
                     <ul>
                         <li className=""><span className="account-label-front">Username:</span>{props.user.username}</li>

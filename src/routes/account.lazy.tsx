@@ -5,6 +5,7 @@ import TwitchCard from '../components/account/TwitchCard';
 import DownloadsCard from '../components/account/DownloadsCard';
 import TermsCard from '../components/account/TermsCard';
 import ArtCard from '../components/account/ArtCard';
+import TransactionsCard from '../components/account/TransactionsCard';
 import { AuthenticatedUser, useUserQuery, removeToken } from "../utils/authentication";
 import "../assets/_account.scss";
 import { Modal } from '../components/Modal';
@@ -24,7 +25,7 @@ export const Route = createFileRoute('/account')({
       window.location.href = '/login';
     } else {
       return (
-        <section className='col-lg-offset-2 col-lg-8' id="account">
+        <section className='page-wrap-main col-lg-offset-2 col-lg-8' id="account">
           <Account />
         </section>
       )
@@ -50,9 +51,10 @@ function Account() {
     <>
       <UserCard user={user} />
       <DownloadsCard />
-      <InviteCard />
+      <TransactionsCard user={user} />
+      {/* <InviteCard /> */}
       <SteamCard />
-      <TwitchCard user={user} />
+      {/* <TwitchCard user={user} /> */}
       <ArtCard />
       <TermsCard />
     </>

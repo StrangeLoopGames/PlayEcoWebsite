@@ -1,4 +1,4 @@
-export function splitCamelCaseAndCapitalize(inputString) {
+export function splitCamelCaseAndCapitalize(inputString: string) {
     // Split the string at each capital letter
     const words = inputString.split(/(?=[A-Z])/);
 

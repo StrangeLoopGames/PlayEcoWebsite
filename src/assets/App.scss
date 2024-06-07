@@ -17,9 +17,12 @@ body {
     margin: 0;
     align-items: center;
 }
-.content-wrap.account, .content-wrap.admin {
+.content-wrap.account, .content-wrap.admin, .content-wrap.buy {
   background: #f9f9f9 !important;
   background : url("../assets/images/textures/cubes.png");
+}
+.page-wrap-main {
+  padding-top: 5%;
 }
 #loading-modal {
   display: flex;
@@ -47,6 +50,7 @@ body {
     min-height: 200px;
     min-width: 400px;
     max-width: -moz-fit-content;
+    max-width: -webkit-fit-content;
     max-width: fit-content;
     height: auto;
     display: flex;
@@ -66,13 +70,44 @@ body {
 }
 
 header {
-  position: absolute;
+  position: fixed;
+  transition: background 0.3s, box-shadow 0.3s, z-index 0.3s;
+
+  &.hdr-sticky {
+    background: #4688c0;
+    box-shadow: rgba(0,0,0,.3) 1px 1px 10px 1px;
+    z-index: 1000;
+
+    nav{
+      a{
+        color: #ffffff;
+      }
+    
+    }
+}
   .header-logo {
 
     img.eco-logo {
       height: 56px;
       box-shadow: none;
       -webkit-box-shadow: none;
+    }
+  }
+  nav {
+    font-size: 25px;
+    line-height: 60px;
+    font-family: abel, sans-serif;
+    color: #333333;
+
+    a{
+      color: #333333;
+      text-decoration: none;
+      transition: 0.3s;
+
+      &:hover {
+        color: #9fce8e !important;
+        transform: scale(1.1);
+      }
     }
   }
 }

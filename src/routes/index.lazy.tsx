@@ -15,14 +15,14 @@ function Index() {
             <div className="sales landingpage">
                 <section className="row darkmode">
                     <div className="col-md-12 first-section">
-                        <article className="col-lg-offset-2 col-lg-8">
+                        <article className="">
                             <div className="tree-clouds"></div>
                             <div className="tree-clouds-2"></div>
                             <a href="#tree" className="tree-pointer zoomin"></a>
                             <img className="zoomin hero-logo" src={logo} alt="" />
 
                             <h1 className="darkmode-title">Build a Civilization in a Simulated Ecosystem.</h1>
-                            <h3 className="subtitle-big">Eco is an online game where players must collaborate to build a civilization</h3>
+                            <h3 className="subtitle-big">Eco is an online game where players must collaborate to build a civilization in a world where everything they do affects the environment.</h3>
                             <div className="col-sm-10 col-sm-offset-1 col-md-12 col-md-offset-0 trailer-wrap">
                                 <div className="col-md-6">
                                     <div className="image trailer-main">

@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Abel&family=Raleway:ital,wght@0,100..900;1,100..900&display=swap');
 html {
     background-color: #f9f9f9 !important;
 }
@@ -30,13 +31,10 @@ h4 {
 }
 img {
     width: 100%;
-    -webkit-box-shadow: 1px 1px 10px 1px rgba(0, 0, 0, 0.3);
-    box-shadow: 1px 1px 10px 1px rgba(0, 0, 0, 0.3);
-    border-radius: 10px;
 }
 .world-dashboard img {
-    box-shadow: none;
     -webkit-box-shadow: none;
+    box-shadow: none;
 }
 a {
     color: #1165af;
@@ -843,7 +841,9 @@ span.account-label-front {
 .btn-corner {
     position: absolute;
     top: 24px;
+    display: flex;
     right: 20px;
+    gap: 5px !important;
 }
 .account-page .btn-small {
     margin-left: 5px;
@@ -1103,6 +1103,9 @@ a.membership-wrapper:hover .membership-purchase {
 .system-requirements-subwrappers {
     width: 49%;
     display: inline-block;
+}
+.membership-description {
+    margin-top: 211px;
 }
 .membership-description li:nth-child(even) {
     background-color: #e8e8e88c;
@@ -5536,4 +5539,7 @@ img.steam-icon {
         top: 10px;
         margin: 0;
     }
+}
+.bg-d-stripes {
+    background: url("../assets/images/textures/stripes-light.png") repeat;
 }

@@ -1,21 +1,13 @@
 import { Link } from "@tanstack/react-router";
-interface MenuItems {
-    [key: string]: string;
-}
-const menuItems: MenuItems = {
-    'Cloud Hosting': '/cloudhosting',
-    Jobs: '/jobs',
-    Contact: '/contact',
-    Account: '/account',
-
-}
+import {menuItems} from "../data/menu";
 function Menu() {
     return (
         <>
             <nav className="d-flex flex-row">
                 {
                     Object.keys(menuItems).map((item) => (
-                        <Link key={item} to={menuItems[item]} className="mx-1">{item}</Link>
+                        // if doesn't start with / then it's an external link
+                        <Link key={item} to={menuItems[item]} className="mx-1" target={(menuItems[item].startsWith('/')) ? "" : "_blank"}>{item}</Link>
                     ))
                 }
             </nav>

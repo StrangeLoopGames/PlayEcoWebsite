@@ -1,38 +1,8 @@
-import { useQuery, useQueryClient, UseQueryResult } from "@tanstack/react-query";
-import { redirect } from "@tanstack/react-router";
-type sessionStore = {
-	token: string;
-	expiry: number;
-};
-interface User {
-    id: string | number;
-    steamId: string | null;
-    twitchId: string | null;
-    twitchUsername: string | null;
-    username: string | null;
-    avatarUrl: string | null;
-    avatarDna: string | null;
-    achievements: { name: string, worldSource: string, worldName: string, description: string, timeAchieved: string }[] | null;
-    ecoCredits: number | null;
-    ownsEco: boolean;
-    verified: boolean;
-    items: { type: string, worldSource: string, worldName: string, description: string, timeAchieved: string }[] | null;
-	blockPurchasing: boolean | null;
-    isDeveloper: boolean;
-    isCloudAdmin: boolean;
-    bannedUntil: string | null;
-    bannedReason: string | null;
-    isBanned: boolean;
-    lastWorldId: string | null;
-    lastWorldJoinTime: string | null;
-    heartBeatTime: string | null;
-    creationTime: string | null;
-    online: boolean;
-    timeOnlineTotal: string | null;
-    lastEmailSent: string | null;
-}
+import { useQuery, UseQueryResult } from "@tanstack/react-query";
 
-export function AuthenticatedUser(): string | boolean {
+import {AuthenticatedUser as AuthUser, sessionStore, User} from '../types/types';
+
+export function AuthenticatedUser() : AuthUser {
 	if (checkTokenExpiry()) {
 		const item = localStorage.getItem("token");
 		if (item) {
