@@ -23,6 +23,7 @@ const LoginLazyImport = createFileRoute('/login')()
 const JobsLazyImport = createFileRoute('/jobs')()
 const ForgotLazyImport = createFileRoute('/forgot')()
 const ContactLazyImport = createFileRoute('/contact')()
+const BuyLazyImport = createFileRoute('/buy')()
 const AdminLazyImport = createFileRoute('/admin')()
 const AccountLazyImport = createFileRoute('/account')()
 const IndexLazyImport = createFileRoute('/')()
@@ -64,6 +65,11 @@ const ContactLazyRoute = ContactLazyImport.update({
   getParentRoute: () => rootRoute,
 } as any).lazy(() => import('./routes/contact.lazy').then((d) => d.Route))
 
+const BuyLazyRoute = BuyLazyImport.update({
+  path: '/buy',
+  getParentRoute: () => rootRoute,
+} as any).lazy(() => import('./routes/buy.lazy').then((d) => d.Route))
+
 const AdminLazyRoute = AdminLazyImport.update({
   path: '/admin',
   getParentRoute: () => rootRoute,
@@ -93,6 +99,10 @@ declare module '@tanstack/react-router' {
     }
     '/admin': {
       preLoaderRoute: typeof AdminLazyImport
+      parentRoute: typeof rootRoute
+    }
+    '/buy': {
+      preLoaderRoute: typeof BuyLazyImport
       parentRoute: typeof rootRoute
     }
     '/contact': {
@@ -132,6 +142,7 @@ export const routeTree = rootRoute.addChildren([
   IndexLazyRoute,
   AccountLazyRoute,
   AdminLazyRoute,
+  BuyLazyRoute,
   ContactLazyRoute,
   ForgotLazyRoute,
   JobsLazyRoute,

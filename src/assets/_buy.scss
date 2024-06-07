@@ -1,0 +1,17 @@
+section#buy {
+    .sales {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .buy-wrap {
+        display: flex;
+        gap: 20px;
+        flex-direction: row;
+        justify-content: space-between;
+    }
+}
+#requirements {
+    padding: 70px 0px;
+}

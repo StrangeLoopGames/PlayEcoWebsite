@@ -1,0 +1,4 @@
+import { generateColumns } from '../utils/table';
+export function StandardTable () {
+
+}
