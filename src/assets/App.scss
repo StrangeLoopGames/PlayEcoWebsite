@@ -2,6 +2,26 @@
 body {
   background: #f9f9f9;
 }
+body.home {
+
+  nav {
+    font-size: 25px;
+    line-height: 60px;
+    font-family: abel, sans-serif;
+    color: #333333;
+
+    a{
+      color: #ffffff;
+      text-decoration: none;
+      transition: 0.3s;
+
+      &:hover {
+        color: #9fce8e !important;
+        transform: scale(1.1);
+      }
+    }
+  }
+}
 #root {
   margin: 0;
   padding: 0;
@@ -16,9 +36,10 @@ body {
     padding: 0;
     margin: 0;
     align-items: center;
+    z-index: 1;
 }
-.content-wrap.account, .content-wrap.admin, .content-wrap.buy {
-  background: #f9f9f9 !important;
+.content-wrap.account, .content-wrap.admin, .content-wrap.buy, .content-wrap.jobs, .content-wrap.login {
+  background-color: #f9f9f9 !important;
   background : url("../assets/images/textures/cubes.png");
 }
 .page-wrap-main {
@@ -72,6 +93,7 @@ body {
 header {
   position: fixed;
   transition: background 0.3s, box-shadow 0.3s, z-index 0.3s;
+  z-index: 99;
 
   &.hdr-sticky {
     background: #4688c0;
@@ -81,6 +103,9 @@ header {
     nav{
       a{
         color: #ffffff;
+        font-family: 'Abel', sans-serif;
+        font-weight: 400;
+        font-size: 26px;
       }
     
     }

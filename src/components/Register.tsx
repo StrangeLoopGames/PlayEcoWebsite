@@ -39,7 +39,7 @@ function RegisterForm() {
             return;
         } else {
             const queryString: string = `username=${registerData.username}&email=${registerData.email}&password=${registerData.password}`
-            registerMutate.mutate(`https://cloud.strangeloopgames.com/api/Registration/RegisterUser?${queryString}`);
+            registerMutate.mutate(`${import.meta.env.VITE_CLOUD_API_URL}api/Registration/RegisterUser?${queryString}`);
             if (registerMutate.isSuccess) {
                 navigate({
                     to: '/account',

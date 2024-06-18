@@ -4,7 +4,7 @@ import { components as types } from '../types/api'
 import { AuthenticatedUser as AuthUser } from "../types/types";
 type User = types["schemas"]["StrangeUser"];
 export function useFetchUserById(userJWT: string, user: string) {
-    const url = `https://cloud.strangeloopgames.com/UserAccount/${user}`;
+    const url = `${import.meta.env.VITE_CLOUD_API_URL}UserAccount/${user}`;
     return useQuery({
         queryKey: ["selected", user],
         queryFn: () =>
@@ -29,7 +29,7 @@ export function useFetchUserById(userJWT: string, user: string) {
     });
 }
 export function useFetchUsers(pageNumber: number, pageSize: number, userJWT: string) {
-    const url = `https://cloud.strangeloopgames.com/UserAccount?pageNumber=${pageNumber}&pageSize=${pageSize}`;
+    const url = `${import.meta.env.VITE_CLOUD_API_URL}UserAccount?pageNumber=${pageNumber}&pageSize=${pageSize}`;
     return useQuery({
         queryKey: ["users"],
         queryFn: () =>
@@ -53,7 +53,7 @@ export function useFetchUsers(pageNumber: number, pageSize: number, userJWT: str
     });
 }
 export function useSearchUser(pageNumber: number, pageSize: number, search: string) {
-    const url = `https://cloud.strangeloopgames.com/UserAccount/search?search=${search}&pageNumber=${pageNumber}&pageSize=${pageSize}`;
+    const url = `${import.meta.env.VITE_CLOUD_API_URL}UserAccount/search?search=${search}&pageNumber=${pageNumber}&pageSize=${pageSize}`;
     return useQuery({
         queryKey: ["search", search],
         queryFn: () =>
@@ -77,7 +77,7 @@ export function useSearchUser(pageNumber: number, pageSize: number, search: stri
     });
 }
 export async function userUpdateUserById(adminJWT: string, updatedUser: User) {
-	const url = `https://cloud.strangeloopgames.com/UserAccount`;
+	const url = `${import.meta.env.VITE_CLOUD_API_URL}UserAccount`;
 	const response = await fetch(url, {
 		method: "PUT",
 		headers: {
@@ -95,7 +95,9 @@ export async function userUpdateUserById(adminJWT: string, updatedUser: User) {
 }
 // Transactions 
 export function useGetUserTransactions(user: string) {
-    const url = "https://cloud.strangeloopgames.com/UserAccount/GetTransactionSummaries";
+    const apiUrl = import.meta.env.VITE_CLOUD_API_URL;
+    console.log(apiUrl);
+    const url = `${import.meta.env.VITE_CLOUD_API_URL}UserAccount/GetTransactionSummaries`;
     return useQuery({
         queryKey: ["transaction", user],
         queryFn: () =>

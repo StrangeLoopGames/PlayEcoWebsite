@@ -31,7 +31,7 @@ function UserCard(props: any) {
         } else {
             const userJWT = AuthenticatedUser();
             const queryString: string = `?token=${userJWT}&newpassword${userEdit.user.password}`
-            updateUserMutate.mutate(`https://cloud.strangeloopgames.com/PasswordReset/ResetPassword?${queryString}`);
+            updateUserMutate.mutate(`${import.meta.env.VITE_CLOUD_API_URL}PasswordReset/ResetPassword?${queryString}`);
             if (updateUserMutate.isSuccess) {
                 location.reload();
             }

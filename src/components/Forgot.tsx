@@ -7,7 +7,7 @@ function ForgotForm() {
     const [alert, setAlert] = useState<string>('');
     function doSignIn(e: React.FormEvent): void {
         e.preventDefault()
-        const url = `https://cloud.strangeloopgames.com/PasswordReset/RequestReset?email=${submitData.email}`;
+        const url = `${import.meta.env.VITE_CLOUD_API_URL}PasswordReset/RequestReset?email=${submitData.email}`;
         fetch(url, {
             method: 'POST',
             headers: {

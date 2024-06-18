@@ -13,7 +13,7 @@ function LoginForm(props : {error: string}) {
     const navigate = useNavigate();
     function doSignIn(e: React.FormEvent): void {
         e.preventDefault()
-        const url = `https://cloud.strangeloopgames.com/Authentication/AuthenticateSLGUser?username=${loginData.username}&password=${loginData.password}`;
+        const url = `${import.meta.env.VITE_CLOUD_API_URL}Authentication/AuthenticateSLGUser?username=${loginData.username}&password=${loginData.password}`;
         fetch(url, {
             method: 'POST',
             headers: {

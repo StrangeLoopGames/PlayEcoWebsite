@@ -41,7 +41,7 @@ export function useUserQuery(userJWT: string): UseQueryResult<User>  {
 	return useQuery({
 		queryKey: ["user"],
 		queryFn: () =>
-			fetch("https://cloud.strangeloopgames.com/UserAccount/GetAccount", {
+			fetch(`${import.meta.env.VITE_CLOUD_API_URL}UserAccount/GetAccount`, {
 				headers: {
 					Authorization: `Bearer ${userJWT}`,
 					"Content-Type": "application/json",

@@ -7,6 +7,7 @@ body {
     font-size: 20px;
     line-height: 28px;
     background: #4688c0;
+    overflow-x: hidden;
 }
 h1 {
     font-size: 50px;
@@ -564,6 +565,10 @@ section.row.notification-boot-wrapper {
     line-height: 30px;
     margin-top: 50px;
     display: inline-block;
+    color: #ffffff;
+}
+.text-shadow {
+    text-shadow: 1px 1px 9px #3e3e3e;
 }
 .testimonial-quote .srt-mark {
     content: "“";
@@ -589,6 +594,7 @@ section.row.notification-boot-wrapper {
     font-family: 'Raleway', sans-serif;
     text-align: center;
     margin-top: 10px;
+    color: #ffffff;
 }
 .testimonial-quotemarks {
     font-size: 83px;
@@ -745,6 +751,10 @@ a .btn {
 }
 .tree-sidepanel-wrapper .btn-small, .tree-intro-wrapper-sky .btn-small {
     margin: 8px;
+}
+.intro-awards-wrapper a {
+    color: #ffffff;
+    text-decoration: none !important;
 }
 .download-link {
     width: 18%;
@@ -3730,6 +3740,7 @@ h2.tree-sidebar-title {
     z-index: 9;
     bottom: 0;
     right: 40px;
+    display: none;
     opacity: .8;
 }
 .tree-pointer:hover {
@@ -3757,7 +3768,7 @@ h2.tree-sidebar-title {
     animation-timing-function: linear;
     animation-delay: -250s;
     background-repeat: no-repeat;
-    z-index: 1;
+    z-index: -1;
 }
 .tree-clouds-2 {
     margin-top: 250px;
@@ -3781,7 +3792,7 @@ h2.tree-sidebar-title {
     animation-timing-function: linear;
     animation-delay: -100s;
     background-repeat: no-repeat;
-    z-index: 1;
+    z-index: -1;
 }
 .tree-clouds-3 {
     margin-top: 200px;
@@ -3805,7 +3816,7 @@ h2.tree-sidebar-title {
     animation-timing-function: linear;
     animation-delay: -300s;
     background-repeat: no-repeat;
-    z-index: 1;
+    z-index: -1;
 }
 .tree-clouds-4 {
     margin-top: 100px;
@@ -3829,7 +3840,7 @@ h2.tree-sidebar-title {
     animation-timing-function: linear;
     animation-delay: -50s;
     background-repeat: no-repeat;
-    z-index: 1;
+    z-index: -1;
 }
 .tree-clouds-5 {
     top: 500px;
@@ -3852,7 +3863,7 @@ h2.tree-sidebar-title {
     animation-timing-function: linear;
     animation-delay: -250s;
     background-repeat: no-repeat;
-    z-index: 1;
+    z-index: -1;
 }
 .tree-clouds-6 {
     margin-top: 0px;
@@ -3876,7 +3887,7 @@ h2.tree-sidebar-title {
     animation-timing-function: linear;
     animation-delay: -100s;
     background-repeat: no-repeat;
-    z-index: 1;
+    z-index: -1;
 }
 .developer .avatar {
     opacity: 0;

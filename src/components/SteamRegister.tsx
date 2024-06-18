@@ -47,7 +47,7 @@ function SteamRegister() {
             return;
         } else {
             const queryString: string = `username=${registerData.username}&email=${registerData.email}&password=${registerData.password}`
-            registerMutate.mutate(`https://cloud.strangeloopgames.com/api/Registration/SetUsernameAndPassword?${queryString}`);
+            registerMutate.mutate(`${import.meta.env.VITE_CLOUD_API_URL}api/Registration/SetUsernameAndPassword?${queryString}`);
             console.log(registerMutate);
             if (registerMutate.isSuccess) {
                 window.location.href = '/account';
