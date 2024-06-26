@@ -1,53 +1,73 @@
 import "../assets/_buy.scss";
+import { splitCamelCaseAndCapitalize } from "../utils/stringUtils";
 const  placeholderProduct = "https://images.placeholders.dev/?width=300&height=200&bgColor=rgb(70,%20136,%20192)";
 export function Buy() {
+
+    const marketItems = [
+        {
+            id: "EcoCredits10",
+            name: "Eco Credits 10",
+            price: 5.00,
+        },
+        {
+            id: "EcoCredits25",
+            name: "Eco Credits 25",
+            price: 12.50,
+        },
+        {
+            id: "EcoCredits50",
+            name: "Eco Credits 50",
+            price: 25.00,
+        },
+        {
+            id: "EcoCredits100",
+            name: "Eco Credits 100",
+            price: 50.00,
+        },
+        {
+            id: "EcoCredits250",
+            name: "Eco Credits 250",
+            price: 125.00,
+        },
+    ];
     return (
         <>
             <section className='page-wrap-main d-flex col-lg-offset-2 col-lg-8 justify-content-center' id="buy">
                 <div className="col-md-12">
                     <h1 className="mb-4">Purchase Eco</h1>
-                    <div className="buy-wrap d-flex flex-row">
+                    <div className="buy-wrap d-flex flex-row game-banner p-3 overflow-hidden">
                         <div className="col-4">
-                            <img src="https://images.placeholders.dev/?width=600&height=500" alt="" />
+                            <img src="/images/buy/Web-EcoPurchaseImage.png" alt="" />
                         </div>
-                        <div className="col-8">
-                            <ul className="d-flex flex-column gap-3">
-                                <li>
-                                <h2>Buy Eco Directly<sup>*best way to support us</sup></h2>
-                                <p>Buy Eco from our store, and start playing today. You can also buy a gift code for a friend.</p>
-                                <a href="/buy" className="btn btn-primary">Buy Eco</a>
-                                </li>
-                                <li>
-                                <h2>Buy Eco on steam</h2>
+                        <div className="col-8 px-2 d-flex flex-column gap-3 text-white fw-bold">
+                            <div className="purchase-option px-2">
+                                <h2 className="title">Buy Eco Directly</h2>
+                                    <p>Buy Eco from our store + get a key to unlock on Steam (best way to support us)</p>
+                                    <a href="/buy" className="btn btn-primary market-btn">Buy Eco</a>
+                            </div>
+                            <div className="purchase-option px-2">
+                            <h2 className="title">Buy Eco on steam</h2>
                                 <p>Buy Eco on Steam and start playing today.</p>
-                                <a href="https://store.steampowered.com/app/382310/Eco/" target="_blank" className="btn btn-primary">Buy on Steam</a>
-                                </li>   
-                            </ul>
+                                <a href="https://store.steampowered.com/app/382310/Eco/" target="_blank" className="btn btn-primary market-btn">Buy on Steam</a>
+                            </div>
                         </div>
 
                     </div>
-                    <div className="buy-credits d-flex flex-row gap-4 mt-5">
-                        <div className="card col-4">
-                        <img src={placeholderProduct} className="card-img-top" alt="credits" />
-                            <div className="card-body">
-                                <h3 className="card-title">Eco Credits 100</h3>
-                                <p className="card-text">Eco is an online game where players must collaborate to build a civilization in a world where everything they do affects the environment..</p>
+                    <div id="marketplace" className="d-flex mt-4 gap-0 flex-wrap justify-content-between">
+                    {
+                    marketItems.map((item, index) => {
+                        return (
+                        <div className="buy-credits d-flex flex-column p-1 col-3" key={index} >
+                            <div className="card market-item" style={{backgroundImage: `url(images/buy/${item.id}.jpg)`}}>    
+                            <div className="card-body d-flex flex-column justify-content-between">
+                                <h3 className="card-title">{splitCamelCaseAndCapitalize(item.name)}</h3>
+                                <p className="item-price">${item.price}</p>
+                            </div>
                             </div>
                         </div>
-                        <div className="card col-4">
-                        <img src={placeholderProduct} className="card-img-top" alt="credits" />
-                            <div className="card-body">
-                                <h3 className="card-title">Eco Credits 500</h3>
-                                <p className="card-text">Eco is an online game where players must collaborate to build a civilization in a world where everything they do affects the environment. All resources come from a simulated ecosystem, with thousands of plants and animals simulating 24/7.</p>
-                            </div>
-                        </div>
-                        <div className="card col-4">
-                        <img src={placeholderProduct} className="card-img-top" alt="credits" />
-                            <div className="card-body">
-                                <h3 className="card-title">Eco Credits 1000</h3>
-                                <p className="card-text">Eco is an online game where players must collaborate to build a civilization in a world where everything they do affects the environment. All resources come from a simulated ecosystem, with thousands of plants and animals simulating 24/7.</p>
-                            </div>
-                        </div>
+                        );
+                    })
+                    }
                     </div>
                 </div>
             </section>

@@ -31,3 +31,24 @@ export type User = {
     timeOnlineTotal: string | null;
     lastEmailSent: string | null;
 }
+export type Version = {
+    id: string;
+    versionCategory: string;
+    versionNumber: string;
+    commitNumber?: string;
+    downloadUrls?: {
+        windows64: string;
+        windows32: string;
+        mac: string;
+        linux: string;
+        server: {
+            linux: string;
+            mac: string;
+            pc: string;
+        };
+    };
+}
+export type GroupedVersion = {
+    baseVersion: string;
+    versions: Version[];
+}

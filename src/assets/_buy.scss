@@ -4,14 +4,42 @@ section#buy {
         justify-content: space-between;
         align-items: center;
     }
-
-    .buy-wrap {
-        display: flex;
-        gap: 20px;
-        flex-direction: row;
-        justify-content: space-between;
+    a.btn.btn-primary.market-btn {
+        background: #ffe100;
+        border: 2px solid #7d700e;
     }
 }
 #requirements {
     padding: 70px 0px;
+}
+.game-banner {
+    background: linear-gradient(#12876a 0%, #0a513f 100%);
+
+    .title {
+        background: #272a56;
+        border: 1px solid #ffffff;
+        color: #ffffff;
+        text-align: center;
+        font-size: 1.5rem;
+    }
+}
+.market-item{
+    min-height: 300px;
+    background-repeat: no-repeat;
+    background-size: 100%;
+    aspect-ratio: 1 / 2;
+    background-position: center center;
+    .card-title {
+        background: #272a56;
+        border: 1px solid #ffffff;
+        color: #ffffff;
+        text-align: center;
+        font-size: 1.5rem;
+    }
+    .item-price {
+        color: #ffe100;
+        font-weight: 700;
+        text-align: center;
+        font-size: 1.5rem;
+    }
 }

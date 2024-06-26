@@ -28,10 +28,10 @@ export function useFetchUserById(userJWT: string, user: string) {
         refetchOnWindowFocus: false,
     });
 }
-export function useFetchUsers(pageNumber: number, pageSize: number, userJWT: string) {
-    const url = `${import.meta.env.VITE_CLOUD_API_URL}UserAccount?pageNumber=${pageNumber}&pageSize=${pageSize}`;
+export function useFetchCrud(type: string, pageNumber: number, pageSize: number, userJWT: string) {
+    const url = `${import.meta.env.VITE_CLOUD_API_URL}${type}?pageNumber=${pageNumber}&pageSize=${pageSize}`;
     return useQuery({
-        queryKey: ["users"],
+        queryKey: ["users" , type],
         queryFn: () =>
             fetch(url, {
                 headers: {
@@ -52,32 +52,33 @@ export function useFetchUsers(pageNumber: number, pageSize: number, userJWT: str
         staleTime: 5 * 60 * 1000,
     });
 }
-export function useSearchUser(pageNumber: number, pageSize: number, search: string) {
-    const url = `${import.meta.env.VITE_CLOUD_API_URL}UserAccount/search?search=${search}&pageNumber=${pageNumber}&pageSize=${pageSize}`;
-    return useQuery({
-        queryKey: ["search", search],
-        queryFn: () =>
-            fetch(url, {
-                headers: {
-                    Authorization: AuthenticatedUser() as string,
-                    "Content-Type": "application/json",
-                },
-            }).then((res) => {
-                console.log(res);
-                if (!res.ok) {
-                    if (res.status === 401) {
-                        removeToken();
-                        location.href = '/login';
+export function useSearchCrud(type: string, pageNumber: number, pageSize: number, search: string) {
+    const url = `${import.meta.env.VITE_CLOUD_API_URL}${type}/search?search=${search}&pageNumber=${pageNumber}&pageSize=${pageSize}`;
+        return useQuery({
+            queryKey: ["search",type, search],
+            queryFn: () =>
+                fetch(url, {
+                    headers: {
+                        Authorization: AuthenticatedUser() as string,
+                        "Content-Type": "application/json",
+                    },
+                }).then((res) => {
+                    console.log(res);
+                    if (!res.ok) {
+                        if (res.status === 401) {
+                            removeToken();
+                            location.href = '/login';
+                        }
                     }
-                }
-                return res.json();
-            }),
-        refetchOnWindowFocus: true,
-        staleTime: 5 * 60 * 1000,
-    });
+                    return res.json();
+                }),
+            enabled: search != null,
+            refetchOnWindowFocus: true,
+            staleTime: 5 * 60 * 1000,
+        });
 }
-export async function userUpdateUserById(adminJWT: string, updatedUser: User) {
-	const url = `${import.meta.env.VITE_CLOUD_API_URL}UserAccount`;
+export async function crudUpdateById(type: string, adminJWT: string, updatedUser: User) {
+	const url = `${import.meta.env.VITE_CLOUD_API_URL}${type}`;
 	const response = await fetch(url, {
 		method: "PUT",
 		headers: {
@@ -117,6 +118,30 @@ export function useGetUserTransactions(user: string) {
                 return res.json();
             }),
         refetchOnWindowFocus: true,
+        staleTime: 5 * 60 * 1000,
+    });
+}
+export function useGetGameVersions() {
+    const url = `${import.meta.env.VITE_CLOUD_API_URL}s3/GameVersions`;
+    return useQuery({
+        queryKey: ["gameVersions"],
+        queryFn: () =>
+            fetch(url, {
+                headers: {
+                    Authorization: AuthenticatedUser() as string,
+                    "Content-Type": "application/json",
+                },
+            }).then((res) => {
+                console.log(res);
+                if (!res.ok) {
+                    if (res.status === 401) {
+                        removeToken();
+                        location.href = '/login';
+                    }
+                }
+                return res.json();
+            }),
+        refetchOnWindowFocus: false,
         staleTime: 5 * 60 * 1000,
     });
 }

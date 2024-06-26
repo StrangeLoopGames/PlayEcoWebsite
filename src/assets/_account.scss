@@ -37,3 +37,10 @@ section#login {
 .download-icon {
     font-size: 60px;
 }
+.logout-btn {
+    background: #e27b7b;
+    
+    &:hover {
+        background: #fc8d5d !important;
+    }
+}

@@ -1,0 +1,17 @@
+.version_content {
+    display: none;
+}
+
+.subheader:hover {
+    cursor: pointer;
+}
+
+.version_content > div {
+    margin:10px 25px;
+}
+.dark-theme .version_content a {
+    color: #ffffff;
+}
+.version_content a {
+    color: #000000;
+}

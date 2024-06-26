@@ -65,8 +65,8 @@ function UserCard(props: any) {
                     <ul>
                         <li className=""><span className="account-label-front">Username:</span>{props.user.username}</li>
                         <li className="account-label-front"><span className="account-label-front">User ID:</span>{props.user.id}</li>
-                        <li className="account-label-front"><span className="account-label-front">Status:</span>{props.user.ownsEco ? "Owns Eco" : "Purchase Eco"}</li>
-                        <li className="account-label-front"><span className="account-label-front">Type:</span>{props.user.isDeveloper ? "Developer" : "Purchase Eco"}</li>
+                        <li className="account-label-front"><span className="account-label-front">Status:</span>{props.user.ownsEco ? "Owns Eco" : <a href="/buy">Purchase Eco here</a>}</li>
+                        <li className="account-label-front"><span className="account-label-front">Type:</span>{props.user.isDeveloper ? "Developer" : "Standard"}</li>
                     </ul>
                 </div>
             </div>
@@ -74,13 +74,13 @@ function UserCard(props: any) {
                 <a className="btn btn-small" href="/buy">Upgrade</a>
                 <button className="btn btn-small">Change Icon</button>
                 <button className="btn btn-small" id="account-edit" onClick={enableEdit}>Edit Account</button>
-                <a className="btn btn-small" href="/logout">Logout</a>
                 {
                     // display admin button if user is admin
                     useIsUserAdmin(AuthenticatedUser() as string) ? (
                         <a className="btn btn-small" href="/admin">Admin</a>
                     ) : null
                 }
+                <a className="btn btn-small logout-btn" href="/logout">Logout</a>
             </div>
             {
                 // display edit form if edit is true 

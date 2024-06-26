@@ -38,7 +38,8 @@ function RegisterForm() {
             setError('Passwords do not match');
             return;
         } else {
-            const queryString: string = `username=${registerData.username}&email=${registerData.email}&password=${registerData.password}`
+            const encodedPassword = encodeURIComponent(registerData.password);
+            const queryString: string = `username=${registerData.username}&email=${registerData.email}&password=${encodedPassword}`
             registerMutate.mutate(`${import.meta.env.VITE_CLOUD_API_URL}api/Registration/RegisterUser?${queryString}`);
             if (registerMutate.isSuccess) {
                 navigate({

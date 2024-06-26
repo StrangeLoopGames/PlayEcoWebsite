@@ -50,7 +50,7 @@ function Account() {
   return (
     <>
       <UserCard user={user} />
-      <DownloadsCard />
+      <DownloadsCard user={user} />
       <TransactionsCard user={user} />
       {/* <InviteCard /> */}
       <SteamCard />
