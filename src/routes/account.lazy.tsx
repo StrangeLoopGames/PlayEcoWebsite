@@ -52,8 +52,7 @@ function Account() {
       <UserCard user={user} />
       <DownloadsCard user={user} />
       <TransactionsCard user={user} />
-      {/* <InviteCard /> */}
-      <SteamCard />
+      <SteamCard user={user} />
       {/* <TwitchCard user={user} /> */}
       <ArtCard />
       <TermsCard />

@@ -86,6 +86,5 @@ export function useIsUserAdmin(userJWT: string): boolean {
 export function checkNewSteamUserStatus (user: User): boolean{
 // Using regex to check if the string starts with "steam:"
 	const regex = /^steam:/i; 
-	const checkUsername: boolean = !user.verified && regex.test(user.username)
-	return checkUsername;
+	return regex.test(user.username);
 }

@@ -1,5 +1,5 @@
 import { useNavigate } from '@tanstack/react-router';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { storeToken } from '../utils/authentication';
 import steamLogin from '../assets/images/steam_small.png';
 
@@ -9,8 +9,23 @@ function LoginForm(props : {error: string}) {
         password: "",
     });
     const [error, setError] = useState<string>('');
-    if(props.error && props.error == "authenication_error" && error == '') setError("There was an error authenicating your, please login again,");
-    const navigate = useNavigate();
+
+    useEffect(() => {
+        console.log(props.error);
+        if(props.error && props.error != '') {
+            switch (props.error) {
+                case "authenication_error":
+                    setError("There was an error authenicating your, please login again,");
+                    break;
+                case "unverified":
+                    setError("Your account is not verified, please check your email for a verification link.");
+                    break;
+                default:
+                    break;
+            }
+        }
+    }, [props.error]);
+        const navigate = useNavigate();
     function doSignIn(e: React.FormEvent): void {
         e.preventDefault()
         const url = `${import.meta.env.VITE_CLOUD_API_URL}Authentication/AuthenticateSLGUser?username=${loginData.username}&password=${loginData.password}`;
@@ -60,7 +75,7 @@ function LoginForm(props : {error: string}) {
             <div className="login-forgot-wrapper d-flex flex-wrap justify-content-center">
                 <a className="login-forgot w-50" href="/forgot">Forgot Password</a>
                 <a className="login-forgot w-50" href="/register">Register an Account</a>
-                <a className="steam-login" href="https://localhost:7094/api/Registration/RegisterWithSteam"><img src={steamLogin} alt="" /></a>
+                <a className="steam-login" href={`${import.meta.env.VITE_CLOUD_API_URL}api/Registration/RegisterWithSteam`}><img src={steamLogin} alt="" /></a>
                 
             </div>
         </div>

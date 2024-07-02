@@ -94,15 +94,6 @@ function RegisterForm() {
                 </div>
                 <button className="btn login-button w-100" type="submit">Register</button>
             </form>
-            {
-    Object.entries(registerData).map(([key, value]) => {
-        return (
-            <div key={key}>
-                <p><span>{key}</span> {value}</p>
-            </div>
-        )
-    })
-}
         </div>
     );
 }

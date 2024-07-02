@@ -128,7 +128,7 @@ export function useGetGameVersions() {
         queryFn: () =>
             fetch(url, {
                 headers: {
-                    Authorization: AuthenticatedUser() as string,
+                    Authorization: `Bearer ${AuthenticatedUser() as string}`,
                     "Content-Type": "application/json",
                 },
             }).then((res) => {

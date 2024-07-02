@@ -6,8 +6,15 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import { RouterProvider, createRouter } from '@tanstack/react-router'
 // Import the generated route tree
 import { routeTree } from './routeTree.gen';
+import { NotFound } from './components/NotFound';
 // Create a new router instance
-const router = createRouter({ routeTree });
+const router = createRouter({
+  routeTree,
+  defaultNotFoundComponent: () => {
+  return (
+  <NotFound />
+  )
+}, });
 declare module '@tanstack/react-router' {
   interface Register {
     router: typeof router

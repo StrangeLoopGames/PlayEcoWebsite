@@ -9,6 +9,9 @@ import { Trans } from "@lingui/macro";
 // import eco-logo.png 
 export const Route = createLazyFileRoute('/')({
     component: Index,
+    notFoundComponent: () => {
+        return <p>This setting page doesn't exist!</p>
+    },
 })
 document.body.classList.add('home');
 function Index() {
