@@ -1,28 +1,23 @@
-import { createFileRoute } from '@tanstack/react-router'
+import { createFileRoute } from '@tanstack/react-router';
 import "../assets/_account.scss";
+import { ResetPassword } from '../components/ResetPassword';
 
 type ResetPasswordProps = {
   token: string;
 }
+
 export const Route = createFileRoute('/resetpassword')({
-  // validate search and return the url parameter of token using validateSearch
+  // Validate search and return the URL parameter of token using validateSearch
   validateSearch: (search: Record<string, unknown>): ResetPasswordProps => {
     return { token: search.token as string };
   },
-  // validateSearch: (search) => {
-  //   const urlParams = new URLSearchParams(search);
-  //   const token = urlParams.get('token');
-  //   return { token };
-  // },
   component: () => {
-    // get the token from search 
+    document.title = 'Eco - Login';
     const {token} = Route.useSearch();
-    document.title = 'Eco - Password Reset';
       return (
-        <section className='col-lg-offset-2 col-lg-8' id="account">
-          <h1>Password Reset from email!</h1>
-          token: {token}
+        <section className='d-flex col-lg-offset-2 col-lg-8 justify-content-center' id="login">
+          <ResetPassword token={token} />
         </section>
       )
   }
-})
+});

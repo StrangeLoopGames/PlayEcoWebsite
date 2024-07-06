@@ -7,13 +7,38 @@ section#buy {
     a.btn.btn-primary.market-btn {
         background: #ffe100;
         border: 2px solid #7d700e;
+        z-index: 1;
+    }
+    .game-purchase {
+        min-height: 300px;
+        background-size: cover;
+    }
+    .purchase-option {
+        background: url(/images/buy/Web-EcoPurchaseImage.png);
+        padding: 10px;
+        height: 300px;
+        position: relative;
+        background-size: cover;
+
+        &:before {
+            content: "";
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(6deg, rgb(11, 62, 66) 38%, rgba(17, 104, 111, 0) 100%);
+            top: 0;
+            left: 0;
+            z-index: 1;
+        }
+        p.info {
+            z-index: 1;
+        }
     }
 }
 #requirements {
     padding: 70px 0px;
 }
 .game-banner {
-    background: linear-gradient(#12876a 0%, #0a513f 100%);
 
     .title {
         background: #272a56;
@@ -30,8 +55,6 @@ section#buy {
     aspect-ratio: 1 / 2;
     background-position: center center;
     .card-title {
-        background: #272a56;
-        border: 1px solid #ffffff;
         color: #ffffff;
         text-align: center;
         font-size: 1.5rem;
@@ -41,5 +64,14 @@ section#buy {
         font-weight: 700;
         text-align: center;
         font-size: 1.5rem;
+
+        p {
+            margin-bottom: 0.3rem;
+        }
+    }
+}
+#marketplace {
+    .buy-credits {
+        width: 20%;
     }
 }

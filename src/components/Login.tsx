@@ -72,11 +72,10 @@ function LoginForm(props : {error: string}) {
                 </div>
                 <button className="btn login-button w-100" type="submit">Login</button>
             </form>
-            <div className="login-forgot-wrapper d-flex flex-wrap justify-content-center">
-                <a className="login-forgot w-50" href="/forgot">Forgot Password</a>
-                <a className="login-forgot w-50" href="/register">Register an Account</a>
-                <a className="steam-login" href={`${import.meta.env.VITE_CLOUD_API_URL}api/Registration/RegisterWithSteam`}><img src={steamLogin} alt="" /></a>
-                
+            <div className="d-flex flex-wrap justify-content-center gap-2 mt-2">
+                <a className="btn steam-login w-100" href={`${import.meta.env.VITE_CLOUD_API_URL}api/Registration/RegisterWithSteam`}>Login with Steam</a>
+                <a className="login-forgot" href="/forgot">Forgot Password</a>
+                <a className="login-forgot" href="/register">Register an Account</a>                
             </div>
         </div>
     );

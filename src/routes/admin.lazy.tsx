@@ -10,7 +10,7 @@ export const Route = createFileRoute('/admin')({
       window.location.href = '/account';
     } else {
       return (
-        <section className='page-wrap-main d-flex col-lg-offset-2 col-lg-8 justify-content-center' id="account">
+        <section className='page-wrap-main d-flex col-lg-offset-2 col-lg-12 justify-content-center' id="account">
         <div className="col-12">
         <div className="account-feature">
         <UserEditor />

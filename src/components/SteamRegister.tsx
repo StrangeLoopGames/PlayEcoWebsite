@@ -1,6 +1,6 @@
 import { useNavigate } from '@tanstack/react-router';
 import React, { useEffect, useState } from 'react';
-import { AuthenticatedUser, useUserQuery, isValidUsername, checkNewSteamUserStatus } from '../utils/authentication';
+import { AuthenticatedUser, useUserQuery, isValidUsername, checkNewSteamUserStatus, isValidPassword } from '../utils/authentication';
 import { Modal } from './Modal';
 import { useMutation } from '@tanstack/react-query';
 type RegisterSteam = {
@@ -45,9 +45,6 @@ function SteamRegister() {
             return;
         } else {
             const queryString: string = `username=${registerData.username}&email=${registerData.email}&password=${registerData.password}`
-            console.log(`error: ${error} equals ${error === ""}`);
-            console.table(queryString);
-            console.table(registerData);
             
             if(error == "") {
             registerMutate.mutate(`${import.meta.env.VITE_CLOUD_API_URL}api/Registration/SetUsernameAndPassword?${queryString}`);
@@ -77,8 +74,8 @@ function SteamRegister() {
         if(name === "email" && !value.includes('@')) {
             setError('Email is not valid');
         }
-        if (name === "password" && value.length < 8) {
-            setError('Password must be at least 8 characters long.');
+        if (name === "password" && !isValidPassword(value)) {
+            setError('Password is not valid, please use at least 8 characters, one uppercase letter, one lowercase letter, one number, and one special character.');
         }
         if (name === "passwordConfirm" && value !== registerData.password) {
             setError('Passwords do not match.');

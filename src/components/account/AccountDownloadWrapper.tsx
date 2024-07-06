@@ -38,10 +38,7 @@ export function AccountDownloadWrapper() {
 
                                 <div className="btn-corner">
                                     <a className="btn btn-small" id="more-downloads" onClick={() => setShowMoreDownloads(prevState => !prevState)} >
-                                        moreDownloads
-                                    </a>
-                                    <a className="btn btn-small" href="/ReleaseNotes">
-                                        releaseNotes
+                                        More Downloads
                                     </a>
                                 </div>
                             </div>
@@ -147,7 +144,7 @@ export function AccountDownloadWrapper() {
                                     </div>
                                 </div>
                                 <a className="btn btn-small" style={{ position: 'static', float: 'right', marginTop: '-51px' }} href="/gameversions">
-                                    archivedDownloads
+                                    Archived Downloads
                                 </a>
                             </div>
                 </>

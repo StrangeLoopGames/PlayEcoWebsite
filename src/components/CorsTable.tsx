@@ -21,6 +21,7 @@ interface Props {
     selectedKey: string | null
     toggleModalEvent: (toggleModalEvent: void) => void | null;
     updateUserEvent: (updatedUser: User) => void;
+    changePageEvent: (pageNumber: number) => void;
 }
 function generateColumns(data) {
     // Get keys from the first data object  
@@ -51,7 +52,7 @@ export function formatCell(key: string, cell: any, info: any) {
         return cell === "true" || cell === "false" ? booleanIcons[cell] : cell;
     }
 }
-export default function CorsTable({users, selectedKey, toggleModalEvent, updateUserEvent}: Props) {
+export default function CorsTable({users, selectedKey, toggleModalEvent, updateUserEvent, changePageEvent}: Props) {
     // Columns and data are defined in a stable reference, will not cause infinite loop!
     //const [data, setData] = useState(users)
     const [sorting, setSorting] = useState<SortingState>([])
@@ -59,7 +60,7 @@ export default function CorsTable({users, selectedKey, toggleModalEvent, updateU
     const [toggleModal, setToggleModal] = useState(false);
     const [pagination, setPagination] = useState({
         pageIndex: 0, //initial page index
-        pageSize: 5, //default page size
+        pageSize: 100, //default page size
     });
     const data = (selectedKey == null) ? users : users[selectedKey];
     
@@ -96,7 +97,8 @@ export default function CorsTable({users, selectedKey, toggleModalEvent, updateU
     return (
         <div className="p-2 table-container">
             <TablePagnation table={table} />
-            <table>
+            <div className="table-container">
+                            <table>
                 <thead>
                     {table.getHeaderGroups().map((headerGroup) => (
                         <tr key={headerGroup.id}>
@@ -147,6 +149,7 @@ export default function CorsTable({users, selectedKey, toggleModalEvent, updateU
                     ))}
                 </tbody>
             </table>
+            </div>
             <TablePagnation table={table} />
             {
                 selectedUser != null && toggleModal == true ? (
@@ -212,9 +215,10 @@ function TablePagnation(props: any) {
                 value={table.getState().pagination.pageSize}
                 onChange={e => {
                     table.setPageSize(Number(e.target.value))
+                    table.changePageEvent(Number(e.target.value));
                 }}
             >
-                {[5, 10, 20, 30, 40, 50].map(pageSize => (
+                {[5, 10, 20, 30, 40, 50, 100, 150, 200].map(pageSize => (
                     <option key={pageSize} value={pageSize}>
                         Show {pageSize}
                     </option>

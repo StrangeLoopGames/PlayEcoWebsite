@@ -1,5 +1,5 @@
 .table-wrap {
-    overflow-x: scroll;
+    overflow-x: hidden;
     overflow-y: hidden;
 
     .user-search {
@@ -28,6 +28,9 @@
 
             th {
                 padding: 10px;
+            }
+            span {
+                cursor: pointer;
             }
         }
 

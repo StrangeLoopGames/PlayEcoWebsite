@@ -62,16 +62,19 @@ function UserCard(props: any) {
             <div className="profile-wrap">
                 <img className="avatar-img " src={icon} alt="" />
                 <div className="profile-details">
-                    <ul>
+                    <ul className=''>
                         <li className=""><span className="account-label-front">Username:</span>{props.user.username}</li>
                         <li className="account-label-front"><span className="account-label-front">User ID:</span>{props.user.id}</li>
                         <li className="account-label-front"><span className="account-label-front">Status:</span>{props.user.ownsEco ? "Owns Eco" : <a href="/buy">Purchase Eco here</a>}</li>
                         <li className="account-label-front"><span className="account-label-front">Type:</span>{props.user.isDeveloper ? "Developer" : "Standard"}</li>
+                        <li className="account-label-front"><span className="account-label-front">Eco Credits Balance:</span>{props.user.ecoCredits}</li>
                     </ul>
                 </div>
             </div>
             <div className="btn-corner">
-                <a className="btn btn-small" href="/buy">Upgrade</a>
+                { !props.user.ownsEco ? <a className="btn btn-small" href="/buy">Buy Eco</a> : null 
+                }
+                <a className="btn btn-small" href="/buy">Buy Eco Credits</a>
                 <button className="btn btn-small">Change Icon</button>
                 <button className="btn btn-small" id="account-edit" onClick={enableEdit}>Edit Account</button>
                 {

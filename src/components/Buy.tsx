@@ -1,6 +1,5 @@
 import "../assets/_buy.scss";
 import { splitCamelCaseAndCapitalize } from "../utils/stringUtils";
-const  placeholderProduct = "https://images.placeholders.dev/?width=300&height=200&bgColor=rgb(70,%20136,%20192)";
 export function Buy() {
 
     const marketItems = [
@@ -35,33 +34,35 @@ export function Buy() {
             <section className='page-wrap-main d-flex col-lg-offset-2 col-lg-8 justify-content-center' id="buy">
                 <div className="col-md-12">
                     <h1 className="mb-4">Purchase Eco</h1>
-                    <div className="buy-wrap d-flex flex-row game-banner p-3 overflow-hidden">
-                        <div className="col-4">
-                            <img src="/images/buy/Web-EcoPurchaseImage.png" alt="" />
-                        </div>
-                        <div className="col-8 px-2 d-flex flex-column gap-3 text-white fw-bold">
-                            <div className="purchase-option px-2">
-                                <h2 className="title">Buy Eco Directly</h2>
-                                    <p>Buy Eco from our store + get a key to unlock on Steam (best way to support us)</p>
-                                    <a href="/buy" className="btn btn-primary market-btn">Buy Eco</a>
+                    <div className="buy-wrap d-flex flex-row game-banner overflow-hidden">
+                        <div className="game-purchase col-6 d-flex flex-column text-white fw-bold p-2">
+                            <div className="purchase-option d-flex flex-column justify-content-end">
+                                <p className="info">Buy Eco from our store + get a key to unlock on Steam (best way to support us)</p>
+                                <a href="/buy" className="btn btn-primary market-btn">Buy Eco Directly</a>
                             </div>
-                            <div className="purchase-option px-2">
-                            <h2 className="title">Buy Eco on steam</h2>
-                                <p>Buy Eco on Steam and start playing today.</p>
-                                <a href="https://store.steampowered.com/app/382310/Eco/" target="_blank" className="btn btn-primary market-btn">Buy on Steam</a>
+                        </div>
+                        <div className="game-purchase col-6 d-flex flex-column text-white fw-bold p-2">
+                            <div className="purchase-option d-flex flex-column justify-content-end">
+                            <p className="info">Buy Eco on Steam and start playing today.</p>
+                                <a href="https://store.steampowered.com/app/382310/Eco/" target="_blank" className="btn btn-primary market-btn">Buy Eco on Steam</a>
                             </div>
                         </div>
 
                     </div>
+                    <h4 className="pt-5 fw-bold">Eco Credits</h4>
+                    <p className="pt-3 fs-3">Buy Eco Credits here and spend them on premium variants inside the game!</p> 
                     <div id="marketplace" className="d-flex mt-4 gap-0 flex-wrap justify-content-between">
                     {
                     marketItems.map((item, index) => {
                         return (
-                        <div className="buy-credits d-flex flex-column p-1 col-3" key={index} >
+                        <div className="buy-credits d-flex flex-column p-1 zoomin" key={index} >
                             <div className="card market-item" style={{backgroundImage: `url(images/buy/${item.id}.jpg)`}}>    
                             <div className="card-body d-flex flex-column justify-content-between">
                                 <h3 className="card-title">{splitCamelCaseAndCapitalize(item.name)}</h3>
-                                <p className="item-price">${item.price}</p>
+                                <div className="buy-wrap d-flex flex-column align-items-center">
+                                    <p className="item-price">${item.price}</p>
+                                    <a href="/buy" className="btn btn-primary market-btn w-100">Buy</a>
+                                </div>
                             </div>
                             </div>
                         </div>

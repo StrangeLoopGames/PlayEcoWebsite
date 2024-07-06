@@ -73,6 +73,15 @@ export function isValidUsername(username: string): boolean {
 			return true; // Username is valid
 		}
 }
+export function isValidPassword(password: string): boolean {
+	// Password must be at least 8 characters long
+	const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+	if (!regex.test(password)) {
+		return false; // Password is too short
+	} else {
+		return true; // Password is valid
+	}
+}
 
 export function useIsUserAdmin(userJWT: string): boolean {
 	const {data: user} = useUserQuery(userJWT);

@@ -123,12 +123,17 @@ header {
     line-height: 60px;
     font-family: abel, sans-serif;
     color: #333333;
+    gap: 15px;
 
     a{
       color: #333333;
       text-decoration: none;
       transition: 0.3s;
+      line-height: 100%;
 
+      &#menu-Buy {
+        color: #9fce8e;
+      }
       &:hover {
         color: #9fce8e !important;
         transform: scale(1.1);

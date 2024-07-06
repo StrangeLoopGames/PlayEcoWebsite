@@ -1,6 +1,7 @@
 import { useNavigate } from '@tanstack/react-router';
 import React, { useState } from 'react';
 import { useMutation } from '@tanstack/react-query';
+import { isValidPassword } from '../utils/authentication';
 type Register = {
     username: string;
     email: string;
@@ -36,6 +37,9 @@ function RegisterForm() {
         e.preventDefault();
         if (registerData.password != registerData.passwordConfirm) {
             setError('Passwords do not match');
+            return;
+        } else if(!isValidPassword(registerData.password)) {
+            setError('Password is not valid, please use at least 8 characters, one uppercase letter, one lowercase letter, one number, and one special character.');
             return;
         } else {
             const encodedPassword = encodeURIComponent(registerData.password);
@@ -83,13 +87,7 @@ function RegisterForm() {
                 <div className="form-group mb-3">
                     <label htmlFor="ageConfirm">
                         <input onChange={handleCheckboxChange} type="checkbox" name="ageConfirm" id="ageConfirm" />
-                        I am over the age of 13 years old
-                    </label>
-                </div>
-                <div className="form-group mb-3">
-                    <label htmlFor="newsletter">
-                        <input onChange={handleCheckboxChange} type="checkbox" name="newsletter" id="newsletter" />
-                        Join the Eco Newsletter
+                        <span className='px-2'>I am over the age of 13 years old</span>
                     </label>
                 </div>
                 <button className="btn login-button w-100" type="submit">Register</button>

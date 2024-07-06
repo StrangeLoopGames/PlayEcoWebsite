@@ -38,10 +38,6 @@ function Account() {
   const userJWT = (AuthenticatedUser()) ? AuthenticatedUser() : '';
   const { data: user, error, isLoading } = useUserQuery(userJWT as string);
   if (isLoading) return <Modal type="Loading" message="Please wait while we load your account information." />;
-  if(user && !user.verified) {
-    removeToken();
-    window.location.href = '/login?error=unverified';
-  }
   if (error) {
     console.log(error);
     return <Modal type="Error" message={error.message} />
@@ -49,6 +45,10 @@ function Account() {
 
   return (
     <>
+    { user && !user.verified ? (
+      <p className="alert alert-info">Your account is not verified, please check your email for a verification link.</p>
+    ) : null
+    }
       <UserCard user={user} />
       <DownloadsCard user={user} />
       <TransactionsCard user={user} />

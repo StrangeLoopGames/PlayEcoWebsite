@@ -20,7 +20,7 @@ export function UserEditor() {
     const userJWT = AuthenticatedUser();
     const [isUpdating, setIsUpdating] = useState(false);
     const [pageNumber, setPageNumber] = useState(1);
-    const [pageSize, setPageSize] = useState(10);
+    const [pageSize, setPageSize] = useState(100);
     const [crudType, setCrudType] = useState("UserAccount");
     const [search, setSearch] = useState<string | null>(null);
 
@@ -101,6 +101,7 @@ export function UserEditor() {
                         selectedKey={null}
                         toggleModalEvent={null}
                         updateUserEvent={updateUserEvent}
+                        changePageEvent={setPageSize}
                     />
                 )}
             </div>
