@@ -3,32 +3,39 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {useGetGameVersions} from '../../utils/api';
 import { useEffect, useState } from "react";
 import { Version } from "../../types/types";
+import { log } from "console";
 export function AccountDownloadWrapper() {
     // use useGetGameVersions to get game versions and set the first to releaseVersion to the first index that doesn't have a commit value, and then set stagingVersion to the first index that does have a commit value
     const { data: versions, error, isLoading } = useGetGameVersions();
+    const [errorState, setErrorState] = useState<boolean>(false);
     const [releaseVersion, setReleaseVersion] = useState<Version | null>(null);
     const [stagingVersion, setStagingVersion] = useState<Version | null>(null);
     const [stagingFilename, setStagingFilename] = useState<string>("");
     const [showMoreDownloads, setShowMoreDownloads] = useState<boolean>(false);
     useEffect(() => {
-        if (!isLoading && versions != null) {
+        if (!isLoading && versions != null && versions != undefined && versions.length > 0) {
             const release = versions.find((version: Version) => !version.commitNumber);
             const staging = versions.find((version: Version) => version.commitNumber);
             setReleaseVersion(release);
             setStagingVersion(staging);
             setStagingFilename(`${staging?.versionNumber}-${staging?.versionCategory}`);
             
+        } else {
+            setErrorState(true);
         }
     }, [versions, isLoading]);
+    
+    console.log(errorState);
+    
     return (
         <div className="account-feature account-download-wrapper">
             <h2>Game Downloads</h2>
             {
             isLoading ? (
                 <div className="text-left">Loading Downloads</div>
-            ) : error ? (
-                <div className="text-left text-danger">An error occurred</div>
-            ) : versions != null && versions ? (
+            ) : error || errorState ? (
+                <div className="text-left text-danger">An error occurred, please try again, or contact support</div>
+            ) : versions != null && versions != undefined ? (
                 <>
                 <div className="account-label">
                                 <span style={{ textTransform: 'capitalize', fontWeight: 700 }}>

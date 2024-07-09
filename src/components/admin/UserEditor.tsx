@@ -6,7 +6,7 @@ import { AuthenticatedUser } from "../../utils/authentication";
 import { splitCamelCaseAndCapitalize } from "../../utils/stringUtils";
 import { components as types } from '../../types/api';
 import { Link } from "@tanstack/react-router";
-
+import { generateInputTypes } from "../../utils/table";
 type User = types["schemas"]["StrangeUser"];
 
 const menuItems = {
@@ -90,10 +90,24 @@ export function UserEditor() {
                 ))}
             </div>
             <div className="table-wrap">
+            <div className="instructions">
+                <details>
+                    <summary className="fs-6 p-2">Instructions</summary>
+                    <p className="fs-6 m-0">Double click on a cell to edit it</p>
+                    <p className="fs-6 m-0">Click on the column header to sort by that column</p>
+                    <p className="fs-6 m-0">Use the search bar to filter the results</p>
+                    <p className="fs-6 m-0">To change data types click on the buttons above</p>
+                </details>
+                </div>
                 <div className="user-search">
                     <input className="search-input" name="search" type="text" placeholder="Search the database" />
                     <button className="button" onClick={handleSearch}>Search</button>
                     <button className="button reset" onClick={searchReset}>Reset</button>
+                </div>
+                <div className="results-info">
+                {search && ( 
+                        <p>Search results for: {search}</p>
+                    )}
                 </div>
                 {userTable.length > 0 && (
                     <CorsTable

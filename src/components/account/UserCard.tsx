@@ -11,7 +11,7 @@ function UserCard(props: any) {
         password: "",
         passwordConfirm: ""
     } });
-    const selectedIcon = (props.user.isDeveloper) ? "slgicon" : "betaicon";
+    const selectedIcon = (props.user.isSLG) ? "slgicon" : "betaicon";
     const icon = `/images/icons/${getIcon(selectedIcon, icons)}.png`;
     const updateUserMutate = useMutation({
         mutationFn: (url: string) => {
@@ -66,7 +66,7 @@ function UserCard(props: any) {
                         <li className=""><span className="account-label-front">Username:</span>{props.user.username}</li>
                         <li className="account-label-front"><span className="account-label-front">User ID:</span>{props.user.id}</li>
                         <li className="account-label-front"><span className="account-label-front">Status:</span>{props.user.ownsEco ? "Owns Eco" : <a href="/buy">Purchase Eco here</a>}</li>
-                        <li className="account-label-front"><span className="account-label-front">Type:</span>{props.user.isDeveloper ? "Developer" : "Standard"}</li>
+                        <li className="account-label-front"><span className="account-label-front">Type:</span>{props.user.isSLG ? "Developer" : "Standard"}</li>
                         <li className="account-label-front"><span className="account-label-front">Eco Credits Balance:</span>{props.user.ecoCredits}</li>
                     </ul>
                 </div>

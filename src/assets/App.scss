@@ -56,14 +56,16 @@ body.home {
   &.modal-user {
     .modal-content {
       max-width: 50%;
+      max-height: 70%;
+      overflow: hidden;
+      height: 100%;
     }
 
     .modal-edit-wrap {
       width: 100%;
-      display: flex;
-      flex-direction: row;
-      flex-wrap: wrap;
+      overflow: hidden;
       justify-content: space-evenly;
+      flex-wrap: nowrap;
   }
   }
   .modal-content {

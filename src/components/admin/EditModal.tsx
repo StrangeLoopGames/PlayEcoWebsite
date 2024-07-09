@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { components as types } from '../../types/api'
+import { UserInput } from '../../utils/table';
 import CorsTable from '../CorsTable';
 type User = types["schemas"]["StrangeUser"];
 
@@ -20,6 +21,7 @@ const inputTypes = {
     blockPurchasing: "checkbox",
     isDeveloper: "checkbox",
     isCloudAdmin: "checkbox",
+    isSlg: "checkbox",
     bannedUntil: "datetime",
     bannedReason: "textarea",
     isBanned: "checkbox",

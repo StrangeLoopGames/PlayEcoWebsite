@@ -28,8 +28,8 @@ function TransactionsCard({user}:{user: User}) {
     const columns = useMemo<ColumnDef<MarketplaceTransaction>[]>(
         () => [
             {
-                accessorKey: 'id',
-                header: () => <span>Transaction ID</span>,
+                accessorKey: 'timeCompleted',
+                header: () => <span>Date of Transaction</span>,
                 cell: info => info.getValue(),
             },
             {
@@ -53,8 +53,8 @@ function TransactionsCard({user}:{user: User}) {
                 cell: info => info.getValue(),
             },
             {
-                accessorKey: 'timeCompleted',
-                header: () => <span>Date of Transaction</span>,
+                accessorKey: 'id',
+                header: () => <span>Transaction ID</span>,
                 cell: info => info.getValue(),
             },
     

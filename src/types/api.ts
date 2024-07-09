@@ -14,7 +14,7 @@ export interface paths {
         };
       };
       responses: {
-        /** Success */
+        /** OK */
         200: {
           content: {
             "text/plain": components["schemas"]["AuthenticationResult"];
@@ -34,12 +34,40 @@ export interface paths {
         };
       };
       responses: {
-        /** Success */
+        /** OK */
         200: {
           content: {
             "text/plain": components["schemas"]["AuthenticationResult"];
             "application/json": components["schemas"]["AuthenticationResult"];
             "text/json": components["schemas"]["AuthenticationResult"];
+          };
+        };
+      };
+    };
+  };
+  "/Authentication/RefreshToken": {
+    post: {
+      parameters: {
+        query: {
+          refreshToken?: string;
+          "api-version"?: string;
+        };
+      };
+      responses: {
+        /** OK */
+        200: {
+          content: {
+            "text/plain": components["schemas"]["AuthenticationResult"];
+            "application/json": components["schemas"]["AuthenticationResult"];
+            "text/json": components["schemas"]["AuthenticationResult"];
+          };
+        };
+        /** Forbidden */
+        403: {
+          content: {
+            "text/plain": string;
+            "application/json": string;
+            "text/json": string;
           };
         };
       };
@@ -54,7 +82,7 @@ export interface paths {
         };
       };
       responses: {
-        /** Success */
+        /** OK */
         200: {
           content: {
             "text/plain": string;
@@ -75,7 +103,7 @@ export interface paths {
         };
       };
       responses: {
-        /** Success */
+        /** OK */
         200: {
           content: {
             "text/plain": components["schemas"]["StrangeUser"];
@@ -86,17 +114,87 @@ export interface paths {
       };
     };
   };
+  "/s3/public/{documentName}": {
+    get: {
+      parameters: {
+        path: {
+          documentName: string;
+        };
+      };
+      responses: {
+        /** OK */
+        200: unknown;
+      };
+    };
+  };
+  "/s3/release/{documentName}": {
+    get: {
+      parameters: {
+        path: {
+          documentName: string;
+        };
+      };
+      responses: {
+        /** OK */
+        200: unknown;
+      };
+    };
+  };
+  "/s3/staging/{documentName}": {
+    get: {
+      parameters: {
+        path: {
+          documentName: string;
+        };
+      };
+      responses: {
+        /** OK */
+        200: unknown;
+      };
+    };
+  };
+  "/s3/GameVersions": {
+    get: {
+      responses: {
+        /** OK */
+        200: {
+          content: {
+            "text/plain": components["schemas"]["GameVersion"][];
+            "application/json": components["schemas"]["GameVersion"][];
+            "text/json": components["schemas"]["GameVersion"][];
+          };
+        };
+      };
+    };
+  };
+  "/s3/build": {
+    post: {
+      responses: {
+        /** OK */
+        200: unknown;
+      };
+      requestBody: {
+        content: {
+          "application/json-patch+json": components["schemas"]["GameVersion"];
+          "application/json": components["schemas"]["GameVersion"];
+          "text/json": components["schemas"]["GameVersion"];
+          "application/*+json": components["schemas"]["GameVersion"];
+        };
+      };
+    };
+  };
   "/Flags/FlagServer": {
     post: {
       parameters: {
         query: {
           worldTicket?: string;
           problemDescription?: string;
+          circumventingPaidItems?: boolean;
           "api-version"?: string;
         };
       };
       responses: {
-        /** Success */
+        /** OK */
         200: unknown;
       };
     };
@@ -110,13 +208,13 @@ export interface paths {
         };
       };
       responses: {
-        /** Success */
+        /** OK */
         200: unknown;
       };
     };
     put: {
       responses: {
-        /** Success */
+        /** OK */
         200: unknown;
       };
       requestBody: {
@@ -134,7 +232,7 @@ export interface paths {
         };
       };
       responses: {
-        /** Success */
+        /** OK */
         200: {
           content: {
             "application/json": components["schemas"]["FlagReported"];
@@ -149,7 +247,7 @@ export interface paths {
         };
       };
       responses: {
-        /** Success */
+        /** OK */
         200: unknown;
       };
     };
@@ -164,7 +262,7 @@ export interface paths {
         };
       };
       responses: {
-        /** Success */
+        /** OK */
         200: {
           content: {
             "application/json": components["schemas"]["FlagReported"][];
@@ -181,12 +279,31 @@ export interface paths {
         };
       };
       responses: {
-        /** Success */
+        /** OK */
         200: {
           content: {
             "text/plain": components["schemas"]["MarketplaceItem"][];
             "application/json": components["schemas"]["MarketplaceItem"][];
             "text/json": components["schemas"]["MarketplaceItem"][];
+          };
+        };
+      };
+    };
+  };
+  "/Marketplace/GetGlobalData": {
+    get: {
+      parameters: {
+        query: {
+          "api-version"?: string;
+        };
+      };
+      responses: {
+        /** OK */
+        200: {
+          content: {
+            "text/plain": components["schemas"]["StrangeCloudGlobalData"];
+            "application/json": components["schemas"]["StrangeCloudGlobalData"];
+            "text/json": components["schemas"]["StrangeCloudGlobalData"];
           };
         };
       };
@@ -200,7 +317,7 @@ export interface paths {
         };
       };
       responses: {
-        /** Success */
+        /** OK */
         200: unknown;
       };
       requestBody: {
@@ -215,11 +332,12 @@ export interface paths {
       parameters: {
         query: {
           marketplaceItemName?: string;
+          quantityMultiplier?: number;
           "api-version"?: string;
         };
       };
       responses: {
-        /** Success */
+        /** OK */
         200: unknown;
       };
     };
@@ -229,11 +347,12 @@ export interface paths {
       parameters: {
         query: {
           marketplaceItemName?: string;
+          quantityMultiplier?: number;
           "api-version"?: string;
         };
       };
       responses: {
-        /** Success */
+        /** OK */
         200: {
           content: {
             "text/plain": components["schemas"]["MarketplaceTransaction"];
@@ -253,7 +372,7 @@ export interface paths {
         };
       };
       responses: {
-        /** Success */
+        /** OK */
         200: {
           content: {
             "text/plain": boolean;
@@ -273,7 +392,7 @@ export interface paths {
         };
       };
       responses: {
-        /** Success */
+        /** OK */
         200: unknown;
       };
     };
@@ -288,7 +407,7 @@ export interface paths {
         };
       };
       responses: {
-        /** Success */
+        /** OK */
         200: unknown;
       };
     };
@@ -304,7 +423,7 @@ export interface paths {
         };
       };
       responses: {
-        /** Success */
+        /** OK */
         200: unknown;
       };
     };
@@ -320,7 +439,7 @@ export interface paths {
         };
       };
       responses: {
-        /** Success */
+        /** OK */
         200: {
           content: {
             "text/plain": components["schemas"]["AuthenticationResult"];
@@ -340,7 +459,7 @@ export interface paths {
         };
       };
       responses: {
-        /** Success */
+        /** OK */
         200: unknown;
       };
     };
@@ -355,7 +474,7 @@ export interface paths {
         };
       };
       responses: {
-        /** Success */
+        /** OK */
         200: unknown;
       };
     };
@@ -364,11 +483,12 @@ export interface paths {
     get: {
       parameters: {
         query: {
+          token?: string;
           "api-version"?: string;
         };
       };
       responses: {
-        /** Success */
+        /** OK */
         200: unknown;
       };
     };
@@ -382,13 +502,13 @@ export interface paths {
         };
       };
       responses: {
-        /** Success */
+        /** OK */
         200: unknown;
       };
     };
     put: {
       responses: {
-        /** Success */
+        /** OK */
         200: unknown;
       };
       requestBody: {
@@ -406,7 +526,7 @@ export interface paths {
         };
       };
       responses: {
-        /** Success */
+        /** OK */
         200: {
           content: {
             "application/json": components["schemas"]["MarketplaceTransaction"];
@@ -421,7 +541,7 @@ export interface paths {
         };
       };
       responses: {
-        /** Success */
+        /** OK */
         200: unknown;
       };
     };
@@ -436,7 +556,7 @@ export interface paths {
         };
       };
       responses: {
-        /** Success */
+        /** OK */
         200: {
           content: {
             "application/json": components["schemas"]["MarketplaceTransaction"][];
@@ -453,11 +573,12 @@ export interface paths {
         };
       };
       responses: {
-        /** Success */
+        /** OK */
         200: unknown;
       };
       requestBody: {
         content: {
+          "application/json-patch+json": components["schemas"]["StrangeUser"];
           "application/json": components["schemas"]["StrangeUser"];
           "text/json": components["schemas"]["StrangeUser"];
           "application/*+json": components["schemas"]["StrangeUser"];
@@ -473,7 +594,7 @@ export interface paths {
         };
       };
       responses: {
-        /** Success */
+        /** OK */
         200: {
           content: {
             "text/plain": components["schemas"]["StrangeUser"];
@@ -493,7 +614,7 @@ export interface paths {
         };
       };
       responses: {
-        /** Success */
+        /** OK */
         200: unknown;
       };
     };
@@ -506,7 +627,7 @@ export interface paths {
         };
       };
       responses: {
-        /** Success */
+        /** OK */
         200: {
           content: {
             "text/plain": string;
@@ -525,7 +646,7 @@ export interface paths {
         };
       };
       responses: {
-        /** Success */
+        /** OK */
         200: {
           content: {
             "text/plain": components["schemas"]["DailySummary"][];
@@ -544,7 +665,7 @@ export interface paths {
         };
       };
       responses: {
-        /** Success */
+        /** OK */
         200: {
           content: {
             "text/plain": components["schemas"]["DailySummary"][];
@@ -564,11 +685,12 @@ export interface paths {
         };
       };
       responses: {
-        /** Success */
+        /** OK */
         200: unknown;
       };
       requestBody: {
         content: {
+          "application/json-patch+json": components["schemas"]["StrangeAchievement"][];
           "application/json": components["schemas"]["StrangeAchievement"][];
           "text/json": components["schemas"]["StrangeAchievement"][];
           "application/*+json": components["schemas"]["StrangeAchievement"][];
@@ -585,11 +707,12 @@ export interface paths {
         };
       };
       responses: {
-        /** Success */
+        /** OK */
         200: unknown;
       };
       requestBody: {
         content: {
+          "application/json-patch+json": components["schemas"]["StrangeAchievement"];
           "application/json": components["schemas"]["StrangeAchievement"];
           "text/json": components["schemas"]["StrangeAchievement"];
           "application/*+json": components["schemas"]["StrangeAchievement"];
@@ -606,7 +729,7 @@ export interface paths {
         };
       };
       responses: {
-        /** Success */
+        /** OK */
         200: {
           content: {
             "text/plain": components["schemas"]["HearbeatResult"];
@@ -626,13 +749,13 @@ export interface paths {
         };
       };
       responses: {
-        /** Success */
+        /** OK */
         200: unknown;
       };
     };
     put: {
       responses: {
-        /** Success */
+        /** OK */
         200: unknown;
       };
       requestBody: {
@@ -650,7 +773,7 @@ export interface paths {
         };
       };
       responses: {
-        /** Success */
+        /** OK */
         200: {
           content: {
             "application/json": components["schemas"]["StrangeUser"];
@@ -665,7 +788,7 @@ export interface paths {
         };
       };
       responses: {
-        /** Success */
+        /** OK */
         200: unknown;
       };
     };
@@ -680,7 +803,7 @@ export interface paths {
         };
       };
       responses: {
-        /** Success */
+        /** OK */
         200: {
           content: {
             "application/json": components["schemas"]["StrangeUser"][];
@@ -698,7 +821,7 @@ export interface paths {
         };
       };
       responses: {
-        /** Success */
+        /** OK */
         200: {
           content: {
             "text/plain": components["schemas"]["VoiceLoginTokenResult"];
@@ -719,7 +842,7 @@ export interface paths {
         };
       };
       responses: {
-        /** Success */
+        /** OK */
         200: {
           content: {
             "text/plain": components["schemas"]["VoiceJoinTokenResult"];
@@ -739,7 +862,7 @@ export interface paths {
         };
       };
       responses: {
-        /** Success */
+        /** OK */
         200: {
           content: {
             "text/plain": components["schemas"]["StrangeWorldCloudData"];
@@ -758,14 +881,8 @@ export interface paths {
         };
       };
       responses: {
-        /** Success */
-        200: {
-          content: {
-            "text/plain": components["schemas"]["StrangeWorldCloudData"][];
-            "application/json": components["schemas"]["StrangeWorldCloudData"][];
-            "text/json": components["schemas"]["StrangeWorldCloudData"][];
-          };
-        };
+        /** OK */
+        200: unknown;
       };
     };
   };
@@ -779,54 +896,15 @@ export interface paths {
         };
       };
       responses: {
-        /** Success */
+        /** OK */
         200: unknown;
       };
       requestBody: {
         content: {
+          "application/json-patch+json": string;
           "application/json": string;
           "text/json": string;
           "application/*+json": string;
-        };
-      };
-    };
-  };
-  "/Worlds/Test": {
-    post: {
-      parameters: {
-        query: {
-          "api-version"?: string;
-        };
-      };
-      responses: {
-        /** Success */
-        200: unknown;
-      };
-      requestBody: {
-        content: {
-          "application/json": components["schemas"]["StrangeWorldCloudData"];
-          "text/json": components["schemas"]["StrangeWorldCloudData"];
-          "application/*+json": components["schemas"]["StrangeWorldCloudData"];
-        };
-      };
-    };
-  };
-  "/Worlds/Test4": {
-    post: {
-      parameters: {
-        query: {
-          "api-version"?: string;
-        };
-      };
-      responses: {
-        /** Success */
-        200: unknown;
-      };
-      requestBody: {
-        content: {
-          "application/json": components["schemas"]["StrangeWorldCloudData"];
-          "text/json": components["schemas"]["StrangeWorldCloudData"];
-          "application/*+json": components["schemas"]["StrangeWorldCloudData"];
         };
       };
     };
@@ -839,11 +917,18 @@ export interface paths {
         };
       };
       responses: {
-        /** Success */
-        200: unknown;
+        /** OK */
+        200: {
+          content: {
+            "text/plain": components["schemas"]["StrangeWorldRegistrationResult"];
+            "application/json": components["schemas"]["StrangeWorldRegistrationResult"];
+            "text/json": components["schemas"]["StrangeWorldRegistrationResult"];
+          };
+        };
       };
       requestBody: {
         content: {
+          "application/json-patch+json": components["schemas"]["StrangeWorldCloudData"];
           "application/json": components["schemas"]["StrangeWorldCloudData"];
           "text/json": components["schemas"]["StrangeWorldCloudData"];
           "application/*+json": components["schemas"]["StrangeWorldCloudData"];
@@ -860,13 +945,13 @@ export interface paths {
         };
       };
       responses: {
-        /** Success */
+        /** OK */
         200: unknown;
       };
     };
     put: {
       responses: {
-        /** Success */
+        /** OK */
         200: unknown;
       };
       requestBody: {
@@ -884,7 +969,7 @@ export interface paths {
         };
       };
       responses: {
-        /** Success */
+        /** OK */
         200: {
           content: {
             "application/json": components["schemas"]["StrangeWorldCloudData"];
@@ -899,7 +984,7 @@ export interface paths {
         };
       };
       responses: {
-        /** Success */
+        /** OK */
         200: unknown;
       };
     };
@@ -914,7 +999,7 @@ export interface paths {
         };
       };
       responses: {
-        /** Success */
+        /** OK */
         200: {
           content: {
             "application/json": components["schemas"]["StrangeWorldCloudData"][];
@@ -929,17 +1014,22 @@ export interface components {
   schemas: {
     AuthenticationResult: {
       token?: string | null;
+      refreshToken?: string | null;
       strangeUser?: components["schemas"]["StrangeUser"];
     };
+    /** @description Stores a summary of the amount of eco credits collected in tax each day on each world. */
     DailySummary: {
       /** Format: uuid */
       id?: string;
       /** Format: uuid */
       userID?: string | null;
+      /** Format: uuid */
+      worldID?: string | null;
       /** Format: date */
       date?: string;
       /** Format: float */
       totalCollected?: number;
+      summaryType?: components["schemas"]["SummaryType"];
     };
     /** @description Info stored about a server in the cloud stroage db */
     FlagReported: {
@@ -951,6 +1041,16 @@ export interface components {
       problemDescription?: string | null;
       reportedWorldID?: string | null;
       reportedUserID?: string | null;
+      circumventingPaidItems?: boolean | null;
+    };
+    GameVersion: {
+      /** Format: uuid */
+      id?: string;
+      versionCategory?: string | null;
+      versionNumber?: string | null;
+      changeLog?: string | null;
+      date?: string | null;
+      commitNumber?: string | null;
     };
     HearbeatResult: {
       success?: boolean;
@@ -1001,6 +1101,8 @@ export interface components {
       slgReceived?: number;
       /** Format: float */
       worldOwnerReceived?: number;
+      /** Format: float */
+      charityReceived?: number;
       realMoney?: boolean;
       badTransaction?: boolean;
       completed?: boolean;
@@ -1016,8 +1118,17 @@ export interface components {
       /** Format: date-time */
       timeAchieved?: string | null;
     };
+    StrangeCloudGlobalData: {
+      /** Format: uuid */
+      id?: string;
+      /** Format: float */
+      percentCutForHosts?: number;
+      /** Format: float */
+      percentCutForCharity?: number;
+    };
     /** @description A user stored in the StrangeCloud. */
     StrangeUser: {
+      isDeveloper?: boolean;
       /** Format: uuid */
       id?: string;
       steamId?: string | null;
@@ -1033,7 +1144,9 @@ export interface components {
       verified?: boolean;
       items?: components["schemas"]["InvItem"][] | null;
       blockPurchasing?: boolean | null;
-      isDeveloper?: boolean;
+      isDevTier?: boolean | null;
+      isWolfWhisperer?: boolean | null;
+      isSLG?: boolean | null;
       isCloudAdmin?: boolean;
       /** Format: date-time */
       bannedUntil?: string | null;
@@ -1048,7 +1161,8 @@ export interface components {
       /** Format: date-time */
       creationTime?: string;
       online?: boolean;
-      timeOnlineTotal?: components["schemas"]["TimeSpan"];
+      /** Format: date-span */
+      timeOnlineTotal?: string;
       /** Format: date-time */
       lastEmailSent?: string | null;
     };
@@ -1071,39 +1185,18 @@ export interface components {
       serverInfoJson?: string | null;
       online?: boolean;
       isOfficial?: boolean | null;
+      isEligibleForTax?: boolean | null;
     };
-    TimeSpan: {
-      /** Format: int64 */
-      ticks?: number;
-      /** Format: int32 */
-      days?: number;
-      /** Format: int32 */
-      hours?: number;
-      /** Format: int32 */
-      milliseconds?: number;
-      /** Format: int32 */
-      microseconds?: number;
-      /** Format: int32 */
-      nanoseconds?: number;
-      /** Format: int32 */
-      minutes?: number;
-      /** Format: int32 */
-      seconds?: number;
-      /** Format: double */
-      totalDays?: number;
-      /** Format: double */
-      totalHours?: number;
-      /** Format: double */
-      totalMilliseconds?: number;
-      /** Format: double */
-      totalMicroseconds?: number;
-      /** Format: double */
-      totalNanoseconds?: number;
-      /** Format: double */
-      totalMinutes?: number;
-      /** Format: double */
-      totalSeconds?: number;
-    };
+    /**
+     * Format: int32
+     * @enum {integer}
+     */
+    StrangeWorldRegistrationResult: 200 | 501;
+    /**
+     * Format: int32
+     * @enum {integer}
+     */
+    SummaryType: 0 | 1 | 2;
     /** @description Response for channel join request */
     VoiceJoinTokenResult: {
       token?: string | null;

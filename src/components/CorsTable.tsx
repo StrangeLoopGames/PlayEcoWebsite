@@ -37,33 +37,33 @@ function generateColumns(data) {
     return arrayOfObjects;
 }
 const subTableColumns = ['achievements', 'items', 'icons'];
+const copyButton = ['id'];
 const booleanIcons: { true: JSX.Element, false: JSX.Element } = {
     true: <FontAwesomeIcon className="table-icon true" icon={faSquareCheck} />,
     false: <FontAwesomeIcon className="table-icon false" icon={faSquareXmark} />,
 };
-
 export function formatCell(key: string, cell: any, info: any) {
-    if(cell == null) {
-        console.log("empty!")
-    }
     if (subTableColumns.includes(key)) {
-        return <button className={cell.index}>View {key}</button>;
-    } else {
+        return <button className={`${cell != "null" ? "enabled" : "disabled"}`}>View {key}</button>;
+    } else if (copyButton.includes(key)) {
+        return <button className={cell.index} onClick={() => { navigator.clipboard.writeText(cell) }}>Copy {key}</button>
+    }
+    else {
         return cell === "true" || cell === "false" ? booleanIcons[cell] : cell;
     }
 }
-export default function CorsTable({users, selectedKey, toggleModalEvent, updateUserEvent, changePageEvent}: Props) {
+export default function CorsTable({ users, selectedKey, toggleModalEvent, updateUserEvent, changePageEvent }: Props) {
     // Columns and data are defined in a stable reference, will not cause infinite loop!
     //const [data, setData] = useState(users)
     const [sorting, setSorting] = useState<SortingState>([])
-    const [selectedUser, setSelectedUser] = useState<{cell: string, user: User} | null>(null);
+    const [selectedUser, setSelectedUser] = useState<{ cell: string, user: User } | null>(null);
     const [toggleModal, setToggleModal] = useState(false);
     const [pagination, setPagination] = useState({
         pageIndex: 0, //initial page index
         pageSize: 100, //default page size
     });
     const data = (selectedKey == null) ? users : users[selectedKey];
-    
+
     const columns = generateColumns(data);
     const table = useReactTable({
         data,
@@ -80,7 +80,20 @@ export default function CorsTable({users, selectedKey, toggleModalEvent, updateU
         },
     })
 
+    useEffect(() => {
+        const handleKeyDown = (event: { key: string; }) => {
+            if (event.key === 'Escape' && toggleModal) {
+                setToggleModal(false);
+            }
+        };
 
+        document.addEventListener('keydown', handleKeyDown);
+
+        // Clean up the event listener when component unmounts
+        return () => {
+            document.removeEventListener('keydown', handleKeyDown);
+        };
+    }, [toggleModal]);
     function selectUser(user: User, cell: any) {
         return () => {
             if (user[cell].length > 0) {
@@ -96,59 +109,65 @@ export default function CorsTable({users, selectedKey, toggleModalEvent, updateU
     }
     return (
         <div className="p-2 table-container">
+            {
+                sorting.length > 0 ? (
+                    <div className="sorting">
+                        <h5>Table is currently sorted by: <span className="fw-bold">{sorting[0].id}</span> in <span className="fw-bold">{sorting[0].desc ? 'descending' : 'ascending '} </span> order</h5>
+                    </div>
+                ) : null
+            }
             <TablePagnation table={table} />
             <div className="table-container">
-                            <table>
-                <thead>
-                    {table.getHeaderGroups().map((headerGroup) => (
-                        <tr key={headerGroup.id}>
-                            {headerGroup.headers.map((header) => (
-                                <th key={header.id} colSpan={header.colSpan}>
-                                    {header.isPlaceholder ? null : (
-                                        <div
-                                            className={
-                                                header.column.getCanSort()
-                                                    ? 'cursor-pointer select-none'
-                                                    : ''
-                                            }
-                                            onClick={header.column.getToggleSortingHandler()}
-                                            title={
-                                                header.column.getCanSort()
-                                                    ? header.column.getNextSortingOrder() === 'asc'
-                                                        ? 'Sort ascending'
-                                                        : header.column.getNextSortingOrder() === 'desc'
-                                                            ? 'Sort descending'
-                                                            : 'Clear sort'
-                                                    : undefined
-                                            }
-                                        >
-                                            {flexRender(
-                                                header.column.columnDef.header,
-                                                header.getContext()
-                                            )}
-                                            {{
-                                                asc: <FontAwesomeIcon icon={faCaretUp} />,
-                                                desc: <FontAwesomeIcon icon={faCaretDown} />,
-                                            }[header.column.getIsSorted() as string] ?? null}
-                                        </div>
-                                    )}
-                                </th>
-                            ))}
-                        </tr>
-                    ))}
-                </thead>
-                <tbody>
-                    {table.getRowModel().rows.map((row) => (
-                        <tr key={row.id} className={row.index}>
-                            {row.getVisibleCells().map((cell) => (
-                                <td key={cell.id} className={cell.id} onDoubleClick={selectUser(row.original, cell.column.id)}>
-                                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                                </td>
-                            ))}
-                        </tr>
-                    ))}
-                </tbody>
-            </table>
+                <table>
+                    <thead>
+                        {table.getHeaderGroups().map((headerGroup) => (
+                            <tr key={headerGroup.id}>
+                                {headerGroup.headers.map((header) => (
+                                    <th key={header.id} colSpan={header.colSpan} onClick={header.column.getToggleSortingHandler()}>
+                                        {header.isPlaceholder ? null : (
+                                            <div
+                                                className={
+                                                    header.column.getCanSort()
+                                                        ? `cursor-pointer select-none`
+                                                        : ''
+                                                }
+                                                title={
+                                                    header.column.getCanSort()
+                                                        ? header.column.getNextSortingOrder() === 'asc'
+                                                            ? 'Sort ascending'
+                                                            : header.column.getNextSortingOrder() === 'desc'
+                                                                ? 'Sort descending'
+                                                                : 'Clear sort'
+                                                        : undefined
+                                                }
+                                            >
+                                                {flexRender(
+                                                    header.column.columnDef.header,
+                                                    header.getContext()
+                                                )}
+                                                {{
+                                                    asc: <FontAwesomeIcon icon={faCaretUp} />,
+                                                    desc: <FontAwesomeIcon icon={faCaretDown} />,
+                                                }[header.column.getIsSorted() as string] ?? null}
+                                            </div>
+                                        )}
+                                    </th>
+                                ))}
+                            </tr>
+                        ))}
+                    </thead>
+                    <tbody>
+                        {table.getRowModel().rows.map((row) => (
+                            <tr key={row.id} className={row.index}>
+                                {row.getVisibleCells().map((cell) => (
+                                    <td key={cell.id} className={cell.id} onDoubleClick={selectUser(row.original, cell.column.id)}>
+                                        {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                                    </td>
+                                ))}
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
             </div>
             <TablePagnation table={table} />
             {

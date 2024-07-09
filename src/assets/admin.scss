@@ -19,15 +19,37 @@
             border-radius: 5px;
         }
     }
+    .results-info {
+        text-align: center;
+        width: 100%;
+        font-size: 1.5rem;
+    }
 
     table {
         font-size: 14px;
 
         thead tr {
             background: #bfbfbf;
-
             th {
+                position: relative;
                 padding: 10px;
+
+            div {
+                display: flex;
+                gap: 10px;
+                flex-direction: row;
+                align-content: center;
+                align-items: center;
+            }
+
+            &.fa-caret-down, .fa-caret-up {
+                font-size: 20px;
+            }
+
+                &:hover {
+                    cursor: pointer;
+                    background: #e7e7e7;
+                }
             }
             span {
                 cursor: pointer;
@@ -41,6 +63,24 @@
             }
             td {
                 padding: 10px;
+
+                button {
+                    background: #ffffff;
+                    border: 1px solid #6c6c6c;
+                    padding: 10px;
+                    cursor: pointer;
+                    font-size: 14px;
+                    border-radius: 5px;
+                    transition: 0.3s;
+                    &:hover {
+                        background: #c1c1c1;
+                    }
+                    &.disabled {
+                        background: #0000000a;
+                        border: 1px solid #ffffff;
+                        cursor: not-allowed;
+                    }
+                }
             }
             span.icon {
                 font-size: 18px;
