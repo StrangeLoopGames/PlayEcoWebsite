@@ -1,0 +1,25 @@
+.table-container {
+    overflow: auto;
+    position: relative;
+
+    table {
+        line-height: 110%;
+
+        thead {
+            font-size: 14px;
+            line-height: 100%;
+        }
+
+        .table-icon {
+            font-size: 24px;
+            cursor: pointer;
+
+            &.true {
+                color: #4CAF50;
+            }
+            &.false {
+                color: #F44336;
+            }
+        }
+    }
+}

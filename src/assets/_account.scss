@@ -1,0 +1,60 @@
+.profile-wrap {
+        display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+
+    img.avatar-img {
+        height: 140px;
+        width: 140px;
+        margin: 0;
+        padding: 0;
+        box-shadow: none;
+    }
+}
+.update-account {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    gap: 10px;
+}
+
+section#login {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-grow: 1;
+
+    .login-wrap {
+        min-width: 400px;
+
+        form {
+            width: 100%;
+        }
+        .btn {
+            font-size: 27px;
+            line-height: 100%;
+            height: fit-content;
+            vertical-align: revert;
+            background: rgba(123, 194, 206, 0.5882352941);
+            padding: 10px;
+            -webkit-transition: all 0.4s;
+            -moz-transition: all 0.4s;
+            transition: all 0.4s;
+        }
+    }
+}
+
+.download-icon {
+    font-size: 60px;
+}
+.logout-btn {
+    background: #e27b7b;
+    
+    &:hover {
+        background: #fc8d5d !important;
+    }
+}
+.profile-details ul {
+    list-style: none;
+}
