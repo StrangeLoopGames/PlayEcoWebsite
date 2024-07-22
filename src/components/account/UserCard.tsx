@@ -4,14 +4,27 @@ import { useMutation } from '@tanstack/react-query';
 import { getIcon } from '../../utils/account';
 // Temporary icons until we have a proper icon migration of teirs
 const icons = "alphaicon;alpha4packicon;alpha2packicon;devicon;hareicon;bannericon;wolficon;hareicon;supericon;slgicon";
-
+// switch((props.user.isSLG) ? "slgicon" : "betaicon";)
 function UserCard(props: any) {
     const [error, setError] = useState("");
     const [userEdit, setUserEdit] = useState({ edit: false, user: {
         password: "",
         passwordConfirm: ""
     } });
-    const selectedIcon = (props.user.isSLG) ? "slgicon" : "betaicon";
+    let selectedIcon;
+    if (props.user.isSLG) {
+        selectedIcon = "slgicon";
+    } else {
+        if ( props.user.isWolfWhisperer ) {
+            selectedIcon = "wolficon";
+        } else if (props.user.isDevTier ) {
+            selectedIcon = "devicon";
+        } else if (props.user.ownsEco) {
+            selectedIcon = "betaicon";
+        } else {
+            selectedIcon = "standardicon";
+        }
+    }
     const icon = `/images/icons/${getIcon(selectedIcon, icons)}.png`;
     const updateUserMutate = useMutation({
         mutationFn: (url: string) => {

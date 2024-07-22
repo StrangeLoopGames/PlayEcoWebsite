@@ -28,6 +28,8 @@ const BuyLazyImport = createFileRoute('/buy')()
 const AdminLazyImport = createFileRoute('/admin')()
 const AccountLazyImport = createFileRoute('/account')()
 const IndexLazyImport = createFileRoute('/')()
+const TermsTosLazyImport = createFileRoute('/terms/tos')()
+const TermsEulaLazyImport = createFileRoute('/terms/eula')()
 
 // Create/Update Routes
 
@@ -91,6 +93,16 @@ const IndexLazyRoute = IndexLazyImport.update({
   getParentRoute: () => rootRoute,
 } as any).lazy(() => import('./routes/index.lazy').then((d) => d.Route))
 
+const TermsTosLazyRoute = TermsTosLazyImport.update({
+  path: '/terms/tos',
+  getParentRoute: () => rootRoute,
+} as any).lazy(() => import('./routes/terms/tos.lazy').then((d) => d.Route))
+
+const TermsEulaLazyRoute = TermsEulaLazyImport.update({
+  path: '/terms/eula',
+  getParentRoute: () => rootRoute,
+} as any).lazy(() => import('./routes/terms/eula.lazy').then((d) => d.Route))
+
 // Populate the FileRoutesByPath interface
 
 declare module '@tanstack/react-router' {
@@ -143,6 +155,14 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ResetpasswordLazyImport
       parentRoute: typeof rootRoute
     }
+    '/terms/eula': {
+      preLoaderRoute: typeof TermsEulaLazyImport
+      parentRoute: typeof rootRoute
+    }
+    '/terms/tos': {
+      preLoaderRoute: typeof TermsTosLazyImport
+      parentRoute: typeof rootRoute
+    }
   }
 }
 
@@ -161,6 +181,8 @@ export const routeTree = rootRoute.addChildren([
   LogoutLazyRoute,
   RegisterLazyRoute,
   ResetpasswordLazyRoute,
+  TermsEulaLazyRoute,
+  TermsTosLazyRoute,
 ])
 
 /* prettier-ignore-end */

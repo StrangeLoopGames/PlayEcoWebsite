@@ -75,7 +75,7 @@ export function isValidUsername(username: string): boolean {
 }
 export function isValidPassword(password: string): boolean {
 	// Password must be at least 8 characters long
-	const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+	const regex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/;
 	if (!regex.test(password)) {
 		return false; // Password is too short
 	} else {
@@ -85,7 +85,7 @@ export function isValidPassword(password: string): boolean {
 
 export function useIsUserAdmin(userJWT: string): boolean {
 	const {data: user} = useUserQuery(userJWT);
-	if(user && user.isSLG) {
+	if(user && user.isCloudAdmin) {
 		return true;
 	} else {
 		return false;

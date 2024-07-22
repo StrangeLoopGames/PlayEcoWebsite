@@ -86,7 +86,7 @@ function DownloadsCard({ user }: { user: User }) {
             </>
         ) : (
             <div className="account-feature account-download-wrapper">
-                <h2>gameDownload</h2>
+                <h2>Game Downloads</h2>
                 <p className="">
                     You must own Eco to download the game. <a href="/buy">Purchase Eco here</a>.
                 </p>

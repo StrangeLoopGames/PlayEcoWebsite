@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {useGetGameVersions} from '../../utils/api';
 import { useEffect, useState } from "react";
 import { Version } from "../../types/types";
-import { log } from "console";
+import { AuthenticatedUser } from "../../utils/authentication";
 export function AccountDownloadWrapper() {
     // use useGetGameVersions to get game versions and set the first to releaseVersion to the first index that doesn't have a commit value, and then set stagingVersion to the first index that does have a commit value
     const { data: versions, error, isLoading } = useGetGameVersions();
@@ -13,22 +13,52 @@ export function AccountDownloadWrapper() {
     const [stagingFilename, setStagingFilename] = useState<string>("");
     const [showMoreDownloads, setShowMoreDownloads] = useState<boolean>(false);
     useEffect(() => {
-        if (!isLoading && versions != null && versions != undefined && versions.length > 0) {
+        if (versions != null && versions != undefined && versions.length > 0) {
+            console.log(versions.length);
             const release = versions.find((version: Version) => !version.commitNumber);
             const staging = versions.find((version: Version) => version.commitNumber);
             setReleaseVersion(release);
             setStagingVersion(staging);
             setStagingFilename(`${staging?.versionNumber}-${staging?.versionCategory}`);
-            
+            setErrorState(false);
         } else {
             setErrorState(true);
         }
-    }, [versions, isLoading]);
+    }, [versions]);
+
+    async function downloadVersion(endpointUrl: string, fileName: string) {
+        try {
+            const response = await fetch(endpointUrl, {
+                method: 'GET',
+                headers: {
+                    'Authorization': `Bearer ${AuthenticatedUser()}`
+                },
+                redirect: 'manual'
+            });
     
-    console.log(errorState);
+            if (response.status !== 302) {
+                throw new Error(`Expected redirect, got status: ${response.status}`);
+            }
+    
+            const presignedUrl = response.headers.get('Location');
+            if (!presignedUrl) {
+                throw new Error('Presigned URL not found in Location header');
+            }
+    
+            const anchor = document.createElement('a');
+            anchor.href = presignedUrl;
+            anchor.download = fileName;
+            document.body.appendChild(anchor);
+            anchor.click();
+            document.body.removeChild(anchor);
+        } catch (error) {
+            console.error('Download failed:', error);
+        }
+    }
+    
     
     return (
-        <div className="account-feature account-download-wrapper">
+        <div className={`account-feature account-download-wrapper ${showMoreDownloads ? "more" : ""}`}>
             <h2>Game Downloads</h2>
             {
             isLoading ? (
@@ -51,48 +81,48 @@ export function AccountDownloadWrapper() {
                             </div>
                             <div style={{ margin: '10px 0 20px', textAlign: 'left' }}>
                                 <div className="download-link">
-                                    <a href={`${import.meta.env.VITE_CLOUD_API_URL}s3/release/EcoPC_v0.${releaseVersion?.versionNumber}-${releaseVersion?.versionCategory}.zip`} download>
+                                    <a href={`${import.meta.env.VITE_CLOUD_API_URL}s3/release/EcoPC_v0.${releaseVersion?.versionNumber}-${releaseVersion?.versionCategory}.zip?token=${AuthenticatedUser()}`} download>
                                         <FontAwesomeIcon className="download-icon" icon={faWindows} />
                                         game
                                         <div>win64</div>
                                     </a>
                                 </div>
                                 <div className="download-link">
-                                    <a href={`${import.meta.env.VITE_CLOUD_API_URL}s3/release/EcoOSX_v0.${releaseVersion?.versionNumber}-${releaseVersion?.versionCategory}.tar.gz`} download>
+                                    <a href={`${import.meta.env.VITE_CLOUD_API_URL}s3/release/EcoOSX_v0.${releaseVersion?.versionNumber}-${releaseVersion?.versionCategory}.tar.gz?token=${AuthenticatedUser()}`} download>
                                         <FontAwesomeIcon className="download-icon" icon={faApple} />
                                         game
                                         <div>mac *</div>
                                     </a>
                                 </div>
                                 <div className="download-link">
-                                    <a href={`${import.meta.env.VITE_CLOUD_API_URL}s3/release/EcoLinux_v0.${releaseVersion?.versionNumber}-${releaseVersion?.versionCategory}.zip`} download>
+                                    <a href={`${import.meta.env.VITE_CLOUD_API_URL}s3/release/EcoLinux_v0.${releaseVersion?.versionNumber}-${releaseVersion?.versionCategory}.zip?token=${AuthenticatedUser()}`} download>
                                         <FontAwesomeIcon className="download-icon" icon={faLinux} />
                                         game
                                         <div>linux *</div>
                                     </a>
                                 </div>
                                 <div className="download-link">
-                                    <a href={`${import.meta.env.VITE_CLOUD_API_URL}s3/release/EcoModKit_v0.${releaseVersion?.versionNumber}-${releaseVersion?.versionCategory}.zip`} download>
+                                    <a href={`${import.meta.env.VITE_CLOUD_API_URL}s3/release/EcoModKit_v0.${releaseVersion?.versionNumber}-${releaseVersion?.versionCategory}.zip?token=${AuthenticatedUser()}`} download>
                                         <FontAwesomeIcon className="download-icon" icon={faUnity} />
                                         modKit
                                     </a>
                                 </div>
                                 <div className="download-link">
-                                    <a href={`${import.meta.env.VITE_CLOUD_API_URL}s3/release/EcoServerPC_v0.${releaseVersion?.versionNumber}-${releaseVersion?.versionCategory}.zip`} download>
+                                    <a href={`${import.meta.env.VITE_CLOUD_API_URL}s3/release/EcoServerPC_v0.${releaseVersion?.versionNumber}-${releaseVersion?.versionCategory}.zip?token=${AuthenticatedUser()}`} download>
                                         <FontAwesomeIcon className="download-icon" icon={faWindows} />
                                         server
                                         <div>win64</div>
                                     </a>
                                 </div>
                                 <div className="download-link">
-                                    <a href={`${import.meta.env.VITE_CLOUD_API_URL}s3/release/EcoServerOSX_v0.${releaseVersion?.versionNumber}-${releaseVersion?.versionCategory}.tar.gz`} download>
+                                    <a href={`${import.meta.env.VITE_CLOUD_API_URL}s3/release/EcoServerOSX_v0.${releaseVersion?.versionNumber}-${releaseVersion?.versionCategory}.tar.gz?token=${AuthenticatedUser()}`} download>
                                         <FontAwesomeIcon className="download-icon" icon={faApple} />
                                         server
                                         <div>mac</div>
                                     </a>
                                 </div>
                                 <div className="download-link">
-                                    <a href={`${import.meta.env.VITE_CLOUD_API_URL}s3/release/EcoServerLinux_v0.${releaseVersion?.versionNumber}-${releaseVersion?.versionCategory}.zip`} download>
+                                    <a href={`${import.meta.env.VITE_CLOUD_API_URL}s3/release/EcoServerLinux_v0.${releaseVersion?.versionNumber}-${releaseVersion?.versionCategory}.zip?token=${AuthenticatedUser()}`} download>
                                         <FontAwesomeIcon className="download-icon" icon={faLinux} />
                                         server
                                         <div>linux</div>
@@ -109,42 +139,42 @@ export function AccountDownloadWrapper() {
                                 </div>
                                 <div style={{ margin: '0 0 40px', textAlign: 'left' }}>
                                     <div className="download-link">
-                                        <a href={`${import.meta.env.VITE_CLOUD_API_URL}s3/staging/EcoPC_v0.${stagingVersion?.versionNumber}-${stagingVersion?.versionCategory}-staging-${stagingVersion?.commitNumber}.zip`} download>
+                                        <a href={`${import.meta.env.VITE_CLOUD_API_URL}s3/staging/EcoPC_v0.${stagingVersion?.versionNumber}-${stagingVersion?.versionCategory}-staging-${stagingVersion?.commitNumber}.zip?token=${AuthenticatedUser()}`} download>
                                             <FontAwesomeIcon className="download-icon" icon={faWindows} />
                                             game
                                             <div>win64</div>
                                         </a>
                                     </div>
                                     <div className="download-link">
-                                        <a href={`${import.meta.env.VITE_CLOUD_API_URL}s3/staging/EcoPC_v0.${stagingVersion?.versionNumber}-${stagingVersion?.versionCategory}-staging-${stagingVersion?.commitNumber}.zip`} download>
+                                        <a href={`${import.meta.env.VITE_CLOUD_API_URL}s3/staging/EcoPC_v0.${stagingVersion?.versionNumber}-${stagingVersion?.versionCategory}-staging-${stagingVersion?.commitNumber}.zip?token=${AuthenticatedUser()}`} download>
                                             <FontAwesomeIcon className="download-icon" icon={faWindows} />
                                             server
                                             <div>win64</div>
                                         </a>
                                     </div>
                                     <div className="download-link">
-                                        <a href={`${import.meta.env.VITE_CLOUD_API_URL}s3/staging/EcoServerPC32_v0.${stagingVersion?.versionNumber}-${stagingVersion?.versionCategory}-staging-${stagingVersion?.commitNumber}.zip`} download>
+                                        <a href={`${import.meta.env.VITE_CLOUD_API_URL}s3/staging/EcoServerPC32_v0.${stagingVersion?.versionNumber}-${stagingVersion?.versionCategory}-staging-${stagingVersion?.commitNumber}.zip?token=${AuthenticatedUser()}`} download>
                                             <FontAwesomeIcon className="download-icon" icon={faWindows} />
                                             server
                                             <div>win32</div>
                                         </a>
                                     </div>
                                     <div className="download-link">
-                                        <a href={`${import.meta.env.VITE_CLOUD_API_URL}s3/staging/EcoServerOSX_v0.${stagingVersion?.versionNumber}-${stagingVersion?.versionCategory}-staging-${stagingVersion?.commitNumber}.tar.gz`} download>
+                                        <a href={`${import.meta.env.VITE_CLOUD_API_URL}s3/staging/EcoServerOSX_v0.${stagingVersion?.versionNumber}-${stagingVersion?.versionCategory}-staging-${stagingVersion?.commitNumber}.tar.gz?token=${AuthenticatedUser()}`} download>
                                             <FontAwesomeIcon className="download-icon" icon={faApple} />
                                             server
                                             <div>mac</div>
                                         </a>
                                     </div>
                                     <div className="download-link">
-                                        <a href={`${import.meta.env.VITE_CLOUD_API_URL}s3/staging/EcoServerLinux_v0.${stagingVersion?.versionNumber}-${stagingVersion?.versionCategory}-staging-${stagingVersion?.commitNumber}.zip`} download>
+                                        <a href={`${import.meta.env.VITE_CLOUD_API_URL}s3/staging/EcoServerLinux_v0.${stagingVersion?.versionNumber}-${stagingVersion?.versionCategory}-staging-${stagingVersion?.commitNumber}.zip?token=${AuthenticatedUser()}`} download>
                                             <FontAwesomeIcon className="download-icon" icon={faLinux} />
                                             server
                                             <div>linux</div>
                                         </a>
                                     </div>
                                     <div className="download-link">
-                                        <a href={`${import.meta.env.VITE_CLOUD_API_URL}s3/staging/EcoModKit_v0.${stagingVersion?.versionNumber}-${stagingVersion?.versionCategory}-staging-${stagingVersion?.commitNumber}.zip`} download>
+                                        <a href={`${import.meta.env.VITE_CLOUD_API_URL}s3/staging/EcoModKit_v0.${stagingVersion?.versionNumber}-${stagingVersion?.versionCategory}-staging-${stagingVersion?.commitNumber}.zip?token=${AuthenticatedUser()}`} download>
                                             <FontAwesomeIcon className="download-icon" icon={faUnity} />
                                             modKit
                                         </a>

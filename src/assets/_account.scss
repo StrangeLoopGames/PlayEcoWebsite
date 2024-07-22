@@ -58,3 +58,11 @@ section#login {
 .profile-details ul {
     list-style: none;
 }
+.account-download-wrapper {
+    max-height: 400px;
+    transition: max-height 0.2s ease-in-out;
+
+    &.more {
+        max-height: 800px;
+    }
+}

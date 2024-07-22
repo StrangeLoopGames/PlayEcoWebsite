@@ -2,6 +2,7 @@ import { useNavigate } from '@tanstack/react-router';
 import React, { useEffect, useState } from 'react';
 import { storeToken } from '../utils/authentication';
 import steamLogin from '../assets/images/steam_small.png';
+import { log } from 'console';
 
 function LoginForm(props : {error: string}) {
     const [loginData, setLoginData] = useState({
@@ -28,16 +29,27 @@ function LoginForm(props : {error: string}) {
         const navigate = useNavigate();
     function doSignIn(e: React.FormEvent): void {
         e.preventDefault()
-        const url = `${import.meta.env.VITE_CLOUD_API_URL}Authentication/AuthenticateSLGUser?username=${loginData.username}&password=${loginData.password}`;
+        const url = `${import.meta.env.VITE_CLOUD_API_URL}Authentication/AuthenticateSLGUser`;
+        console.log(loginData);
+        
         fetch(url, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
-            }
+            },
+            body: JSON.stringify(loginData)
         })
             .then(response => {
                 if (!response.ok) {
-                    setError('There was an error with your login. Please try again later.')
+                    if(response.status == 401) {
+                        return response.json().then(errorData => {
+                            if (response.status === 401) {
+                                setError(errorData.message);
+                            }
+                        });
+                    } else {
+                        setError('There was an error with your login. Please try again later.')
+                    }
                     throw new Error('Network response was not ok');
                 }
                 return response.json();

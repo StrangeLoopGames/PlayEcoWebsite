@@ -10,6 +10,12 @@ type Register = {
     ageConfirm: boolean;
     newsletter: boolean;
 }
+type registerMutate = {
+    username: string;
+    email: string;
+    password: string;
+
+}
 function RegisterForm() {  
     const [registerData, setRegisterData] = useState<Register>({
         username: "",
@@ -23,12 +29,13 @@ function RegisterForm() {
     const navigate = useNavigate();
 
     const registerMutate = useMutation({
-        mutationFn: (url: string) => {
-            return fetch(url, {
+        mutationFn: (register: registerMutate) => {
+            return fetch(`${import.meta.env.VITE_CLOUD_API_URL}api/Registration/RegisterUser`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
                 },
+                body: JSON.stringify(register),
             });
         }
     });
@@ -42,9 +49,11 @@ function RegisterForm() {
             setError('Password is not valid, please use at least 8 characters, one uppercase letter, one lowercase letter, one number, and one special character.');
             return;
         } else {
-            const encodedPassword = encodeURIComponent(registerData.password);
-            const queryString: string = `username=${registerData.username}&email=${registerData.email}&password=${encodedPassword}`
-            registerMutate.mutate(`${import.meta.env.VITE_CLOUD_API_URL}api/Registration/RegisterUser?${queryString}`);
+            registerMutate.mutate({
+                username: registerData.username,
+                email: registerData.email,
+                password: registerData.password
+            });
             if (registerMutate.isSuccess) {
                 navigate({
                     to: '/account',
