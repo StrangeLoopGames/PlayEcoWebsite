@@ -12,7 +12,6 @@ function LoginForm(props : {error: string}) {
     const [error, setError] = useState<string>('');
 
     useEffect(() => {
-        console.log(props.error);
         if(props.error && props.error != '') {
             switch (props.error) {
                 case "authenication_error":
@@ -30,7 +29,6 @@ function LoginForm(props : {error: string}) {
     function doSignIn(e: React.FormEvent): void {
         e.preventDefault()
         const url = `${import.meta.env.VITE_CLOUD_API_URL}Authentication/AuthenticateSLGUser`;
-        console.log(loginData);
         
         fetch(url, {
             method: 'POST',

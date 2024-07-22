@@ -39,7 +39,6 @@ function Account() {
   const { data: user, error, isLoading } = useUserQuery(userJWT as string);
   if (isLoading) return <Modal type="Loading" message="Please wait while we load your account information." />;
   if (error) {
-    console.log(error);
     return <Modal type="Error" message={error.message} />
   }
 

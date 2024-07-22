@@ -14,7 +14,6 @@ export function useFetchUserById(userJWT: string, user: string) {
                     "Content-Type": "application/json",
                 },
             }).then((res) => {
-                console.log(res);
                 if (!res.ok) {
                     if (res.status === 401) {
                         removeToken();
@@ -39,7 +38,6 @@ export function useFetchCrud(type: string, pageNumber: number, pageSize: number,
                     "Content-Type": "application/json",
                 },
             }).then((res) => {
-                console.log(res);
                 if (!res.ok) {
                     if (res.status === 401) {
                         removeToken();
@@ -63,7 +61,6 @@ export function useSearchCrud(type: string, pageNumber: number, pageSize: number
                         "Content-Type": "application/json",
                     },
                 }).then((res) => {
-                    console.log(res);
                     if (!res.ok) {
                         if (res.status === 401) {
                             removeToken();
@@ -97,7 +94,6 @@ export async function crudUpdateById(type: string, adminJWT: string, updatedUser
 // Transactions 
 export function useGetUserTransactions(user: string) {
     const apiUrl = import.meta.env.VITE_CLOUD_API_URL;
-    console.log(apiUrl);
     const url = `${import.meta.env.VITE_CLOUD_API_URL}UserAccount/GetTransactionSummaries`;
     return useQuery({
         queryKey: ["transaction", user],
@@ -108,7 +104,6 @@ export function useGetUserTransactions(user: string) {
                     "Content-Type": "application/json",
                 },
             }).then((res) => {
-                console.log(res);
                 if (!res.ok) {
                     if (res.status === 401) {
                         removeToken();
@@ -132,7 +127,6 @@ export function useGetGameVersions() {
                     "Content-Type": "application/json",
                 },
             }).then((res) => {
-                console.log(res);
                 if (!res.ok) {
                     if (res.status === 401) {
                         removeToken();

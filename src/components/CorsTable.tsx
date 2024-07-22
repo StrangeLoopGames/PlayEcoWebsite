@@ -98,8 +98,6 @@ export default function CorsTable({ users, selectedKey, toggleModalEvent, update
         return () => {
             if (user[cell].length > 0) {
                 setSelectedUser({ cell: cell, user: user });
-                console.log("Selected User: ");
-                console.table(selectedUser);
                 setToggleModal(true);
             }
         }

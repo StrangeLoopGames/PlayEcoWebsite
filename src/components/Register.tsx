@@ -60,7 +60,6 @@ function RegisterForm() {
                 });
             }
             if (registerMutate.isError || error) {
-                console.log(registerMutate.error);
                 setError("There was an error registering your account.");
             }
         }

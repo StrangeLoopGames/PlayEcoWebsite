@@ -52,7 +52,6 @@ function SteamRegister() {
                 window.location.href = '/account';
             }
             if (registerMutate.isError || userError) {
-                console.log(registerMutate.error);
                 setError("There was an error registering your account.");
             }
             }

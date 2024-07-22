@@ -49,7 +49,6 @@ function UserCard(props: any) {
                 location.reload();
             }
             if (updateUserMutate.isError || error) {
-                console.log(updateUserMutate.error);
                 setError("There was an error registering your account.");
             }
         }
@@ -63,7 +62,6 @@ function UserCard(props: any) {
 
     function handleSubmit(e: React.FormEvent) {
         e.preventDefault();
-        console.log("submitting");
         doUpdateUser();
     }
     function enableEdit(){

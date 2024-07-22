@@ -49,7 +49,6 @@ export function UserEditor() {
 
         try {
             const res = await crudUpdateById(crudType, userJWT as string, updatedUser);
-            console.log(res);
             refetch();
         } catch (error) {
             console.error('Error:', error);

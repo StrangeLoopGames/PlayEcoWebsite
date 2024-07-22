@@ -38,11 +38,9 @@ export function ResetPassword ({token}: {token: string}) {
             location.href = '/forgot?errid=invalid_token';
         }
     }, [token]);
-    console.log(resetToken);
     
     function doResetPassword(e: React.FormEvent): void {
         e.preventDefault();
-        console.log(resetData);
         
         if (resetData.password != resetData.passwordConfirm) {
             setError('Passwords do not match');
@@ -57,7 +55,6 @@ export function ResetPassword ({token}: {token: string}) {
                 window.location.href = '/account';
             }
             if (resetMutate.isError) {
-                console.log(resetMutate.error);
                 setError("There was an error registering your account.");
             }
             }

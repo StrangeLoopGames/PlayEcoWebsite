@@ -14,7 +14,6 @@ export function AccountDownloadWrapper() {
     const [showMoreDownloads, setShowMoreDownloads] = useState<boolean>(false);
     useEffect(() => {
         if (versions != null && versions != undefined && versions.length > 0) {
-            console.log(versions.length);
             const release = versions.find((version: Version) => !version.commitNumber);
             const staging = versions.find((version: Version) => version.commitNumber);
             setReleaseVersion(release);
