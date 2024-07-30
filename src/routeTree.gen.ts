@@ -13,9 +13,11 @@ import { createFileRoute } from '@tanstack/react-router'
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
+import { Route as AccountIndexImport } from './routes/account/index'
 
 // Create Virtual Routes
 
+const VerifyemailLazyImport = createFileRoute('/verifyemail')()
 const ResetpasswordLazyImport = createFileRoute('/resetpassword')()
 const RegisterLazyImport = createFileRoute('/register')()
 const LogoutLazyImport = createFileRoute('/logout')()
@@ -26,12 +28,17 @@ const ForgotLazyImport = createFileRoute('/forgot')()
 const ContactLazyImport = createFileRoute('/contact')()
 const BuyLazyImport = createFileRoute('/buy')()
 const AdminLazyImport = createFileRoute('/admin')()
-const AccountLazyImport = createFileRoute('/account')()
 const IndexLazyImport = createFileRoute('/')()
 const TermsTosLazyImport = createFileRoute('/terms/tos')()
 const TermsEulaLazyImport = createFileRoute('/terms/eula')()
+const AccountPurchaseLazyImport = createFileRoute('/account/purchase')()
 
 // Create/Update Routes
+
+const VerifyemailLazyRoute = VerifyemailLazyImport.update({
+  path: '/verifyemail',
+  getParentRoute: () => rootRoute,
+} as any).lazy(() => import('./routes/verifyemail.lazy').then((d) => d.Route))
 
 const ResetpasswordLazyRoute = ResetpasswordLazyImport.update({
   path: '/resetpassword',
@@ -83,15 +90,15 @@ const AdminLazyRoute = AdminLazyImport.update({
   getParentRoute: () => rootRoute,
 } as any).lazy(() => import('./routes/admin.lazy').then((d) => d.Route))
 
-const AccountLazyRoute = AccountLazyImport.update({
-  path: '/account',
-  getParentRoute: () => rootRoute,
-} as any).lazy(() => import('./routes/account.lazy').then((d) => d.Route))
-
 const IndexLazyRoute = IndexLazyImport.update({
   path: '/',
   getParentRoute: () => rootRoute,
 } as any).lazy(() => import('./routes/index.lazy').then((d) => d.Route))
+
+const AccountIndexRoute = AccountIndexImport.update({
+  path: '/account/',
+  getParentRoute: () => rootRoute,
+} as any)
 
 const TermsTosLazyRoute = TermsTosLazyImport.update({
   path: '/terms/tos',
@@ -103,16 +110,19 @@ const TermsEulaLazyRoute = TermsEulaLazyImport.update({
   getParentRoute: () => rootRoute,
 } as any).lazy(() => import('./routes/terms/eula.lazy').then((d) => d.Route))
 
+const AccountPurchaseLazyRoute = AccountPurchaseLazyImport.update({
+  path: '/account/purchase',
+  getParentRoute: () => rootRoute,
+} as any).lazy(() =>
+  import('./routes/account/purchase.lazy').then((d) => d.Route),
+)
+
 // Populate the FileRoutesByPath interface
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
     '/': {
       preLoaderRoute: typeof IndexLazyImport
-      parentRoute: typeof rootRoute
-    }
-    '/account': {
-      preLoaderRoute: typeof AccountLazyImport
       parentRoute: typeof rootRoute
     }
     '/admin': {
@@ -155,12 +165,24 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ResetpasswordLazyImport
       parentRoute: typeof rootRoute
     }
+    '/verifyemail': {
+      preLoaderRoute: typeof VerifyemailLazyImport
+      parentRoute: typeof rootRoute
+    }
+    '/account/purchase': {
+      preLoaderRoute: typeof AccountPurchaseLazyImport
+      parentRoute: typeof rootRoute
+    }
     '/terms/eula': {
       preLoaderRoute: typeof TermsEulaLazyImport
       parentRoute: typeof rootRoute
     }
     '/terms/tos': {
       preLoaderRoute: typeof TermsTosLazyImport
+      parentRoute: typeof rootRoute
+    }
+    '/account/': {
+      preLoaderRoute: typeof AccountIndexImport
       parentRoute: typeof rootRoute
     }
   }
@@ -170,7 +192,6 @@ declare module '@tanstack/react-router' {
 
 export const routeTree = rootRoute.addChildren([
   IndexLazyRoute,
-  AccountLazyRoute,
   AdminLazyRoute,
   BuyLazyRoute,
   ContactLazyRoute,
@@ -181,8 +202,11 @@ export const routeTree = rootRoute.addChildren([
   LogoutLazyRoute,
   RegisterLazyRoute,
   ResetpasswordLazyRoute,
+  VerifyemailLazyRoute,
+  AccountPurchaseLazyRoute,
   TermsEulaLazyRoute,
   TermsTosLazyRoute,
+  AccountIndexRoute,
 ])
 
 /* prettier-ignore-end */

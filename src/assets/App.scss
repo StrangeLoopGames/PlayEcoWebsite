@@ -143,3 +143,11 @@ header {
     }
   }
 }
+.xpaystation-widget-lightbox {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.xpaystation-widget-lightbox-content {
+  max-height: 90%;
+}

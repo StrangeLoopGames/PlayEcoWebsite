@@ -1,4 +1,4 @@
-import { createFileRoute } from '@tanstack/react-router';
+import { createFileRoute, useSearch } from '@tanstack/react-router';
 import "../assets/_account.scss";
 import { ResetPassword } from '../components/ResetPassword';
 
