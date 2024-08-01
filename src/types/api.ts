@@ -8,8 +8,6 @@ export interface paths {
     post: {
       parameters: {
         query: {
-          username?: string;
-          password?: string;
           "api-version"?: string;
         };
       };
@@ -21,6 +19,13 @@ export interface paths {
             "application/json": components["schemas"]["AuthenticationResult"];
             "text/json": components["schemas"]["AuthenticationResult"];
           };
+        };
+      };
+      requestBody: {
+        content: {
+          "application/json": components["schemas"]["AuthenticateSlgUser"];
+          "text/json": components["schemas"]["AuthenticateSlgUser"];
+          "application/*+json": components["schemas"]["AuthenticateSlgUser"];
         };
       };
     };
@@ -133,6 +138,9 @@ export interface paths {
         path: {
           documentName: string;
         };
+        query: {
+          token?: string;
+        };
       };
       responses: {
         /** OK */
@@ -145,6 +153,9 @@ export interface paths {
       parameters: {
         path: {
           documentName: string;
+        };
+        query: {
+          token?: string;
         };
       };
       responses: {
@@ -175,7 +186,6 @@ export interface paths {
       };
       requestBody: {
         content: {
-          "application/json-patch+json": components["schemas"]["GameVersion"];
           "application/json": components["schemas"]["GameVersion"];
           "text/json": components["schemas"]["GameVersion"];
           "application/*+json": components["schemas"]["GameVersion"];
@@ -196,6 +206,48 @@ export interface paths {
       responses: {
         /** OK */
         200: unknown;
+      };
+    };
+  };
+  "/Flags/GetRecentlyFlaggedServers": {
+    get: {
+      parameters: {
+        query: {
+          days?: number;
+          "api-version"?: string;
+        };
+      };
+      responses: {
+        /** OK */
+        200: {
+          content: {
+            "text/plain": components["schemas"]["FlaggedServerSummary"][];
+            "application/json": components["schemas"]["FlaggedServerSummary"][];
+            "text/json": components["schemas"]["FlaggedServerSummary"][];
+          };
+        };
+      };
+    };
+  };
+  "/Flags/GetAllFlagsForServer/{worldId}": {
+    get: {
+      parameters: {
+        path: {
+          worldId: string;
+        };
+        query: {
+          "api-version"?: string;
+        };
+      };
+      responses: {
+        /** OK */
+        200: {
+          content: {
+            "text/plain": components["schemas"]["FlaggedServerSummary"];
+            "application/json": components["schemas"]["FlaggedServerSummary"];
+            "text/json": components["schemas"]["FlaggedServerSummary"];
+          };
+        };
       };
     };
   };
@@ -268,6 +320,55 @@ export interface paths {
             "application/json": components["schemas"]["FlagReported"][];
           };
         };
+      };
+    };
+  };
+  "/Invites/GrantInvites": {
+    get: {
+      parameters: {
+        query: {
+          userid?: string;
+          count?: number;
+          "api-version"?: string;
+        };
+      };
+      responses: {
+        /** OK */
+        200: unknown;
+      };
+    };
+  };
+  "/Invites/GetInivtes": {
+    get: {
+      parameters: {
+        query: {
+          userid?: string;
+          "api-version"?: string;
+        };
+      };
+      responses: {
+        /** OK */
+        200: {
+          content: {
+            "text/plain": string[];
+            "application/json": string[];
+            "text/json": string[];
+          };
+        };
+      };
+    };
+  };
+  "/Invites/RedeemInvite": {
+    get: {
+      parameters: {
+        query: {
+          inviteGuid?: string;
+          "api-version"?: string;
+        };
+      };
+      responses: {
+        /** OK */
+        200: unknown;
       };
     };
   };
@@ -416,9 +517,6 @@ export interface paths {
     post: {
       parameters: {
         query: {
-          userName?: string;
-          email?: string;
-          password?: string;
           "api-version"?: string;
         };
       };
@@ -426,15 +524,19 @@ export interface paths {
         /** OK */
         200: unknown;
       };
+      requestBody: {
+        content: {
+          "application/json": components["schemas"]["UsernameOrEmailAndPassword"];
+          "text/json": components["schemas"]["UsernameOrEmailAndPassword"];
+          "application/*+json": components["schemas"]["UsernameOrEmailAndPassword"];
+        };
+      };
     };
   };
   "/api/Registration/RegisterUser": {
     post: {
       parameters: {
         query: {
-          username?: string;
-          email?: string;
-          password?: string;
           "api-version"?: string;
         };
       };
@@ -446,6 +548,13 @@ export interface paths {
             "application/json": components["schemas"]["AuthenticationResult"];
             "text/json": components["schemas"]["AuthenticationResult"];
           };
+        };
+      };
+      requestBody: {
+        content: {
+          "application/json": components["schemas"]["UsernameOrEmailAndPassword"];
+          "text/json": components["schemas"]["UsernameOrEmailAndPassword"];
+          "application/*+json": components["schemas"]["UsernameOrEmailAndPassword"];
         };
       };
     };
@@ -578,7 +687,6 @@ export interface paths {
       };
       requestBody: {
         content: {
-          "application/json-patch+json": components["schemas"]["StrangeUser"];
           "application/json": components["schemas"]["StrangeUser"];
           "text/json": components["schemas"]["StrangeUser"];
           "application/*+json": components["schemas"]["StrangeUser"];
@@ -690,7 +798,6 @@ export interface paths {
       };
       requestBody: {
         content: {
-          "application/json-patch+json": components["schemas"]["StrangeAchievement"][];
           "application/json": components["schemas"]["StrangeAchievement"][];
           "text/json": components["schemas"]["StrangeAchievement"][];
           "application/*+json": components["schemas"]["StrangeAchievement"][];
@@ -712,7 +819,6 @@ export interface paths {
       };
       requestBody: {
         content: {
-          "application/json-patch+json": components["schemas"]["StrangeAchievement"];
           "application/json": components["schemas"]["StrangeAchievement"];
           "text/json": components["schemas"]["StrangeAchievement"];
           "application/*+json": components["schemas"]["StrangeAchievement"];
@@ -901,10 +1007,35 @@ export interface paths {
       };
       requestBody: {
         content: {
-          "application/json-patch+json": string;
           "application/json": string;
           "text/json": string;
           "application/*+json": string;
+        };
+      };
+    };
+  };
+  "/Worlds/ServerHeartbeat": {
+    post: {
+      parameters: {
+        query: {
+          "api-version"?: string;
+        };
+      };
+      responses: {
+        /** OK */
+        200: {
+          content: {
+            "text/plain": components["schemas"]["ServerHeartbeatResult"];
+            "application/json": components["schemas"]["ServerHeartbeatResult"];
+            "text/json": components["schemas"]["ServerHeartbeatResult"];
+          };
+        };
+      };
+      requestBody: {
+        content: {
+          "application/json": components["schemas"]["ServerHeartbeatData"];
+          "text/json": components["schemas"]["ServerHeartbeatData"];
+          "application/*+json": components["schemas"]["ServerHeartbeatData"];
         };
       };
     };
@@ -928,7 +1059,6 @@ export interface paths {
       };
       requestBody: {
         content: {
-          "application/json-patch+json": components["schemas"]["StrangeWorldCloudData"];
           "application/json": components["schemas"]["StrangeWorldCloudData"];
           "text/json": components["schemas"]["StrangeWorldCloudData"];
           "application/*+json": components["schemas"]["StrangeWorldCloudData"];
@@ -1012,6 +1142,10 @@ export interface paths {
 
 export interface components {
   schemas: {
+    AuthenticateSlgUser: {
+      username?: string | null;
+      password?: string | null;
+    };
     AuthenticationResult: {
       token?: string | null;
       refreshToken?: string | null;
@@ -1037,11 +1171,21 @@ export interface components {
       id?: string;
       /** Format: date-time */
       reportTime?: string;
-      reportingUserID?: string | null;
+      /** Format: uuid */
+      reportingUserID?: string;
       problemDescription?: string | null;
-      reportedWorldID?: string | null;
-      reportedUserID?: string | null;
+      /** Format: uuid */
+      reportedWorldID?: string;
+      /** Format: uuid */
+      reportedUserID?: string;
       circumventingPaidItems?: boolean | null;
+    };
+    FlaggedServerSummary: {
+      /** Format: uuid */
+      worldID?: string;
+      /** Format: int32 */
+      flagCount?: number;
+      recentProblems?: string[] | null;
     };
     GameVersion: {
       /** Format: uuid */
@@ -1109,6 +1253,14 @@ export interface components {
       /** Format: date-time */
       timeCompleted?: string;
     };
+    ServerHeartbeatData: {
+      world?: components["schemas"]["StrangeWorldCloudData"];
+      usersOnline?: string[] | null;
+    };
+    ServerHeartbeatResult: {
+      result?: components["schemas"]["StrangeWorldRegistrationResult"];
+      usersToKick?: components["schemas"]["UserToKick"][] | null;
+    };
     StrangeAchievement: {
       name?: string | null;
       /** Format: uuid */
@@ -1128,7 +1280,7 @@ export interface components {
     };
     /** @description A user stored in the StrangeCloud. */
     StrangeUser: {
-      isDeveloper?: boolean;
+      isDeveloper?: boolean | null;
       /** Format: uuid */
       id?: string;
       steamId?: string | null;
@@ -1139,9 +1291,9 @@ export interface components {
       avatarDna?: string | null;
       achievements?: components["schemas"]["StrangeAchievement"][] | null;
       /** Format: float */
-      ecoCredits?: number;
+      ecoCredits?: number | null;
       ownsEco?: boolean;
-      verified?: boolean;
+      verified?: boolean | null;
       items?: components["schemas"]["InvItem"][] | null;
       blockPurchasing?: boolean | null;
       isDevTier?: boolean | null;
@@ -1153,7 +1305,7 @@ export interface components {
       bannedReason?: string | null;
       isBanned?: boolean;
       /** Format: uuid */
-      lastWorldId?: string | null;
+      currentWorldID?: string | null;
       /** Format: date-time */
       lastWorldJoinTime?: string | null;
       /** Format: date-time */
@@ -1162,7 +1314,14 @@ export interface components {
       creationTime?: string;
       online?: boolean;
       /** Format: date-span */
-      timeOnlineTotal?: string;
+      timeOnlineTotal?: string | null;
+      /** Format: date-span */
+      totalOnlineHostingTime?: string | null;
+      /**
+       * Format: date-span
+       * @description Sum of all time played on all servers hosted by this user.
+       */
+      sumHostedUsersTime?: string | null;
       /** Format: date-time */
       lastEmailSent?: string | null;
     };
@@ -1184,8 +1343,18 @@ export interface components {
       activePlayerCount?: number;
       serverInfoJson?: string | null;
       online?: boolean;
+      /** Format: int32 */
+      adminAppliedScoreBoost?: number | null;
       isOfficial?: boolean | null;
       isEligibleForTax?: boolean | null;
+      /** Format: date-span */
+      timeOnline?: string | null;
+      /** Format: date-span */
+      totalUserTime?: string | null;
+      /** Format: date-span */
+      totalUserTimeOfOwner?: string | null;
+      /** Format: date-span */
+      timeHostingMoreThanOne?: string | null;
     };
     /**
      * Format: int32
@@ -1197,6 +1366,16 @@ export interface components {
      * @enum {integer}
      */
     SummaryType: 0 | 1 | 2;
+    UserToKick: {
+      /** Format: uuid */
+      userId?: string;
+      reason?: string | null;
+    };
+    UsernameOrEmailAndPassword: {
+      username?: string | null;
+      email?: string | null;
+      password?: string | null;
+    };
     /** @description Response for channel join request */
     VoiceJoinTokenResult: {
       token?: string | null;

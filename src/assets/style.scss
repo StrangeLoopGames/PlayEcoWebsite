@@ -9,7 +9,7 @@ body {
     background: #4688c0;
     overflow-x: hidden;
 }
-body.not-found .content-wrap, .content-wrap.account, .content-wrap.admin, .content-wrap.buy, 
+body.not-found .content-wrap, .content-wrap.account, .content-wrap.accountadmin, .content-wrap.buy, 
 .content-wrap.jobs, .content-wrap.login, .content-wrap.register, .content-wrap.forgot, .content-wrap.resetpassword {
     background-color: #f9f9f9 !important;
     background : url("../assets/images/textures/cubes.png");
@@ -774,6 +774,7 @@ a .btn {
     text-align: center;
     vertical-align: top;
     margin-top: 20px;
+    text-transform: capitalize;
 }
 .download-link i {
     display: block;

@@ -85,7 +85,7 @@ export function isValidPassword(password: string): boolean {
 
 export function useIsUserAdmin(userJWT: string): boolean {
 	const {data: user} = useUserQuery(userJWT);
-	if(user && user.isCloudAdmin) {
+	if(user && user.isSLG && user.isCloudAdmin) {
 		return true;
 	} else {
 		return false;

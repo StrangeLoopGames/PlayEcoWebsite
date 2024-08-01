@@ -14,6 +14,7 @@ import { createFileRoute } from '@tanstack/react-router'
 
 import { Route as rootRoute } from './routes/__root'
 import { Route as AccountIndexImport } from './routes/account/index'
+import { Route as AccountAdminImport } from './routes/account/admin'
 
 // Create Virtual Routes
 
@@ -27,7 +28,6 @@ const GameversionsLazyImport = createFileRoute('/gameversions')()
 const ForgotLazyImport = createFileRoute('/forgot')()
 const ContactLazyImport = createFileRoute('/contact')()
 const BuyLazyImport = createFileRoute('/buy')()
-const AdminLazyImport = createFileRoute('/admin')()
 const IndexLazyImport = createFileRoute('/')()
 const TermsTosLazyImport = createFileRoute('/terms/tos')()
 const TermsEulaLazyImport = createFileRoute('/terms/eula')()
@@ -85,11 +85,6 @@ const BuyLazyRoute = BuyLazyImport.update({
   getParentRoute: () => rootRoute,
 } as any).lazy(() => import('./routes/buy.lazy').then((d) => d.Route))
 
-const AdminLazyRoute = AdminLazyImport.update({
-  path: '/admin',
-  getParentRoute: () => rootRoute,
-} as any).lazy(() => import('./routes/admin.lazy').then((d) => d.Route))
-
 const IndexLazyRoute = IndexLazyImport.update({
   path: '/',
   getParentRoute: () => rootRoute,
@@ -117,16 +112,17 @@ const AccountPurchaseLazyRoute = AccountPurchaseLazyImport.update({
   import('./routes/account/purchase.lazy').then((d) => d.Route),
 )
 
+const AccountAdminRoute = AccountAdminImport.update({
+  path: '/account/admin',
+  getParentRoute: () => rootRoute,
+} as any)./routes/account/admin
+
 // Populate the FileRoutesByPath interface
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
     '/': {
       preLoaderRoute: typeof IndexLazyImport
-      parentRoute: typeof rootRoute
-    }
-    '/admin': {
-      preLoaderRoute: typeof AdminLazyImport
       parentRoute: typeof rootRoute
     }
     '/buy': {
@@ -169,6 +165,10 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof VerifyemailLazyImport
       parentRoute: typeof rootRoute
     }
+    '/account/admin': {
+      preLoaderRoute: typeof AccountAdminImport
+      parentRoute: typeof rootRoute
+    }
     '/account/purchase': {
       preLoaderRoute: typeof AccountPurchaseLazyImport
       parentRoute: typeof rootRoute
@@ -192,7 +192,6 @@ declare module '@tanstack/react-router' {
 
 export const routeTree = rootRoute.addChildren([
   IndexLazyRoute,
-  AdminLazyRoute,
   BuyLazyRoute,
   ContactLazyRoute,
   ForgotLazyRoute,
@@ -203,6 +202,7 @@ export const routeTree = rootRoute.addChildren([
   RegisterLazyRoute,
   ResetpasswordLazyRoute,
   VerifyemailLazyRoute,
+  AccountAdminRoute,
   AccountPurchaseLazyRoute,
   TermsEulaLazyRoute,
   TermsTosLazyRoute,

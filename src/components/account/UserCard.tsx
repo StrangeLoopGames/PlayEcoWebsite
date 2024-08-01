@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { AuthenticatedUser, useIsUserAdmin } from '../../utils/authentication';
 import { useMutation } from '@tanstack/react-query';
 import { getIcon } from '../../utils/account';
+import { Link } from '@tanstack/react-router';
 // Temporary icons until we have a proper icon migration of teirs
 const icons = "alphaicon;alpha4packicon;alpha2packicon;devicon;hareicon;bannericon;wolficon;hareicon;supericon;slgicon";
 // switch((props.user.isSLG) ? "slgicon" : "betaicon";)
@@ -76,22 +77,22 @@ function UserCard(props: any) {
                     <ul className=''>
                         <li className=""><span className="account-label-front">Username:</span>{props.user.username}</li>
                         <li className="account-label-front"><span className="account-label-front">User ID:</span>{props.user.id}</li>
-                        <li className="account-label-front"><span className="account-label-front">Status:</span>{props.user.ownsEco ? "Owns Eco" : <a href="/buy">Purchase Eco here</a>}</li>
+                        <li className="account-label-front"><span className="account-label-front">Status:</span>{props.user.ownsEco ? "Owns Eco" : <Link to="/buy">Purchase Eco here</Link>}</li>
                         <li className="account-label-front"><span className="account-label-front">Type:</span>{props.user.isSLG ? "Developer" : "Standard"}</li>
                         <li className="account-label-front"><span className="account-label-front">Eco Credits Balance:</span>{props.user.ecoCredits}</li>
                     </ul>
                 </div>
             </div>
             <div className="btn-corner">
-                { !props.user.ownsEco ? <a className="btn btn-small" href="/buy">Buy Eco</a> : null 
+                { !props.user.ownsEco ? <Link className="btn btn-small" to="/buy">Purchase Eco</Link> : null 
                 }
-                <a className="btn btn-small" href="/buy">Buy Eco Credits</a>
+                <Link className="btn btn-small" to="/buy">Buy Eco Credits</Link>
                 <button className="btn btn-small">Change Icon</button>
                 <button className="btn btn-small" id="account-edit" onClick={enableEdit}>Edit Account</button>
                 {
                     // display admin button if user is admin
                     useIsUserAdmin(AuthenticatedUser() as string) ? (
-                        <a className="btn btn-small" href="/admin">Admin</a>
+                        <Link className="btn btn-small" to="/account/admin">Admin</Link>
                     ) : null
                 }
                 <a className="btn btn-small logout-btn" href="/logout">Logout</a>
