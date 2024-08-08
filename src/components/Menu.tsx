@@ -1,9 +1,12 @@
 import { Link } from "@tanstack/react-router";
 import {menuItems} from "../data/menu";
+
 function Menu() {
+    const lightMenu = window.location.pathname == "/";
+    
     return (
         <>
-            <nav className="d-flex flex-row">
+            <nav className={`d-flex flex-row ${lightMenu ? "light-menu" : ""}`}>
                 {
                     Object.keys(menuItems).map((item) => (
                         // if doesn't start with / then it's an external link

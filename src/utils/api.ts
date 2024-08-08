@@ -50,14 +50,15 @@ export function useFetchCrud(type: string, pageNumber: number, pageSize: number,
         staleTime: 5 * 60 * 1000,
     });
 }
-export function useSearchCrud(type: string, pageNumber: number, pageSize: number, search: string) {
-    const url = `${import.meta.env.VITE_CLOUD_API_URL}${type}/search?search=${search}&pageNumber=${pageNumber}&pageSize=${pageSize}`;
+
+export function useSearchCrud(type: string, search: string, adminJWT: string, options: { enabled?: boolean } = {}) {
+        const url = `${import.meta.env.VITE_CLOUD_API_URL}${type}/${search}`;
         return useQuery({
-            queryKey: ["search",type, search],
+            queryKey: ["search", type, search],
             queryFn: () =>
                 fetch(url, {
                     headers: {
-                        Authorization: AuthenticatedUser() as string,
+                        Authorization: `Bearer ${adminJWT}`,
                         "Content-Type": "application/json",
                     },
                 }).then((res) => {
@@ -66,14 +67,16 @@ export function useSearchCrud(type: string, pageNumber: number, pageSize: number
                             removeToken();
                             location.href = '/login';
                         }
+                        throw new Error('Network response was not ok');
                     }
                     return res.json();
                 }),
-            enabled: search != null,
             refetchOnWindowFocus: true,
             staleTime: 5 * 60 * 1000,
+            enabled: options.enabled !== undefined ? options.enabled : true,
         });
 }
+
 export async function crudUpdateById(type: string, adminJWT: string, updatedUser: User) {
 	const url = `${import.meta.env.VITE_CLOUD_API_URL}${type}`;
 	const response = await fetch(url, {
@@ -93,7 +96,6 @@ export async function crudUpdateById(type: string, adminJWT: string, updatedUser
 }
 // Transactions 
 export function useGetUserTransactions(user: string) {
-    const apiUrl = import.meta.env.VITE_CLOUD_API_URL;
     const url = `${import.meta.env.VITE_CLOUD_API_URL}UserAccount/GetTransactionSummaries`;
     return useQuery({
         queryKey: ["transaction", user],

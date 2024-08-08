@@ -10,7 +10,8 @@ type RegisterSteam = {
     passwordConfirm: string;
 }
 function SteamRegister() {
-    const [error, setError] = useState<string>('');
+    const [error, setError] = useState<string | null>(null);
+    const navigate = useNavigate();
     const userJwt = AuthenticatedUser();
     if (userJwt === false) {
         location.href = '/login';
@@ -21,23 +22,42 @@ function SteamRegister() {
         password: "",
         passwordConfirm: "",
     });
+    const [showRegister, setShowRegister] = useState(true);
     const { data: user, error: userError, isLoading: userLoading } = useUserQuery(userJwt as string);
     // handle the submission of the form via mutation
+    
     const registerMutate = useMutation({
-        mutationFn: (url: string) => {
-            return fetch(url, {
+        mutationFn: async (url: string) => {
+            const response = await fetch(url, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
                     Authorization: `Bearer ${userJwt}`,
                 },
+            })
+
+            if (!response.ok) {
+                const errorResponse = await response.json();
+                throw new Error(JSON.stringify(errorResponse));
+            }
+
+            const data = await response.json();
+            return data.token;
+        },
+        onSuccess: () => {
+            navigate({
+                to: '/account',
+                search: {
+                    token: null,
+                    refType: null
+                }
             });
+        },
+        onError: (error: any, response) => {
+            console.log(response);
+            setError(`There was an error registering your account. ${JSON.parse(error.message).message}`);
         }
     });
-    // If the user is not new, redirect them to the account page
-    if (user && !checkNewSteamUserStatus(user)) {
-        window.location.href = '/account';  
-    }
     function doSteamRegister(e: React.FormEvent): void {
         e.preventDefault();
         if (registerData.password != registerData.passwordConfirm) {
@@ -65,7 +85,7 @@ function SteamRegister() {
 
     function handleInputChange(e: React.ChangeEvent<HTMLInputElement>) {
         const { name, value } = e.target;
-        setError('');
+        setError(null);
         // Validate username if it's being updated
         if (name === "username" && !isValidUsername(value)) {
             setError('Username is not valid, please use only letters, numbers, and underscores.');
@@ -74,17 +94,22 @@ function SteamRegister() {
             setError('Email is not valid');
         }
         if (name === "password" && !isValidPassword(value)) {
-            setError('Password is not valid, please use at least 8 characters, one uppercase letter, one lowercase letter, one number, and one special character.');
+            setError('Password must be at least 8 characters long and include at least one digit, one lowercase letter, one uppercase letter, and one special character (e.g., !@#$%^&*).');
         }
         if (name === "passwordConfirm" && value !== registerData.password) {
             setError('Passwords do not match.');
         }
         setRegisterData({ ...registerData, [name]: value });
     }
-
+    if (user && !checkNewSteamUserStatus(user)) {
+        setShowRegister(false);
+        location.href = "/account";
+    }
     return (
         <>
-            <div className='login-wrap d-flex flex-column align-items-center w-25'>
+        {
+            showRegister ? (
+                <div className='login-wrap d-flex flex-column align-items-center w-25'>
                 <h1>Register</h1>
                 <p>You successfully registered with steam</p>
                 <p className="alert alert-success">Complete your account below, this will allow you to login via steam or these credentials</p>
@@ -102,9 +127,16 @@ function SteamRegister() {
                     <div className="form-group mb-3">
                         <input onChange={handleInputChange} className="w-100 form-control" type="password" name="passwordConfirm" id="passwordConfirm" title="passwordConfirm" placeholder="Confirm Password" />
                     </div>
-                    <button className="btn login-button w-100" type="submit">Register</button>
+                    <button className="btn login-button w-100" type="submit" disabled={error !== null}>Register</button>
                 </form>
             </div>
+            ) : null
+        }
+            {
+                registerMutate.isPending ? (
+                    <Modal type={"Loading"} message={"Creating account"} data={undefined} />
+                ) : null
+            }
         </>
     );
 }

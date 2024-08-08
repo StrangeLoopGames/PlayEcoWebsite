@@ -1,4 +1,4 @@
-import { createFileRoute, redirect } from '@tanstack/react-router';
+import { createFileRoute, Navigate, redirect, useNavigate } from '@tanstack/react-router';
 import UserCard from '../../components/account/UserCard';
 import SteamCard from '../../components/account/SteamCard';
 import DownloadsCard from '../../components/account/DownloadsCard';
@@ -10,20 +10,26 @@ import "../../assets/_account.scss";
 import { Modal } from '../../components/Modal';
 
 type AccountParams = {
-  refType: string;
-  token: string;
+  refType: string | null;
+  token: string | null;
+  redirect: string | null;
+  product: string | null;
 }
 export const Route = createFileRoute('/account/')({
   validateSearch: (search: Record<string, unknown>): AccountParams => {
-    return { refType: search.type as string, token: search.token as string };
+    return { 
+      refType: search.type as string, 
+      token: search.token as string, 
+      redirect: search.redirect as string, 
+      product: search.pid as string,
+    };
   },
-  beforeLoad: async ({ location }) => {
+  beforeLoad: async ({ location, search }) => {
     if (!AuthenticatedUser()) {
       throw redirect({
         to: '/login',
         search: {
-          error: 'authenication_error',
-          redirect: location.href,
+          redirect: search.redirect != null ? search.redirect : location.href,
         },
       })
     }
@@ -46,7 +52,6 @@ function Account() {
   if (error) {
     return <Modal type="Error" message={error.message} data={undefined} />
   }
-
   return (
     <>
     { user && !user.verified ? (

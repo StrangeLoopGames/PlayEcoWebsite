@@ -46,7 +46,7 @@ export function ResetPassword ({token}: {token: string}) {
             setError('Passwords do not match');
             return;
         } else if(!isValidPassword(resetData.password)) {
-            setError('Password is not valid, please use at least 8 characters, one uppercase letter, one lowercase letter, one number, and one special character.');
+            setError('Password must be at least 8 characters long and include at least one digit, one lowercase letter, one uppercase letter, and one special character (e.g., !@#$%^&*).');
             return;
         } else {
             if(error == "") {
@@ -65,7 +65,7 @@ export function ResetPassword ({token}: {token: string}) {
         setError('');
         // Validate username if it's being updated
         if (name === "password" && !isValidPassword(value)) {
-            setError('Password is not valid, please use at least 8 characters, one uppercase letter, one lowercase letter, one number, and one special character.');
+            setError('Password must be at least 8 characters long and include at least one digit, one lowercase letter, one uppercase letter, and one special character (e.g., !@#$%^&*).');
         }
         if (name === "passwordConfirm" && value !== resetData.password) {
             setError('Passwords do not match.');

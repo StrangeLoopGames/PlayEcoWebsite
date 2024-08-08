@@ -74,10 +74,10 @@ export function isValidUsername(username: string): boolean {
 		}
 }
 export function isValidPassword(password: string): boolean {
-	// Password must be at least 8 characters long
-	const regex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/;
+	// Password must be at least 8 characters long, include at least one digit, one lowercase letter, one uppercase letter, and one special character
+	const regex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*()_+{}[\]:;"'<>,.?~`]).{8,}$/;
 	if (!regex.test(password)) {
-		return false; // Password is too short
+		return false; // Password is invalid
 	} else {
 		return true; // Password is valid
 	}

@@ -1,16 +1,13 @@
-import { useNavigate } from '@tanstack/react-router';
+import { getRouteApi, redirect, Route, useNavigate } from '@tanstack/react-router';
 import React, { useEffect, useState } from 'react';
 import { storeToken } from '../utils/authentication';
-import steamLogin from '../assets/images/steam_small.png';
-import { log } from 'console';
 
-function LoginForm(props : {error: string}) {
+function LoginForm(props : {error: string, redirect: string}) {
     const [loginData, setLoginData] = useState({
         username: "",
         password: "",
     });
     const [error, setError] = useState<string>('');
-
     useEffect(() => {
         if(props.error && props.error != '') {
             switch (props.error) {
@@ -19,6 +16,9 @@ function LoginForm(props : {error: string}) {
                     break;
                 case "unverified":
                     setError("Your account is not verified, please check your email for a verification link.");
+                    break;
+                case "purchase_login":
+                    setError("You must be logged in to make a purchase.");
                     break;
                 default:
                     break;
@@ -55,7 +55,11 @@ function LoginForm(props : {error: string}) {
             .then(data => {
                 // Store the response data in a variable
                 storeToken(data.token)
-                window.location.href = '/account';
+                if(props.redirect != null) {
+                    location.href = props.redirect ;
+                } else {
+                    location.href = "/account";
+                }
             })
             .catch(error => {
                 console.error('There was a problem with your fetch operation:', error);

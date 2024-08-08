@@ -1,7 +1,8 @@
 import { useNavigate } from '@tanstack/react-router';
 import React, { useState } from 'react';
 import { useMutation } from '@tanstack/react-query';
-import { isValidPassword } from '../utils/authentication';
+import { isValidPassword, isValidUsername } from '../utils/authentication';
+import { Modal } from './Modal';
 type Register = {
     username: string;
     email: string;
@@ -16,7 +17,15 @@ type registerMutate = {
     password: string;
 
 }
-function RegisterForm() {  
+function _turnstileCb() {
+    console.debug('_turnstileCb called');
+
+    turnstile.render('#turnstile-widget', {
+        sitekey: '0xAAAAAAAAAXAAAAAAAAAAAA',
+        theme: 'light',
+    });
+}
+function RegisterForm() {
     const [registerData, setRegisterData] = useState<Register>({
         username: "",
         email: "",
@@ -25,28 +34,49 @@ function RegisterForm() {
         ageConfirm: false,
         newsletter: false
     });
-    const [error, setError] = useState<string>('');
+    const [error, setError] = useState<string | null>(null);
     const navigate = useNavigate();
 
     const registerMutate = useMutation({
-        mutationFn: (register: registerMutate) => {
-            return fetch(`${import.meta.env.VITE_CLOUD_API_URL}api/Registration/RegisterUser`, {
+        mutationFn: async (register: registerMutate) => {
+            const response = await fetch(`${import.meta.env.VITE_CLOUD_API_URL}api/Registration/RegisterUser`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
                 },
                 body: JSON.stringify(register),
+            })
+
+            if (!response.ok) {
+                const errorResponse = await response.json();
+                throw new Error(JSON.stringify(errorResponse));
+            }
+
+            const data = await response.json();
+            return data.token;
+        },
+        onSuccess: () => {
+            navigate({
+                to: '/account',
+                search: {
+                    token: null,
+                    refType: null
+                }
             });
+        },
+        onError: (error: any, response) => {
+            console.log(response);
+            setError(`There was an error registering your account. ${JSON.parse(error.message).message}`);
         }
     });
-    
+
     function doRegistration(e: React.FormEvent): void {
         e.preventDefault();
         if (registerData.password != registerData.passwordConfirm) {
             setError('Passwords do not match');
             return;
-        } else if(!isValidPassword(registerData.password)) {
-            setError('Password is not valid, please use at least 8 characters, one uppercase letter, one lowercase letter, one number, and one special character.');
+        } else if (!isValidPassword(registerData.password)) {
+            setError('Password must be at least 8 characters long and include at least one digit, one lowercase letter, one uppercase letter, and one special character (e.g., !@#$%^&*).');
             return;
         } else {
             registerMutate.mutate({
@@ -54,24 +84,30 @@ function RegisterForm() {
                 email: registerData.email,
                 password: registerData.password
             });
-            if (registerMutate.isSuccess) {
-                navigate({
-                    to: '/account',
-                });
-            }
-            if (registerMutate.isError || error) {
-                setError("There was an error registering your account.");
-            }
         }
     }
 
     function handleInputChange(e: React.ChangeEvent<HTMLInputElement>) {
         const { name, value } = e.target;
+        setError(null);
+        // Validate username if it's being updated
+        if (name === "username" && !isValidUsername(value)) {
+            setError('Username is not valid, please use only letters, numbers, and underscores.');
+        }
+        if (name === "email" && !value.includes('@')) {
+            setError('Email is not valid');
+        }
+        if (name === "password" && !isValidPassword(value)) {
+            setError('Password must be at least 8 characters long and include at least one digit, one lowercase letter, one uppercase letter, and one special character (e.g., !@#$%^&*).');
+        }
+        if (name === "passwordConfirm" && value !== registerData.password) {
+            setError('Passwords do not match.');
+        }
         setRegisterData({ ...registerData, [name]: value });
     }
     function handleCheckboxChange(e: React.ChangeEvent<HTMLInputElement>) {
         const { name, checked } = e.target;
-        setRegisterData({ ...registerData, [name]: checked ? true : false});
+        setRegisterData({ ...registerData, [name]: checked ? true : false });
     }
 
     return (
@@ -98,8 +134,14 @@ function RegisterForm() {
                         <span className='px-2'>I am over the age of 13 years old</span>
                     </label>
                 </div>
-                <button className="btn login-button w-100" type="submit">Register</button>
+                <div id="turnstile-widget"></div>
+                <button className={`btn login-button w-100 ${error != null ? "disabled" : ""}`} type="submit">Register</button>
             </form>
+            {
+                registerMutate.isPending ? (
+                    <Modal type={"Loading"} message={"Creating account"} data={undefined} />
+                ) : null
+            }
         </div>
     );
 }

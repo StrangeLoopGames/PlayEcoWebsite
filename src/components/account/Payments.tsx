@@ -14,7 +14,7 @@ function Payments() {
     const purchaseTokenMutate = useMutation({
         mutationFn: async (object: PaymentObject) => {
             const response = await fetch(
-                `${import.meta.env.VITE_CLOUD_API_URL}Transactions/GenerateXsollaToken`,
+                `${import.meta.env.VITE_CLOUD_API_URL}Transactions/GeneratePaymentToken`,
                 {
                     method: 'POST',
                     headers: {
@@ -53,13 +53,28 @@ function Payments() {
             window.XPayStationWidget.init({
                 sandbox: true,
                 access_token: paymentToken,
+                childWindow: {
+                    target: '_self',
+                },
+                onPaymentSuccess: function (data: any) {
+                    console.log(data);
+                },
+                onPaymentFailure: function (data: any) {
+                    console.log(data);
+                },
+                onPaymentCancel: function (data: any) {
+                    console.log(data);
+                },
+                onPaymentClose: function (data: any) {
+                    console.log(data);
+                },
             });
             window.XPayStationWidget.open();
         }
     }, [paymentToken]);
 
     return (
-        <div>
+        <div className='modal payment-modal'>
             <h1>Payments</h1>
             <button onClick={initPurchaseAndToken}>
                 {purchaseTokenMutate.isLoading ? 'Processing...' : 'Pay with Xsolla'}

@@ -4,7 +4,7 @@ section#buy {
         justify-content: space-between;
         align-items: center;
     }
-    a.btn.btn-primary.market-btn {
+    a.btn.btn-primary.market-btn, button.btn.btn-primary.market-btn {
         background: #ffe100;
         border: 2px solid #7d700e;
         z-index: 1;

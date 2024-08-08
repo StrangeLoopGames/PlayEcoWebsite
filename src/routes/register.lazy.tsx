@@ -2,7 +2,7 @@ import { createFileRoute } from '@tanstack/react-router'
 import SteamRegister from '../components/SteamRegister';
 import RegisterForm from '../components/Register';
 import "../assets/_account.scss";
-import { storeToken } from '../utils/authentication';
+import {  storeToken } from '../utils/authentication';
 type SteamParams = {
   type: string | unknown;
   token: string | unknown;
