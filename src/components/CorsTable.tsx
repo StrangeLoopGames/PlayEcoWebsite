@@ -23,19 +23,21 @@ interface Props {
     updateUserEvent: (updatedUser: User) => void;
     changePageEvent: (pageNumber: number) => void;
 }
-function generateColumns(data) {
-    // Get keys from the first data object  
-    const keys = Object.keys(data[0]);
-    // Map keys to array of objects with required structure
-    const arrayOfObjects: User[] = keys.map(key => ({
+function generateColumns(data: User[]): any[] {
+    const dataArray = !Array.isArray(data) ? [data] : data;
+    if (!data || data.length === 0) {
+        return []; // Return an empty array if data is undefined or empty
+    }
+    const keys = Object.keys(dataArray[0]);
+    return keys.map(key => ({
         id: key,
         accessorFn: row => `${row[key]}`, // Accessor function to get value by key
         header: () => <span>{splitCamelCaseAndCapitalize(key)}</span>, // Header cell
         cell: (info) => <span>{formatCell(key, info.getValue(), info)}</span>, // Data cell
     }));
-
-    return arrayOfObjects;
 }
+
+
 const subTableColumns = ['achievements', 'items', 'icons'];
 const copyButton = ['id'];
 const booleanIcons: { true: JSX.Element, false: JSX.Element } = {
@@ -53,18 +55,22 @@ export function formatCell(key: string, cell: any, info: any) {
     }
 }
 export default function CorsTable({ users, selectedKey, toggleModalEvent, updateUserEvent, changePageEvent }: Props) {
-    // Columns and data are defined in a stable reference, will not cause infinite loop!
-    //const [data, setData] = useState(users)
-    const [sorting, setSorting] = useState<SortingState>([])
+    const [sorting, setSorting] = useState<SortingState>([]);
     const [selectedUser, setSelectedUser] = useState<{ cell: string, user: User } | null>(null);
     const [toggleModal, setToggleModal] = useState(false);
     const [pagination, setPagination] = useState({
-        pageIndex: 0, //initial page index
-        pageSize: 100, //default page size
+        pageIndex: 0,
+        pageSize: 100,
     });
-    const data = (selectedKey == null) ? users : users[selectedKey];
 
-    const columns = generateColumns(data);
+    // Ensure `users` is always treated as an array
+    const userArray = Array.isArray(users) ? users : [users];
+
+    const data = useMemo(() => (selectedKey == null ? userArray : userArray[selectedKey] || []), [selectedKey, userArray]);
+
+
+    const columns = useMemo(() => generateColumns(data), [data]);
+
     const table = useReactTable({
         data,
         columns,
@@ -74,11 +80,10 @@ export default function CorsTable({ users, selectedKey, toggleModalEvent, update
         getSortedRowModel: getSortedRowModel(),
         onSortingChange: setSorting,
         state: {
-            //...
             pagination,
             sorting,
         },
-    })
+    });
 
     useEffect(() => {
         const handleKeyDown = (event: { key: string; }) => {
@@ -89,11 +94,11 @@ export default function CorsTable({ users, selectedKey, toggleModalEvent, update
 
         document.addEventListener('keydown', handleKeyDown);
 
-        // Clean up the event listener when component unmounts
         return () => {
             document.removeEventListener('keydown', handleKeyDown);
         };
     }, [toggleModal]);
+
     function selectUser(user: User, cell: any) {
         return () => {
             if (user[cell].length > 0) {
@@ -102,18 +107,18 @@ export default function CorsTable({ users, selectedKey, toggleModalEvent, update
             }
         }
     }
+
     function toggleEditModal() {
         setToggleModal(!toggleModal);
     }
+
     return (
         <div className="p-2 table-container">
-            {
-                sorting.length > 0 ? (
-                    <div className="sorting">
-                        <h5>Table is currently sorted by: <span className="fw-bold">{sorting[0].id}</span> in <span className="fw-bold">{sorting[0].desc ? 'descending' : 'ascending '} </span> order</h5>
-                    </div>
-                ) : null
-            }
+            {sorting.length > 0 && (
+                <div className="sorting">
+                    <h5>Table is currently sorted by: <span className="fw-bold">{sorting[0].id}</span> in <span className="fw-bold">{sorting[0].desc ? 'descending' : 'ascending '} </span> order</h5>
+                </div>
+            )}
             <TablePagnation table={table} />
             <div className="table-container">
                 <table>
@@ -168,14 +173,13 @@ export default function CorsTable({ users, selectedKey, toggleModalEvent, update
                 </table>
             </div>
             <TablePagnation table={table} />
-            {
-                selectedUser != null && toggleModal == true ? (
-                    <EditModal type="user" message="Edit User" data={selectedUser} toggleModalEvent={toggleEditModal} updateUserEvent={updateUserEvent} />
-                ) : null
-            }
+            {selectedUser && toggleModal && (
+                <EditModal type="user" message="Edit User" data={selectedUser} toggleModalEvent={toggleEditModal} updateUserEvent={updateUserEvent} />
+            )}
         </div>
     );
 }
+
 
 function TablePagnation(props: any) {
     const { table } = props;

@@ -6,7 +6,7 @@ import { AuthenticatedUser } from "../../utils/authentication";
 import { splitCamelCaseAndCapitalize } from "../../utils/stringUtils";
 import { components as types } from '../../types/api';
 import { Link } from "@tanstack/react-router";
-import { generateInputTypes } from "../../utils/table";
+
 type User = types["schemas"]["StrangeUser"];
 
 const menuItems = {
@@ -25,7 +25,9 @@ export function UserEditor() {
     const [search, setSearch] = useState<string | null>(null);
 
     const { data: users, error, isLoading, refetch } = useFetchCrud(crudType, pageNumber, pageSize, userJWT as string);
-    const { data: userSearch, error: searchError, isLoading: searchIsLoading } = useSearchCrud(crudType, pageNumber, pageSize, search as string);
+    const { data: userSearch, error: searchError, isLoading: searchIsLoading, refetch: searchRefetch } = useSearchCrud(crudType, search || "", userJWT as string, {
+        enabled: !!search,
+    });
 
     const [userTable, setUserTable] = useState<User[]>([]);
 
@@ -48,7 +50,7 @@ export function UserEditor() {
         setIsUpdating(true);
 
         try {
-            const res = await crudUpdateById(crudType, userJWT as string, updatedUser);
+            await crudUpdateById(crudType, userJWT as string, updatedUser);
             refetch();
         } catch (error) {
             console.error('Error:', error);
@@ -60,20 +62,46 @@ export function UserEditor() {
     const handleSearch = () => {
         const searchString = (document.querySelector('.search-input') as HTMLInputElement).value;
         setSearch(searchString);
+        if (searchString) {
+            searchRefetch();
+        }
     };
 
-    const searchReset = () => {
-        setSearch(null);
+    const handleKeyPress = (event: KeyboardEvent) => {
+        if (event.key === 'Enter') {
+            handleSearch();
+        }
     };
 
     const handleCrudTypeChange = (newCrudType: string) => {
         setCrudType(newCrudType);
         setPageNumber(1); // Reset page number when crudType changes
+        setSearch(null);  // Reset search when crudType changes
+        refetch();        // Refetch data for the new CRUD type
     };
+
+    useEffect(() => {
+        const searchInput = document.querySelector('.search-input') as HTMLInputElement;
+        if (searchInput) {
+            searchInput.addEventListener('keypress', handleKeyPress);
+        }
+        return () => {
+            if (searchInput) {
+                searchInput.removeEventListener('keypress', handleKeyPress);
+            }
+        };
+    }, []);
+
+    useEffect(() => {
+        // When `search` changes to null, we should ensure userTable is reset
+        if (search === null) {
+            setUserTable(users || []);
+        }
+    }, [search, users]);
 
     return (
         <>
-        <Link className="accounts-back btn btn-small" to="/account">Go Back</Link>
+            <Link className="accounts-back btn btn-small" to="/account">Go Back</Link>
             <h2 className="title-medium-white account-feature-title">
                 {splitCamelCaseAndCapitalize(crudType)} Editor
             </h2>
@@ -89,34 +117,31 @@ export function UserEditor() {
                 ))}
             </div>
             <div className="table-wrap">
-            <div className="instructions">
-                <details>
-                    <summary className="fs-6 p-2">Instructions</summary>
-                    <p className="fs-6 m-0">Double click on a cell to edit it</p>
-                    <p className="fs-6 m-0">Click on the column header to sort by that column</p>
-                    <p className="fs-6 m-0">Use the search bar to filter the results</p>
-                    <p className="fs-6 m-0">To change data types click on the buttons above</p>
-                </details>
+                <div className="instructions">
+                    <details>
+                        <summary className="fs-6 p-2">Instructions</summary>
+                        <p className="fs-6 m-0">Double click on a cell to edit it</p>
+                        <p className="fs-6 m-0">Click on the column header to sort by that column</p>
+                        <p className="fs-6 m-0">Use the search bar to filter the results</p>
+                        <p className="fs-6 m-0">To change data types click on the buttons above</p>
+                    </details>
                 </div>
                 <div className="user-search">
-                    <input className="search-input" name="search" type="text" placeholder="Search the database" />
-                    <button className="button" onClick={handleSearch}>Search</button>
-                    <button className="button reset" onClick={searchReset}>Reset</button>
+                    <input className="search-input" name="search" type="text" placeholder="ENTER GUID HERE" />
+                    <button className="button" onClick={handleSearch}>Lookup</button>
                 </div>
                 <div className="results-info">
-                {search && ( 
+                    {search && (
                         <p>Search results for: {search}</p>
                     )}
                 </div>
-                {userTable.length > 0 && (
-                    <CorsTable
-                        users={userTable}
-                        selectedKey={null}
-                        toggleModalEvent={null}
-                        updateUserEvent={updateUserEvent}
-                        changePageEvent={setPageSize}
-                    />
-                )}
+                <CorsTable
+                    users={userTable}
+                    selectedKey={null}
+                    toggleModalEvent={null}
+                    updateUserEvent={updateUserEvent}
+                    changePageEvent={setPageSize}
+                />
             </div>
             {(isLoading || searchIsLoading) && (
                 <Modal type="Loading" message="Fetching Users from the database." data={undefined} />

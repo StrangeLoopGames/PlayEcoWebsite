@@ -17,6 +17,12 @@
             font-size: 14px;
             border: 1px solid #ccc;
             border-radius: 5px;
+
+            &::placeholder {
+                font-weight: bolder;
+                opacity: 1;
+                color: #000000;
+            }
         }
     }
     .results-info {
