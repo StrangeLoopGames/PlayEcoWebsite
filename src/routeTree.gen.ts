@@ -28,6 +28,7 @@ const GameversionsLazyImport = createFileRoute('/gameversions')()
 const ForgotLazyImport = createFileRoute('/forgot')()
 const BuyLazyImport = createFileRoute('/buy')()
 const IndexLazyImport = createFileRoute('/')()
+const TwitchIndexLazyImport = createFileRoute('/twitch/')()
 const TermsTosLazyImport = createFileRoute('/terms/tos')()
 const TermsEulaLazyImport = createFileRoute('/terms/eula')()
 
@@ -82,6 +83,11 @@ const IndexLazyRoute = IndexLazyImport.update({
   path: '/',
   getParentRoute: () => rootRoute,
 } as any).lazy(() => import('./routes/index.lazy').then((d) => d.Route))
+
+const TwitchIndexLazyRoute = TwitchIndexLazyImport.update({
+  path: '/twitch/',
+  getParentRoute: () => rootRoute,
+} as any).lazy(() => import('./routes/twitch/index.lazy').then((d) => d.Route))
 
 const AccountIndexRoute = AccountIndexImport.update({
   path: '/account/',
@@ -163,6 +169,10 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AccountIndexImport
       parentRoute: typeof rootRoute
     }
+    '/twitch/': {
+      preLoaderRoute: typeof TwitchIndexLazyImport
+      parentRoute: typeof rootRoute
+    }
   }
 }
 
@@ -183,6 +193,7 @@ export const routeTree = rootRoute.addChildren([
   TermsEulaLazyRoute,
   TermsTosLazyRoute,
   AccountIndexRoute,
+  TwitchIndexLazyRoute,
 ])
 
 /* prettier-ignore-end */

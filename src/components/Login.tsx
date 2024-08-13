@@ -92,7 +92,7 @@ function LoginForm(props : {error: string, redirect: string}) {
                 </div>
                 <button className="btn login-button w-100" type="submit">Login</button>
             </form>
-            <div className="d-flex flex-wrap justify-content-center gap-2 mt-2">
+            <div className="d-flex flex-wrap justify-content-center gap-2 mt-2 login-footer">
                 <a className="btn steam-login w-100" href={`${import.meta.env.VITE_CLOUD_API_URL}api/Registration/RegisterWithSteam`}>Login with Steam</a>
                 <Link to="/forgot" className="login-forgot">Forgot Password</Link>
                 <Link to="/register" className="login-forgot">Register an Account</Link>             

@@ -183,6 +183,26 @@ header {
     }
   }
 }
+.login-footer {
+  max-width: 400px;
+}
+
+.login-wrap {
+  .form-group {
+      position: relative;
+  }
+  input.field-error {
+      border: 2px solid #ff7a7a;
+      box-sizing: border-box;
+  }
+  p.field-error-message {
+    font-size: 1rem;
+    width: 100%;
+    line-height: 100%;
+    margin-top: 1px;
+    padding: 0px 3px;
+  }
+}
 .xpaystation-widget-lightbox {
   display: flex;
   flex-direction: column;

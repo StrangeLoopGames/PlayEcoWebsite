@@ -1,0 +1,289 @@
+@keyframes spin {
+    from {
+        transform:rotate(0deg);
+    }
+    to {
+        transform:rotate(360deg);
+    }
+}
+iframe[src*="ads-iframe"] { display: none; }
+html {
+    overflow-x: hidden;
+}
+body {
+    padding: 0 !important;
+    overflow-x: hidden;
+    position: relative;
+    background: #4688c0;
+    min-height: 100vh;
+}
+
+img.polaroid {
+    width: 75%;
+}
+.drops-heading {
+    padding-top: 10%;
+}
+.drops-campaign img.eco-logo {
+    width: 50%;
+}
+.drops-campaign p.account-info {
+    font-style: italic;
+    font-size: 0.7em !important;
+}
+section#drop-rewards {
+    padding: 30px 0px;
+}
+.rewards .reward {
+    padding: 2%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.rewards .reward img.reward-icon {
+    width: 60%;
+}
+.drops-campaign h1 {
+    text-shadow: 1px 1px 12px #3e3e3e;
+    color: #9fce8e;
+    font-size: 4em;
+    text-transform: uppercase;
+    font-weight: bold;
+    line-height: 100%;
+}
+.drops-campaign h2 {
+    text-shadow: 1px 1px 12px #3e3e3e;
+    color: #ffffff;
+    font-size: 2.4em;
+    text-transform: uppercase;
+    line-height: 100%;
+}
+.drops-campaign h3 {
+    text-shadow: 1px 1px 12px #3e3e3e;
+    color: #ffffff;
+    font-size: 2em;
+    text-transform: uppercase;
+    line-height: 100%;
+}
+.drops-campaign .drops-heading  p {
+    text-shadow: 1px 1px 12px #3e3e3e;
+    color: #ffffff;
+    font-size: 1.5em;
+    line-height: 120%;
+    padding: 20px 0px;
+}
+img.twitch-icon {
+    height: 70%;
+    width: auto;
+    margin-right: 10px;
+}
+a.account-link {
+    font-size: 100%;
+    width: fit-content;
+    background: #80be6a;
+}
+.faq-title{
+    text-shadow: 1px 1px 12px #3e3e3e;
+    color: #ffffff;
+    font-weight: bold;
+    font-size: 1.2em;
+    line-height: 120%;
+    padding: 6px 0px;
+}
+.faq-text {
+    text-shadow: 1px 1px 12px #3e3e3e;
+    color: #ffffff;
+    font-size: 1em;
+    line-height: 120%;
+    padding: 6px;
+}
+p.faq-text a {
+    color: #ffffff;
+    text-decoration: underline;
+}
+p.faq-text a:hover {
+    color: #80be6a !important;
+    text-decoration: underline;
+}
+img.void-storage-icon {
+    width: auto;
+    height: 100%;
+    animation-name: spin;
+    animation-duration: 5000ms;
+    animation-iteration-count: infinite;
+    animation-timing-function: linear;
+}
+.reward-title {
+    text-shadow: 1px 1px 12px #3e3e3e;
+    color: #ffffff;
+    font-size: 1.2em;
+    line-height: 120%;
+    padding: 6px 0px;
+}
+a.reward-link {
+    color: #90e7b8;
+    font-size: 20px;
+}
+a.reward-link:hover {
+    color: #ffffff !important;
+}
+span.reward-time {
+    background: #80BBAD;
+    text-shadow: 1px 1px 12px #3e3e3e;
+    min-width: 140px;
+    font-weight: normal;
+    text-align: center;
+    padding: 6px 0px;
+    color: #ffffff;
+}
+.menu-wrapper {
+    margin: 0;
+}
+.tree-clouds {
+    pointer-events: none;
+}
+.menu-wrapper.cloned {
+    background: url(/assets/images/textures/cubes.png) rgba(70, 136, 192, 0.95) !important;
+    background-blend-mode: soft-light;
+}
+.menu-wrapper a, .menu-wrapper a:focus  {
+    color:white !important;
+}
+.dropdown a, .menu-wrapper a:hover, .dropdown a:focus  {
+    color:#333 !important;
+}
+.menu-wrapper a:hover {
+    color:#9fce8e !important;
+}
+.menu-wrapper .btn {
+    background:#24dffe96 !important;
+}
+.menu-wrapper a.btn:hover {
+    background: #00dbffb8 !important;
+    color:white !important;
+}
+.menu-wrapper .text-right {
+    opacity: 100;
+    -webkit-transition: all 0.2s;
+    -moz-transition: all 0.2s;
+    transition: all 0.2s;
+}
+.intro-awards-wrapper a {
+    color: white;
+}
+.menu-wrapper.cloned .menu-link-logo {
+    display:block;
+}
+.fadeinscroll {
+    opacity: 0;
+    transform: translate(0, 20px);
+    transition: all 1s;
+}
+.fadeinscroll.visible {
+    opacity: 1;
+    transform: translate(0, 0);
+}
+section.row {
+    margin-bottom: 110px;
+}
+.dropdown-hover .dropdown a {
+    background:#ffffffdb;
+}
+.menu-wrapper .menu-link-logo {
+    margin-top: 8px;
+}
+
+::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+    background: none;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+    background: #3c6797;
+    border-radius: 10px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+    background: #3c6797;
+}
+
+::-webkit-scrollbar-track-piece {
+    background: transparent;
+}
+
+html {
+    scrollbar-color: #3c6797 transparent;
+}
+@media only screen and (max-width: 999px) {
+    p.reward-title {
+        font-size: 3em;
+        line-height: 120%;
+        padding: 14px 0px;
+    }
+    a.reward-link {
+        color: #90e7b8;
+        font-size: 40px;
+        font-weight: bold;
+    }
+    a.reward-link a:hover {
+        color: #ffffff;
+    }
+    span.reward-time {
+        background: #80BBAD;
+        text-shadow: 1px 1px 12px #3e3e3e;
+        min-width: 50%;
+        font-weight: normal;
+        text-align: center;
+        padding: 29px 0px;
+        font-size: 3em;
+        color: #ffffff;
+    }
+    .faq-description {
+        font-size: 2.5em;
+    }
+    .faq-title {
+        line-height: 100%;
+        padding-top: 10px !important;
+    }
+    p.faq-text {
+        padding: 40px 0px;
+    }
+    .drops-heading {
+        padding: 0px 40px;
+    }
+    .drops-campaign h1 {
+        text-align: left;
+        font-size: 3em;
+    }
+    .drops-campaign h3 {
+        font-size: 3.5em;
+        padding-bottom: 30px;
+    }
+    .drops-heading h2 {
+        text-align: left;
+        font-size: 2em;
+        font-weight: bold;
+    }
+    .drops-heading, .drops-heading p.text-right {
+        text-align: left;
+        font-size: 1.5em;
+        font-weight: bold;
+    }
+    .drops-heading a.account-link {
+        width: 100%;
+        font-size: 2em;
+        height: 2em;
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+    }
+}

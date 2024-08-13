@@ -4,7 +4,7 @@ import "../assets/_landing.scss"
 import logo from '../assets/images/eco-logo.png';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCartShopping } from '@fortawesome/free-solid-svg-icons';
-import { faSteamSquare, faFacebookSquare, faXTwitter, faDiscord, faYoutube } from '@fortawesome/free-brands-svg-icons'
+import { faSteamSquare, faFacebookSquare, faXTwitter, faDiscord, faYoutube, faTwitch } from '@fortawesome/free-brands-svg-icons'
 import { Trans } from "@lingui/macro";
 // import eco-logo.png 
 export const Route = createLazyFileRoute('/')({
@@ -53,16 +53,17 @@ function Index() {
                                         <div className="socials w-100 justify-content-center d-flex gap-3 py-4">
                                             <a href="https://www.facebook.com/EcoVideoGame" target="_blank"><FontAwesomeIcon className="facebook-icon fs-1" icon={faFacebookSquare} /></a>
                                             <a href="https://twitter.com/StrangeLoopGame" target="_blank"><FontAwesomeIcon className="XTwitter-icon fs-1" icon={faXTwitter} /></a>
+                                            <a href="https://twitch.tv/strangeloopgames" target="_blank"><FontAwesomeIcon className="Discord-icon fs-1" icon={faTwitch} /></a>
                                             <a href="https://www.youtube.com/user/StrangeLoopGame" target="_blank"><FontAwesomeIcon className="Youtube-icon fs-1" icon={faYoutube} /></a>
                                             <a href="https://discord.gg/eco" target="_blank"><FontAwesomeIcon className="Discord-icon fs-1" icon={faDiscord} /></a>
                                         </div>
                                     </div>
                                     <div className="col-md-6 purchase-wrap d-flex flex-row">
-                                        <a href="/buy" className="btn btn col-md-6 justify-content-between fs-4 buyweb">
-                                            <FontAwesomeIcon className="download-icon" icon={faCartShopping} /> Buy Direct</a>
+                                        <a href="/buy" className="btn btn col-6 justify-content-between fs-4 buyweb purchase-cta">
+                                            <span><FontAwesomeIcon className="icon download-icon" icon={faCartShopping} /> Buy Direct</span></a>
                                         <a href="https://store.steampowered.com/app/382310/Eco/" target="_blank"
-                                            className="btn btn col-md-6 justify-content-between fs-4">
-                                            <FontAwesomeIcon className="download-icon" icon={faSteamSquare} /> Buy on Steam </a>
+                                            className="btn btn col-6 justify-content-between fs-4 purchase-cta">
+                                            <span><FontAwesomeIcon className="icon download-icon icon" icon={faSteamSquare} /> Buy on Steam</span> </a>
                                     </div>
                                 </div>
                             </article>
