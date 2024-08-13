@@ -141,3 +141,27 @@ export function useGetGameVersions() {
         staleTime: 5 * 60 * 1000,
     });
 }
+export function useGetUserInvites() {
+    const url = `${import.meta.env.VITE_CLOUD_API_URL}Invites/GetInvites`;
+    return useQuery({
+        queryKey: ["userInvites"],
+        queryFn: () =>
+            fetch(url, {
+                headers: {
+                    Authorization: `Bearer ${AuthenticatedUser() as string}`,
+                    "Content-Type": "application/json",
+                },
+            }).then((res) => {
+                if (!res.ok) {
+                    if (res.status === 401) {
+                        removeToken();
+                        location.href = '/login';
+                    }
+                }
+                return res.json();
+            }),
+        refetchOnWindowFocus: false,
+        staleTime: 5 * 60 * 1000,
+        
+    });
+}

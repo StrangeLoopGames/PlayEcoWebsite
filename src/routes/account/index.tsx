@@ -8,6 +8,7 @@ import TransactionsCard from '../../components/account/TransactionsCard';
 import { AuthenticatedUser, useUserQuery } from "../../utils/authentication";
 import "../../assets/_account.scss";
 import { Modal } from '../../components/Modal';
+import InviteCard from '../../components/account/InviteCard';
 
 type AccountParams = {
   refType: string | null;
@@ -60,6 +61,7 @@ function Account() {
     }
       <UserCard user={user} />
       <DownloadsCard user={user} />
+      <InviteCard user={user} />
       <TransactionsCard user={user} />
       <SteamCard user={user} />
       {/* <TwitchCard user={user} /> */}

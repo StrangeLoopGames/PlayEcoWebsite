@@ -6,7 +6,4 @@ export const menuItems: MenuItems = {
     Wiki : 'https://wiki.play.eco/en/Eco_Wiki',
     Company: 'https://strangeloopgames.com/',
     Jobs: '/jobs',
-    Contact: '/contact',
-    Account: '/account',
-
 }

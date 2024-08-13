@@ -51,14 +51,43 @@ nav.light-menu {
   top: 0;
   left: 0;
   transform: translate(50%, 50%);
+
+  .modal-close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    display: flex;
+    padding: 10px;
+    font-size: 24px;
 }
-#loading-modal {
+}
+#loading-modal, #payment-modal {
   display: flex;
   height: 100%;
   width: 100%;
   background: rgba(0, 0, 0, 0.3411764706);
   justify-content: center;
   align-items: center;
+  
+  .btn-quantity {
+    padding: 10px;
+    font-size: 24px;
+    height: fit-content;
+    max-height: 40px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+  .modal-close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    display: flex;
+    padding: 10px;
+    font-size: 24px;
+    width: unset;
+    height: unset;
+}
 
   &.modal-user {
     .modal-content {

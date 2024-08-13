@@ -1,12 +1,14 @@
-import { getRouteApi, redirect, Route, useNavigate } from '@tanstack/react-router';
+import { getRouteApi, Link, redirect, Route, useNavigate } from '@tanstack/react-router';
 import React, { useEffect, useState } from 'react';
 import { storeToken } from '../utils/authentication';
+import { Modal } from 'react-bootstrap';
 
 function LoginForm(props : {error: string, redirect: string}) {
     const [loginData, setLoginData] = useState({
         username: "",
         password: "",
     });
+    const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState<string>('');
     useEffect(() => {
         if(props.error && props.error != '') {
@@ -29,7 +31,7 @@ function LoginForm(props : {error: string, redirect: string}) {
     function doSignIn(e: React.FormEvent): void {
         e.preventDefault()
         const url = `${import.meta.env.VITE_CLOUD_API_URL}Authentication/AuthenticateSLGUser`;
-        
+        setIsLoading(true);
         fetch(url, {
             method: 'POST',
             headers: {
@@ -39,9 +41,12 @@ function LoginForm(props : {error: string, redirect: string}) {
         })
             .then(response => {
                 if (!response.ok) {
-                    if(response.status == 401) {
+                    if(response.status != 200) {
                         return response.json().then(errorData => {
                             if (response.status === 401) {
+                                setError(errorData.status);
+                            }
+                            if(response.status == 500) {
                                 setError(errorData.message);
                             }
                         });
@@ -64,6 +69,7 @@ function LoginForm(props : {error: string, redirect: string}) {
             .catch(error => {
                 console.error('There was a problem with your fetch operation:', error);
             });
+            setIsLoading(false);
     }
 
 
@@ -88,9 +94,14 @@ function LoginForm(props : {error: string, redirect: string}) {
             </form>
             <div className="d-flex flex-wrap justify-content-center gap-2 mt-2">
                 <a className="btn steam-login w-100" href={`${import.meta.env.VITE_CLOUD_API_URL}api/Registration/RegisterWithSteam`}>Login with Steam</a>
-                <a className="login-forgot" href="/forgot">Forgot Password</a>
-                <a className="login-forgot" href="/register">Register an Account</a>                
+                <Link to="/forgot" className="login-forgot">Forgot Password</Link>
+                <Link to="/register" className="login-forgot">Register an Account</Link>             
             </div>
+            {
+            isLoading ? (
+                <Modal type={"Loading"} message={"Logging you in"} data={undefined} />
+            ) : null
+        }
         </div>
     );
 }

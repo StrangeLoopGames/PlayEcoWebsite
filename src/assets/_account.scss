@@ -27,10 +27,11 @@ section#login {
 
     .login-wrap {
         min-width: 400px;
-        max-width: 400px;
+        max-width: 700px;
 
         form {
             width: 100%;
+            max-width: 400px;
         }
         .btn {
             font-size: 27px;

@@ -4,11 +4,12 @@ section#buy {
         justify-content: space-between;
         align-items: center;
     }
-    a.btn.btn-primary.market-btn, button.btn.btn-primary.market-btn {
+    a.btn-primary.market-btn, button.btn-primary.market-btn, .market-btn {
         background: #ffe100;
         border: 2px solid #7d700e;
         z-index: 1;
     }
+    
     .game-purchase {
         min-height: 300px;
         background-size: cover;
@@ -72,6 +73,6 @@ section#buy {
 }
 #marketplace {
     .buy-credits {
-        width: 20%;
+        width: 16%;
     }
 }

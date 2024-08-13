@@ -1,8 +1,10 @@
-import { useNavigate } from '@tanstack/react-router';
 import React, { useState } from 'react';
+import { useNavigate } from '@tanstack/react-router';
 import { useMutation } from '@tanstack/react-query';
 import { isValidPassword, isValidUsername } from '../utils/authentication';
 import { Modal } from './Modal';
+import { debounce } from '../utils/stringUtils'
+
 type Register = {
     username: string;
     email: string;
@@ -11,12 +13,13 @@ type Register = {
     ageConfirm: boolean;
     newsletter: boolean;
 }
+
 type registerMutate = {
     username: string;
     email: string;
     password: string;
-
 }
+
 function _turnstileCb() {
     console.debug('_turnstileCb called');
 
@@ -25,6 +28,7 @@ function _turnstileCb() {
         theme: 'light',
     });
 }
+
 function RegisterForm() {
     const [registerData, setRegisterData] = useState<Register>({
         username: "",
@@ -45,7 +49,7 @@ function RegisterForm() {
                     "Content-Type": "application/json",
                 },
                 body: JSON.stringify(register),
-            })
+            });
 
             if (!response.ok) {
                 const errorResponse = await response.json();
@@ -70,24 +74,7 @@ function RegisterForm() {
         }
     });
 
-    function doRegistration(e: React.FormEvent): void {
-        e.preventDefault();
-        if (registerData.password != registerData.passwordConfirm) {
-            setError('Passwords do not match');
-            return;
-        } else if (!isValidPassword(registerData.password)) {
-            setError('Password must be at least 8 characters long and include at least one digit, one lowercase letter, one uppercase letter, and one special character (e.g., !@#$%^&*).');
-            return;
-        } else {
-            registerMutate.mutate({
-                username: registerData.username,
-                email: registerData.email,
-                password: registerData.password
-            });
-        }
-    }
-
-    function handleInputChange(e: React.ChangeEvent<HTMLInputElement>) {
+    const handleInputChange = debounce((e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
         setError(null);
         // Validate username if it's being updated
@@ -104,7 +91,25 @@ function RegisterForm() {
             setError('Passwords do not match.');
         }
         setRegisterData({ ...registerData, [name]: value });
+    }, 300);
+
+    function doRegistration(e: React.FormEvent): void {
+        e.preventDefault();
+        if (registerData.password !== registerData.passwordConfirm) {
+            setError('Passwords do not match');
+            return;
+        } else if (!isValidPassword(registerData.password)) {
+            setError('Password must be at least 8 characters long and include at least one digit, one lowercase letter, one uppercase letter, and one special character (e.g., !@#$%^&*).');
+            return;
+        } else {
+            registerMutate.mutate({
+                username: registerData.username,
+                email: registerData.email,
+                password: registerData.password
+            });
+        }
     }
+
     function handleCheckboxChange(e: React.ChangeEvent<HTMLInputElement>) {
         const { name, checked } = e.target;
         setRegisterData({ ...registerData, [name]: checked ? true : false });
@@ -117,7 +122,7 @@ function RegisterForm() {
             {error && <p className="alert alert-info">{error}</p>}
             <form onSubmit={doRegistration}>
                 <div className="form-group mb-3">
-                    <input onChange={handleInputChange} className="w-100 form-control" type="text" name="username" id="username" title="username" placeholder="Username" value={registerData.username} />
+                    <input onChange={handleInputChange} className="w-100 form-control" type="text" name="username" id="username" title="username" placeholder="Username" />
                 </div>
                 <div className="form-group mb-3">
                     <input onChange={handleInputChange} className="w-100 form-control" type="text" name="email" id="email" title="email" placeholder="Email" />
@@ -145,4 +150,5 @@ function RegisterForm() {
         </div>
     );
 }
+
 export default RegisterForm;

@@ -52,3 +52,9 @@ export type GroupedVersion = {
     baseVersion: string;
     versions: Version[];
 }
+export type marketItem = {
+    id: string,
+    sku: string,
+    name: string,
+    price: number,
+}
