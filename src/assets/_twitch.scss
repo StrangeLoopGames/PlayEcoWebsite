@@ -50,6 +50,14 @@ section#drop-rewards {
     text-transform: uppercase;
     font-weight: bold;
     line-height: 100%;
+    text-align: left;
+}
+.summary-copy {
+    text-shadow: 1px 1px 12px #3e3e3e;
+    color: #ffffff;
+    font-size: 1.5em;
+    line-height: 120%;
+    padding: 20px 0px;
 }
 .drops-campaign h2 {
     text-shadow: 1px 1px 12px #3e3e3e;
@@ -224,7 +232,7 @@ html {
 }
 @media only screen and (max-width: 999px) {
     p.reward-title {
-        font-size: 3em;
+        font-size: 2em;
         line-height: 120%;
         padding: 14px 0px;
     }
@@ -247,7 +255,7 @@ html {
         color: #ffffff;
     }
     .faq-description {
-        font-size: 2.5em;
+        font-size: 1.4em;
     }
     .faq-title {
         line-height: 100%;
@@ -269,17 +277,17 @@ html {
     }
     .drops-heading h2 {
         text-align: left;
-        font-size: 2em;
+        font-size: 1em;
         font-weight: bold;
     }
     .drops-heading, .drops-heading p.text-right {
         text-align: left;
-        font-size: 1.5em;
+        font-size: 1.2em;
         font-weight: bold;
     }
     .drops-heading a.account-link {
         width: 100%;
-        font-size: 2em;
+        font-size: 1.2em;
         height: 2em;
         display: flex;
         flex-direction: row;

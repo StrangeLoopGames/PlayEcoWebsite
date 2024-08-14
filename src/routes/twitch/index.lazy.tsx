@@ -3,65 +3,50 @@ import "../../assets/_twitch.scss";
 export const Route = createLazyFileRoute('/twitch/')({
   component: () => {
     return (
-      <section className='page-wrap-main d-flex col-lg-offset-2 col-lg-8 justify-content-center' id="buy">
-        <div className="col-md-12">
-          <div className="drops-campaign">
+      <section className='page-wrap-main d-flex col-lg-offset-2 col-lg-8 justify-content-center mt-4' id="twitch">
+        <div className="col-md-12 mt-4">
+          <div className="drops-campaign pt-2">
             <div className="tree-clouds"></div>
             <section className="row">
               <div className="col-md-6">
                 <div className="row drops-heading text-right">
-                  <h1 className="text-right">ECO 11 launch</h1>
-                  <h2 className="text-right">Twitch Drops</h2>
-                  <p className="text-right">Twitch Drops to celebrate the 10.0 launch we've got a selection of nautical themed drops to celebrate the addition of boats!</p>
+                  <h1 className="text-right p-0">ECO 11 launch</h1>
+                  <h2 className="text-right p-0">Twitch Drops</h2>
+                  <p className="text-right">Twitch drops to celebrate Eco 11 launch and our creator event: Socialism Vs. Capitalism. Two unique apparel drops to help you show support for your ideology! </p>
                   <a href="/account" className="btn btn account-link">
                     <img className="twitch-icon img-transparent" src="/images/twitch/twitch.svg" />Link Twitch Account</a>
                   <p className="account-info text-right">If you purchased the game through Steam, you will also need to link your Steam account to a play.eco account.</p>
                 </div>
               </div>
               <div className="col-md-6">
-                <img src="/images/twitch/polaroid.png" className="polaroid center-block img-transparent zoomin" alt="Responsive image" />
+                <img src="/images/twitch/eco11_website_image.png" className="w-100 polaroid center-block img-transparent zoomin" alt="Responsive image" />
               </div>
             </section>
             <section id="drop-rewards" className="row">
-              <div className="col-md-12">
+              <div className="col-md-12 px-5 px-md-1">
+                <h2>Socialism Vs. Capitalism</h2>
+                <p className="text-right summary-copy">A unique storyline of competing societies that is extremely topical for world events.
+                  Participating creators will be split into each camp, building a socialist society (planned economy, shared property) on one side, and a capitalist society (free trade, private property, max profits) on the other.
+                  The world will run for 2 weeks, at which time a meteor circling the planet will either destroy the world, or its citizens will succeed in collaborating to destroy it.
+                  The societies will start on their own but will inevitably have to compete and work together as they grow, ultimately trying to stop the meteor together, with much drama ensuing!</p>
                 <h3 className="drops-campaign-heading text-center">Twitch Drops</h3>
-                <p className="reward-title text-center">12 December 2023 - 4 January 2024</p>
-                <div className="row rewards">
+                <p className="reward-title text-center">16th August 2024- 13 September 2024</p>
+                <div className="row rewards justify-content-center">
                   <div className="col-md-4 col-xs-12 reward">
-                    <img src="/images/twitch/FlipFlops.png" className="reward-icon center-block img-transparent zoomin" alt="Responsive image" />
-                    <p className="reward-title">Boat Captain Flip Flops</p>
-                    <span className="reward-time">30 mins</span>
-                  </div>
-                  <div className="col-md-4 col-xs-12 reward">
-                    <img src="/images/twitch/CaptainGlasses.png" className="reward-icon center-block img-transparent zoomin" alt="Responsive image" />
-                    <p className="reward-title">Boat Captain Glasses</p>
-                    <span className="reward-time">1 hour </span>
-                  </div>
-                  <div className="col-md-4 col-xs-12 reward">
-                    <img src="/images/twitch/CaptainHat.png" className="reward-icon center-block img-transparent zoomin" alt="Responsive image" />
-                    <p className="reward-title">Boat Captain Hat</p>
-                    <span className="reward-time">1 hour 30 mins</span>
-                  </div>
-                  <div className="col-md-4 col-xs-12 reward">
-                    <img src="/images/twitch/CaptainShirt.png" className="reward-icon center-block img-transparent zoomin" alt="Responsive image" />
-                    <p className="reward-title">Captain Shirt</p>
+                    <img src="/images/twitch/twitchdropshirt_512.png" className="reward-icon center-block img-transparent zoomin" alt="Responsive image" />
+                    <p className="reward-title">Socialism T-Shirt</p>
                     <span className="reward-time">2 hours</span>
                   </div>
                   <div className="col-md-4 col-xs-12 reward">
-                    <img src="/images/twitch/CaptainShorts.png" className="reward-icon center-block img-transparent zoomin" alt="Responsive image" />
-                    <p className="reward-title">Boat Captain Shorts</p>
-                    <span className="reward-time">2 hours 30 mins</span>
-                  </div>
-                  <div className="col-md-4 col-xs-12 reward">
-                    <img src="/images/twitch/SharkJaws.png" className="reward-icon center-block img-transparent zoomin" alt="Responsive image" />
-                    <p className="reward-title">Shark Jaws</p>
-                    <span className="reward-time">3 hours </span>
+                    <img src="/images/twitch/twitchdrophat_512.png" className="reward-icon center-block img-transparent zoomin" alt="Responsive image" />
+                    <p className="reward-title">Capitalism Top Hat</p>
+                    <span className="reward-time">4 hours</span>
                   </div>
                 </div>
               </div>
             </section>
             <section id="drop-rewards" className="row">
-              <div className="col-md-12">
+              <div className="col-md-12 px-5 px-md-1">
                 <h3 className="drops-campaign-heading text-center">how it works</h3>
                 <div className="col-md-12">
                   <div className="faq-description">
