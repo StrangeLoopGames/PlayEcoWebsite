@@ -2,6 +2,7 @@ import { getRouteApi, Link, redirect, Route, useNavigate } from '@tanstack/react
 import React, { useEffect, useState } from 'react';
 import { storeToken } from '../utils/authentication';
 import { Modal } from 'react-bootstrap';
+import { useMutation } from '@tanstack/react-query';
 
 function LoginForm(props : {error: string, redirect: string}) {
     const [loginData, setLoginData] = useState({
@@ -10,6 +11,7 @@ function LoginForm(props : {error: string, redirect: string}) {
     });
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState<string>('');
+
     useEffect(() => {
         if(props.error && props.error != '') {
             switch (props.error) {
@@ -27,57 +29,57 @@ function LoginForm(props : {error: string, redirect: string}) {
             }
         }
     }, [props.error]);
-        const navigate = useNavigate();
-    function doSignIn(e: React.FormEvent): void {
-        e.preventDefault()
-        const url = `${import.meta.env.VITE_CLOUD_API_URL}Authentication/AuthenticateSLGUser`;
-        setIsLoading(true);
-        fetch(url, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(loginData)
-        })
-            .then(response => {
-                if (!response.ok) {
-                    if(response.status != 200) {
-                        return response.json().then(errorData => {
-                            if (response.status === 401) {
-                                setError(errorData.status);
-                            }
-                            if(response.status == 500) {
-                                setError(errorData.message);
-                            }
-                        });
-                    } else {
-                        setError('There was an error with your login. Please try again later.')
-                    }
-                    throw new Error('Network response was not ok');
-                }
-                return response.json();
-            })
-            .then(data => {
-                // Store the response data in a variable
-                storeToken(data.token)
-                if(props.redirect != null) {
-                    location.href = props.redirect ;
-                } else {
-                    location.href = "/account";
-                }
-            })
-            .catch(error => {
-                console.error('There was a problem with your fetch operation:', error);
+
+    const loginMutate = useMutation({
+        mutationFn: async (loginData: { username: string; password: string }) => {
+            setIsLoading(true);
+            const url = `${import.meta.env.VITE_CLOUD_API_URL}Authentication/AuthenticateSLGUser`;
+            const response = await fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(loginData)
             });
+            if (!response.ok) {
+                const errorData = await response.json();
+                if (response.status === 401) {
+                    throw new Error(errorData.status);
+                }
+                if (response.status === 500) {
+                    throw new Error(errorData.message);
+                }
+                throw new Error('There was an error with your login. Please try again later.');
+            }
+            return response.json();
+        },
+        onSuccess: (data) => {
+            storeToken(data.token);
+            if (props.redirect) {
+                location.href = props.redirect;
+            } else {
+                location.href = "/account";
+            }
+        },
+        onError: (error: any) => {
+            setError(error.message);
+        },
+        onSettled: () => {
             setIsLoading(false);
+        }
+    });
+
+    function doSignIn(e: React.FormEvent): void {
+        e.preventDefault();
+        setIsLoading(true);
+        loginMutate.mutate(loginData);
     }
-
-
 
     function handleInputChange(e: React.ChangeEvent<HTMLInputElement>) {
         const { name, value } = e.target;
         setLoginData({ ...loginData, [name]: value });
     }
+
     return (
         <div className='login-wrap d-flex flex-column align-items-center w-25'>
             <h1>Eco Login</h1>
@@ -90,7 +92,7 @@ function LoginForm(props : {error: string, redirect: string}) {
                 <div className="form-group mb-3">
                     <input onChange={handleInputChange} className="w-100 form-control" type="password" name="password" id="password" title="password" placeholder="Password" />
                 </div>
-                <button className="btn login-button w-100" type="submit">Login</button>
+                <button className="btn login-button w-100" type="submit">{loginMutate.isPending ? "Logging In" : "Login"}</button>
             </form>
             <div className="d-flex flex-wrap justify-content-center gap-2 mt-2 login-footer">
                 <a className="btn steam-login w-100" href={`${import.meta.env.VITE_CLOUD_API_URL}api/Registration/RegisterWithSteam`}>Login with Steam</a>
@@ -98,11 +100,12 @@ function LoginForm(props : {error: string, redirect: string}) {
                 <Link to="/register" className="login-forgot">Register an Account</Link>             
             </div>
             {
-            isLoading ? (
-                <Modal type={"Loading"} message={"Logging you in"} data={undefined} />
-            ) : null
-        }
+                loginMutate.isPending || isLoading ? (
+                    <Modal type={"Loading"} message={"Logging you in"} data={undefined} />
+                ) : null
+            }
         </div>
     );
 }
-export default LoginForm
+
+export default LoginForm;

@@ -4,7 +4,7 @@ import { AuthenticatedUser } from "../utils/authentication";
 
 function Menu() {
     const isLoggedIn = !AuthenticatedUser();
-    const lightMenu = window.location.pathname == "/";
+    const lightMenu = ["/", "/twitch"].includes(window.location.pathname);
     
     return (
         <>

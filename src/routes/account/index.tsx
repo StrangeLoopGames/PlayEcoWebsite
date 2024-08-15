@@ -9,12 +9,15 @@ import { AuthenticatedUser, useUserQuery } from "../../utils/authentication";
 import "../../assets/_account.scss";
 import { Modal } from '../../components/Modal';
 import InviteCard from '../../components/account/InviteCard';
+import TwitchCard from '../../components/account/TwitchCard';
+import { useState } from 'react';
 
 type AccountParams = {
   refType: string | null;
   token: string | null;
   redirect: string | null;
   product: string | null;
+  error: string | null;
 }
 export const Route = createFileRoute('/account/')({
   validateSearch: (search: Record<string, unknown>): AccountParams => {
@@ -23,6 +26,7 @@ export const Route = createFileRoute('/account/')({
       token: search.token as string, 
       redirect: search.redirect as string, 
       product: search.pid as string,
+      error: search.error as string
     };
   },
   beforeLoad: async ({ location, search }) => {
@@ -47,24 +51,36 @@ export const Route = createFileRoute('/account/')({
 
 
 function Account() {
+  const {error, redirect, product, token, refType} = Route.useSearch();
   const userJWT = (AuthenticatedUser()) ? AuthenticatedUser() : '';
-  const { data: user, error, isLoading } = useUserQuery(userJWT as string);
+  const { data: user, error: userError, isLoading } = useUserQuery(userJWT as string);
   if (isLoading) return <Modal type="Loading" message="Please wait while we load your account information." />;
-  if (error) {
+  if (userError) {
     return <Modal type="Error" message={error.message} data={undefined} />
   }
+  console.log(error);
+  
   return (
     <>
     { user && !user.verified ? (
       <p className="alert alert-info">Your account is not verified, please check your email for a verification link.</p>
     ) : null
     }
+    {
+    error ? (
+        <p className="alert alert-danger">{
+          error == "twitch_callback_error" ? 
+          "There was an issue connecting your twitch"
+          :
+          "There was an unexpected error"}</p>
+      ) : null
+    }
       <UserCard user={user} />
       <DownloadsCard user={user} />
       <InviteCard user={user} />
       <TransactionsCard user={user} />
       <SteamCard user={user} />
-      {/* <TwitchCard user={user} /> */}
+      <TwitchCard user={user} />
       <ArtCard />
       <TermsCard />
     </>

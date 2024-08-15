@@ -42,7 +42,7 @@ function InviteCard({ user }: { user: User }) {
             </div>
             {
                 purchase != null ? (
-                    <ModalWrapper toggleModal={toggleModal}>
+                    <ModalWrapper toggleModal={toggleModal} dismissable={true}>
                         <Payments item={purchase} />
                     </ModalWrapper>
                 ) : null

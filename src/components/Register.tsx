@@ -144,7 +144,7 @@ function RegisterForm() {
                     </label>
                 </div>
                 <div id="turnstile-widget"></div>
-                <button className={`btn login-button w-100 ${Object.keys(errors).length > 0 ? "disabled" : ""}`} type="submit">Register</button>
+                <button className={`btn login-button w-100 ${Object.keys(errors).length > 0 ? "disabled" : ""}`} type="submit">{registerMutate.isPending ? "Registering" : "Register"}</button>
             </form>
             {
                 registerMutate.isPending ? (

@@ -14,7 +14,9 @@ import { createFileRoute } from '@tanstack/react-router'
 
 import { Route as rootRoute } from './routes/__root'
 import { Route as AccountIndexImport } from './routes/account/index'
+import { Route as AccountTwitchCallbackImport } from './routes/account/twitch-callback'
 import { Route as AccountAdminImport } from './routes/account/admin'
+import { Route as UserConnectionsTwitchImport } from './routes/user.connections.twitch'
 
 // Create Virtual Routes
 
@@ -104,8 +106,18 @@ const TermsEulaLazyRoute = TermsEulaLazyImport.update({
   getParentRoute: () => rootRoute,
 } as any).lazy(() => import('./routes/terms/eula.lazy').then((d) => d.Route))
 
+const AccountTwitchCallbackRoute = AccountTwitchCallbackImport.update({
+  path: '/account/twitch-callback',
+  getParentRoute: () => rootRoute,
+} as any)
+
 const AccountAdminRoute = AccountAdminImport.update({
   path: '/account/admin',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const UserConnectionsTwitchRoute = UserConnectionsTwitchImport.update({
+  path: '/user/connections/twitch',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -157,6 +169,10 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AccountAdminImport
       parentRoute: typeof rootRoute
     }
+    '/account/twitch-callback': {
+      preLoaderRoute: typeof AccountTwitchCallbackImport
+      parentRoute: typeof rootRoute
+    }
     '/terms/eula': {
       preLoaderRoute: typeof TermsEulaLazyImport
       parentRoute: typeof rootRoute
@@ -171,6 +187,10 @@ declare module '@tanstack/react-router' {
     }
     '/twitch/': {
       preLoaderRoute: typeof TwitchIndexLazyImport
+      parentRoute: typeof rootRoute
+    }
+    '/user/connections/twitch': {
+      preLoaderRoute: typeof UserConnectionsTwitchImport
       parentRoute: typeof rootRoute
     }
   }
@@ -190,10 +210,12 @@ export const routeTree = rootRoute.addChildren([
   ResetpasswordLazyRoute,
   VerifyemailLazyRoute,
   AccountAdminRoute,
+  AccountTwitchCallbackRoute,
   TermsEulaLazyRoute,
   TermsTosLazyRoute,
   AccountIndexRoute,
   TwitchIndexLazyRoute,
+  UserConnectionsTwitchRoute,
 ])
 
 /* prettier-ignore-end */

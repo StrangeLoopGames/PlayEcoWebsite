@@ -4,14 +4,20 @@ import React, { useState } from 'react';
 
 interface ModalWrapperProps {
     children: React.ReactNode;
+    dismissable: boolean;
     toggleModal: () => void;
 }
 
-const ModalWrapper: React.FC<ModalWrapperProps> = ({ children, toggleModal }) => {
+const ModalWrapper: React.FC<ModalWrapperProps> = ({ children, toggleModal, dismissable }) => {
     return (
         <div id="payment-modal" className="modal">
             <div className="modal-content p-3">
-                <button onClick={toggleModal} className="btn modal-close"><FontAwesomeIcon icon={faX}/></button>
+                {
+                dismissable ? (
+                    <button onClick={toggleModal} className="btn modal-close"><FontAwesomeIcon icon={faX}/></button>
+                ) : null
+                }
+                
                 {children}
             </div>
         </div>

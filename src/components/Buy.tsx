@@ -150,7 +150,7 @@ export function Buy() {
             </section>
             {
                 purchase != null ? (
-                    <ModalWrapper toggleModal={toggleModal}>
+                    <ModalWrapper toggleModal={toggleModal} dismissable={true}>
                         <Payments item={purchase} />
                     </ModalWrapper>
                 ) : null

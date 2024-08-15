@@ -51,8 +51,8 @@ export function useFetchCrud(type: string, pageNumber: number, pageSize: number,
     });
 }
 
-export function useSearchCrud(type: string, search: string, adminJWT: string, options: { enabled?: boolean } = {}) {
-        const url = `${import.meta.env.VITE_CLOUD_API_URL}${type}/${search}`;
+export function useSearchCrud(type: string, search: string, pageNumber: number, pageSize: number, adminJWT: string, options: { enabled?: boolean } = {}) {
+        const url = `${import.meta.env.VITE_CLOUD_API_URL}${type}/?search=${search}&pageNumber=${pageNumber}&pageSize=${pageSize}`;
         return useQuery({
             queryKey: ["search", type, search],
             queryFn: () =>

@@ -25,7 +25,7 @@ export function UserEditor() {
     const [search, setSearch] = useState<string | null>(null);
 
     const { data: users, error, isLoading, refetch } = useFetchCrud(crudType, pageNumber, pageSize, userJWT as string);
-    const { data: userSearch, error: searchError, isLoading: searchIsLoading, refetch: searchRefetch } = useSearchCrud(crudType, search || "", userJWT as string, {
+    const { data: userSearch, error: searchError, isLoading: searchIsLoading, refetch: searchRefetch } = useSearchCrud(crudType, search || "" , pageNumber, pageSize, userJWT as string, {
         enabled: !!search,
     });
 
