@@ -26,7 +26,7 @@ export function ResetPassword ({token}: {token: string}) {
                 },
                 body: JSON.stringify({
                     token: resetToken,
-                    newpassword: password,
+                    password: password,
                 })
             });
         },
