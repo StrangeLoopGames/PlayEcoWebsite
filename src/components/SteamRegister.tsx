@@ -45,6 +45,8 @@ function SteamRegister() {
             if (!response.ok) {
                 const errorResponse = await response.json();
                 throw new Error(JSON.stringify(errorResponse));
+            } else {
+                location.href = "/account";
             }
 
             const data = await response.json();
