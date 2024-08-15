@@ -14,37 +14,37 @@ export function Buy() {
     const marketItems: marketItem[] = [
         {
             id: "EcoCredits500",
-            sku: "eco_credits_500",
+            sku: "EcoCredits1",
             name: "500 Credits",
             price: 5.00,
         },
         {
             id: "EcoCredits1000",
-            sku: "eco_credits_1000",
+            sku: "EcoCredits2",
             name: "1000 Credits",
             price: 10.00,
         },
         {
             id: "EcoCredits2800",
-            sku: "eco_credits_2800",
+            sku: "EcoCredits3",
             name: "2800 Credits",
             price: 25.00,
         },
         {
             id: "EcoCredits5700",
-            sku: "eco_credits_5700",
+            sku: "EcoCredits4",
             name: "5700 Credits",
             price: 50.00,
         },
         {
             id: "EcoCredits11500",
-            sku: "eco_credits_11500",
+            sku: "EcoCredits5",
             name: "11500 Credits",
             price: 100.00,
         },
         {
             id: "EcoCredits18500",
-            sku: "eco_credits_18500",
+            sku: "EcoCredits6",
             name: "18500 Credits",
             price: 150.00,
         },
