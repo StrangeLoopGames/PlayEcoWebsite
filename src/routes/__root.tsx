@@ -12,7 +12,6 @@ export const Route = createRootRoute({
             <div className={`content-wrap ${useRouterState().location.pathname.replace(/\//g, '')}`}>
                 <Outlet />
             </div>
-            <TanStackRouterDevtools />
         </>
     )   
     },
