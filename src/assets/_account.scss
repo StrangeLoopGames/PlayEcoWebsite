@@ -46,7 +46,14 @@ section#login {
         }
     }
 }
+.resend-verify {
+    font-weight: 600;
 
+    &:hover {
+        text-decoration: underline;
+        cursor: pointer;
+    }
+}
 .download-icon {
     font-size: 60px;
 }

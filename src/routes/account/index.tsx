@@ -51,19 +51,43 @@ export const Route = createFileRoute('/account/')({
 
 
 function Account() {
+  const [alert , setAlert] = useState<string | null>(null);
   const {error, redirect, product, token, refType} = Route.useSearch();
   const userJWT = (AuthenticatedUser()) ? AuthenticatedUser() : '';
   const { data: user, error: userError, isLoading } = useUserQuery(userJWT as string);
   if (isLoading) return <Modal type="Loading" message="Please wait while we load your account information." />;
-  if (userError) {
+  if (userError && userError != null) {
     return <Modal type="Error" message={error.message} data={undefined} />
   }
   console.log(error);
-  
+  function sendVerificationEmail() {
+    const url = `${import.meta.env.VITE_CLOUD_API_URL}api/Registration/RequestVerifyEmail`;
+    fetch(url, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${userJWT}`
+        }
+    })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            } else {
+              setAlert("Verification email sent");
+            }
+        })
+        .catch(error => {
+            console.error('There was a problem with your fetch operation:', error);
+        });
+  }
   return (
     <>
     { user && !user.verified ? (
-      <p className="alert alert-info">Your account is not verified, please check your email for a verification link.</p>
+      <p className="alert alert-info">Your account is not verified, please check your email for a verification link. <span onClick={sendVerificationEmail} className='resend-verify'>Click here to resend a verification email</span></p>
+    ) : null
+    }
+    { alert ? (
+      <p className="alert alert-warning">{alert}</p>
     ) : null
     }
     {

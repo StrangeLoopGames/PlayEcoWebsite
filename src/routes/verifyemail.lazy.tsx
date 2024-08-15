@@ -15,13 +15,10 @@ export function VerifyEmail() {
   const {token} = Route.useSearch();
   useEffect(() => {
     if(!token) {
-      throw redirect({
-        to: '/login',
-        search: {
-          error: 'verify_email_error',
-          redirect: location.href,
-        },
-      })
+      setError('Verification token missing.');
+      setTimeout(() => {
+        location.href = '/login?error=verify_email_error';
+      }, 700);
     } else {
       fetch(`${import.meta.env.VITE_CLOUD_API_URL}api/Registration/VerifyEmail?verifyToken=${token}`, {
         method: 'POST',
@@ -35,7 +32,7 @@ export function VerifyEmail() {
         setVerified(true);
         setTimeout(() => {
           location.href = '/login';
-        }, 500);
+        }, 700);
       }).catch((error) => {
         console.error('Error:', error);
       });

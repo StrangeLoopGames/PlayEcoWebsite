@@ -17,10 +17,14 @@ function UserCard(props: any) {
     if (props.user.isSLG) {
         selectedIcon = "slgicon";
     } else {
-        if ( props.user.isWolfWhisperer ) {
-            selectedIcon = "wolficon";
-        } else if (props.user.isDevTier ) {
+        if (props.user.isSLG) {
+            return "SLG";
+        }  else if (props.user.isDevTier) {
             selectedIcon = "devicon";
+        } else if (props.user.isWolfWhisperer) {
+            selectedIcon = "wolficon";
+        } else if (props.user.isAlphaBaker) {
+            selectedIcon = "alphaicon";
         } else if (props.user.ownsEco) {
             selectedIcon = "betaicon";
         } else {
@@ -86,6 +90,21 @@ function UserCard(props: any) {
     function enableEdit(){
         setUserEdit({edit: !userEdit.edit, user: props.user})
     }
+    function getGameTeir () {
+        if (props.user.isSLG) {
+            return "SLG";
+        }  else if (props.user.isDevTier) {
+            return "Developer Tier";
+        } else if (props.user.isWolfWhisperer) {
+            return "Wolf Whisperer";
+        } else if (props.user.isAlphaBaker) {
+            return "Alpha Backer";
+        } else if (props.user.ownsEco) {
+            return "Beta";
+        } else {
+            return "Standard";
+        }
+    }
     return (
         <div id="userDetails" className="account-feature">
             <h2>Account</h2>
@@ -96,7 +115,7 @@ function UserCard(props: any) {
                         <li className=""><span className="account-label-front">Username:</span>{props.user.username}</li>
                         <li className="account-label-front"><span className="account-label-front">User ID:</span>{props.user.id}</li>
                         <li className="account-label-front"><span className="account-label-front">Status:</span>{props.user.ownsEco ? "Owns Eco" : <Link to="/buy">Purchase Eco here</Link>}</li>
-                        <li className="account-label-front"><span className="account-label-front">Type:</span>{props.user.isSLG ? "Developer" : "Standard"}</li>
+                        <li className="account-label-front"><span className="account-label-front">Type:</span>{getGameTeir()}</li>
                         <li className="account-label-front"><span className="account-label-front">Eco Credits Balance:</span>{props.user.ecoCredits}</li>
                     </ul>
                 </div>

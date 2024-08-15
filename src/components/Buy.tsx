@@ -65,7 +65,11 @@ export function Buy() {
         if (!AuthenticatedUser()) {
             location.href = `/login?redirect=${location.href}&error=purchase_login`;
         } else {
+            if (item.sku == "game_eco_purchase") {
             user && user.ownsEco ? setPurchase(null) : setPurchase(item);
+            } else {
+                setPurchase(item);
+            }
         }
     }
     return (
