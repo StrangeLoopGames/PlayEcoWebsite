@@ -1,13 +1,15 @@
 import { Link, redirect } from "@tanstack/react-router";
 import "../assets/_buy.scss";
 import { splitCamelCaseAndCapitalize } from "../utils/stringUtils";
-import { AuthenticatedUser } from "../utils/authentication";
+import { AuthenticatedUser, useUserQuery } from "../utils/authentication";
 import ModalWrapper from "../components/ModalWrapper";
 import Payments from "./account/Payments";
 import { useState } from "react";
 import { marketItem } from "../types/types";
 
 export function Buy() {
+    const userJWT = (AuthenticatedUser()) ? AuthenticatedUser() : '';
+    const { data: user, error: userError, isLoading } = useUserQuery(userJWT as string);
     const [purchase, setPurchase] = useState<marketItem | null>(null)
     const marketItems: marketItem[] = [
         {
@@ -63,7 +65,7 @@ export function Buy() {
         if (!AuthenticatedUser()) {
             location.href = `/login?redirect=${location.href}&error=purchase_login`;
         } else {
-            setPurchase(item);
+            user && user.ownsEco ? setPurchase(null) : setPurchase(item);
         }
     }
     return (
@@ -75,7 +77,7 @@ export function Buy() {
                         <div className="game-purchase col-6 d-flex flex-column text-white fw-bold p-2 zoomin">
                             <div className="purchase-option d-flex flex-column justify-content-end">
                                 <p className="info">Buy Eco from our store + get a key to unlock on Steam (best way to support us)</p>
-                                <button onClick={() => handlelePurchaseInit(gamePurchase)} className="btn btn-primary market-btn">Buy Eco Directly</button>
+                                <button onClick={() => handlelePurchaseInit(gamePurchase)} className="btn btn-primary market-btn">{user && user.ownsEco ? "You already Own Eco" : "Buy Eco Directly" }</button>
                             </div>
                         </div>
                         <div className="game-purchase col-6 d-flex flex-column text-white fw-bold p-2 zoomin">
@@ -125,7 +127,7 @@ export function Buy() {
                                         <li><strong>Graphics: </strong>AMD Radeon R9 290 or NVIDIA GTX 970 or similar (Minimum: 4 GB VRAM)</li>
                                         <li><strong>DirectX: </strong>Version 11</li>
                                         <li><strong>Network: </strong> Broadband Internet connection</li>
-                                        <li><strong>Storage: </strong> 4 GB available space</li>
+                                        <li><strong>Storage: </strong> 6 GB available space</li>
                                         <li><strong>Sound Card: </strong> DirectX®-compatible</li>
                                     </ul>
                                 </div>
@@ -139,7 +141,7 @@ export function Buy() {
                                         <li><strong>Graphics: </strong>AMD Radeon RX 5700 or NVIDIA GeForce RTX 2070 or similar (Recommended: 8 GB VRAM)</li>
                                         <li><strong>DirectX: </strong>Version 11</li>
                                         <li><strong>Network: </strong> Broadband Internet connection</li>
-                                        <li><strong>Storage: </strong> 8 GB available space</li>
+                                        <li><strong>Storage: </strong> 10 GB available space</li>
                                         <li><strong>Sound Card: </strong> DirectX®-compatible</li>
                                     </ul>
                                 </div>

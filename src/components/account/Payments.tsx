@@ -112,7 +112,7 @@ function Payments({ item }: { item: marketItem }) {
                 <button className='btn btn-quantity' onClick={() => setQuantity(quantity + 1)} disabled={isGamePurchase}>+</button>
             </div>
             <button className='mt-2 btn btn-primary' onClick={initPurchaseAndToken} disabled={isXsollaInitiated || purchaseTokenMutate.isLoading}>
-                {isXsollaInitiated || purchaseTokenMutate.isLoading ? 'Processing...' : 'Pay with Xsolla'}
+                {isXsollaInitiated || purchaseTokenMutate.isLoading ? 'Processing...' : 'Buy'}
             </button>
             {error && <p>Error: {error}</p>}
             {purchaseTokenMutate.isError && (
