@@ -8,6 +8,7 @@ const icons = "alphaicon;alpha4packicon;alpha2packicon;devicon;hareicon;banneric
 // switch((props.user.isSLG) ? "slgicon" : "betaicon";)
 function UserCard(props: any) {
     const [error, setError] = useState("");
+    const userJWT = AuthenticatedUser();
     const [userEdit, setUserEdit] = useState({ edit: false, user: {
         password: "",
         passwordConfirm: ""
@@ -28,27 +29,42 @@ function UserCard(props: any) {
     }
     const icon = `/images/icons/${getIcon(selectedIcon, icons)}.png`;
     const updateUserMutate = useMutation({
-        mutationFn: (url: string) => {
-            return fetch(url, {
+        mutationFn: (password: string) => {
+            const url = `${import.meta.env.VITE_CLOUD_API_URL}PasswordReset/ResetPassword`;
+            return fetch(url, { 
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
                 },
+                body: JSON.stringify({
+                    token: userJWT,
+                    password: password,
+                })
             });
+        },
+        onSuccess: (response) => {
+            if (response.ok) {
+                location.reload();
+            } else {
+                setError("There was an unexpected error updating your account.");
+            }
+        },
+        onError: (error: any, response) => {
+            console.log(response);
+            setError("There was an error registering your account.");
         }
     });
     
     function doUpdateUser(): void {
+        console.log("checking passwords");
+        
         if (userEdit.user.password != userEdit.user.passwordConfirm) {
             setError("Passwords do not match");
             return;
         } else {
-            const userJWT = AuthenticatedUser();
-            const queryString: string = `?token=${userJWT}&newpassword${userEdit.user.password}`
-            updateUserMutate.mutate(`${import.meta.env.VITE_CLOUD_API_URL}PasswordReset/ResetPassword?${queryString}`);
-            if (updateUserMutate.isSuccess) {
-                location.reload();
-            }
+            console.log("updating user");
+            
+            updateUserMutate.mutate(userEdit.user.password);
             if (updateUserMutate.isError || error) {
                 setError("There was an error registering your account.");
             }
@@ -62,6 +78,8 @@ function UserCard(props: any) {
     }
 
     function handleSubmit(e: React.FormEvent) {
+        console.log("submitting form");
+        
         e.preventDefault();
         doUpdateUser();
     }
@@ -103,9 +121,11 @@ function UserCard(props: any) {
                     <div className="">
                         { error != null ? (<p>{error}</p>) : null }
                         <div className="update-account pt-2">
-                            <input onChange={handleInputChange} className="form-control" type="password" name="password" title="password" placeholder="Enter New Password" />
-                            <input onChange={handleInputChange} className="form-control" type="password" name="passwordConfirm" placeholder="Confirm New Password" />
-                            <input onSubmit={handleSubmit} className="btn btn-small" type="submit" value="Update" />
+                            <form onSubmit={handleSubmit}>
+                                <input onChange={handleInputChange} className="form-control" type="password" name="password" title="password" placeholder="Enter New Password" />
+                                <input onChange={handleInputChange} className="form-control" type="password" name="passwordConfirm" placeholder="Confirm New Password" />
+                                <input className="btn btn-small" type="submit" value="Update" />
+                            </form>
                         </div> 
                     </div>
                 ) : null

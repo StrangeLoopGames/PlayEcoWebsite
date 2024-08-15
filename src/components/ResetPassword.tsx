@@ -15,9 +15,10 @@ export function ResetPassword ({token}: {token: string}) {
     );
     
     document.title = 'Eco - Password Reset';
+    
     const resetMutate = useMutation({
         mutationFn: (password: string) => {
-            const url = `${import.meta.env.VITE_CLOUD_API_URL}api/Registration/ResetPassword?password=${password}`;
+            const url = `${import.meta.env.VITE_CLOUD_API_URL}PasswordReset/ResetPassword`;
             return fetch(url, { 
                 method: "POST",
                 headers: {
@@ -28,6 +29,13 @@ export function ResetPassword ({token}: {token: string}) {
                     newpassword: password,
                 })
             });
+        },
+        onSuccess: () => {
+            window.location.href = '/account';
+        },
+        onError: (error: any, response) => {
+            console.log(response);
+            setError("There was an error registering your account.");
         }
     });
     useEffect(() => {
