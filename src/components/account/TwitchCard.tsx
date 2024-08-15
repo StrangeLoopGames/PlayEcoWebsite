@@ -13,7 +13,7 @@ function TwitchCard({ user }: { user: User | undefined | null }) {
                     ) : (
                         <div>
                             Link your Eco account to your Twitch account.
-                            <a href="https://id.twitch.tv/oauth2/authorize?client_id=ddyqfm84zm2a3dny5vv2yyypnbcj5p&redirect_uri=http://localhost:5173/account/twitch-callback&response_type=code&scope=user:read:email"
+                            <a href="https://id.twitch.tv/oauth2/authorize?client_id=ddyqfm84zm2a3dny5vv2yyypnbcj5p&redirect_uri=https://play.eco/account/twitch-callback&response_type=code&scope=user:read:email"
                                 className="btn btn-small btn-corner">
                                     Link Your Twitch
                             </a>
