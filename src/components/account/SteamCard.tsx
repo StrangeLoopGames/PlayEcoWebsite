@@ -12,7 +12,6 @@ function TwitchCard({user}:{user: User | null | undefined}) {
                 ) : (
                     <>
                     <p>Link your Eco account to your Steam account..</p>
-                    <a href={`${import.meta.env.VITE_CLOUD_API_URL}api/Registration/RegisterWithSteam?token=${AuthenticatedUser()}`} className="btn btn-small">Link Steam</a>
                     </>
                 )
                 }
