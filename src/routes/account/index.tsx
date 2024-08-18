@@ -1,4 +1,4 @@
-import { createFileRoute, Navigate, redirect, useNavigate } from '@tanstack/react-router';
+import { createFileRoute, redirect } from '@tanstack/react-router';
 import UserCard from '../../components/account/UserCard';
 import SteamCard from '../../components/account/SteamCard';
 import DownloadsCard from '../../components/account/DownloadsCard';
@@ -82,10 +82,6 @@ function Account() {
   }
   return (
     <>
-    { user && !user.verified ? (
-      <p className="alert alert-info">Your account is not verified, please check your email for a verification link. <span onClick={sendVerificationEmail} className='resend-verify'>Click here to resend a verification email</span></p>
-    ) : null
-    }
     { alert ? (
       <p className="alert alert-warning">{alert}</p>
     ) : null
@@ -96,7 +92,7 @@ function Account() {
           error == "twitch_callback_error" ? 
           "There was an issue connecting your twitch"
           :
-          "There was an unexpected error"}</p>
+          error}</p>
       ) : null
     }
       <UserCard user={user} />

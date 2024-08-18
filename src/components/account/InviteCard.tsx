@@ -35,10 +35,23 @@ function InviteCard({ user }: { user: User }) {
                 <div className="btn-corner">
                     <input onClick={() => handlelePurchaseInit(invitePurchase)} className="buy-invite btn btn-small" type="button" value="Get Invites" />
                 </div>
-                // count the number of invites and display them
-                <div className="account-label">
-                    <p>You currently have <span className="fw-bold">{invites?.length}</span> unused invites</p>
-                    </div>
+                {
+                    invites && invites.length > 0 ? (
+                        <div className="account-label">
+                            <p>You currently have <span className="fw-bold">{invites?.length}</span> unused invites</p>
+                            <p>Your invites:</p>
+                            <ul>
+                                {invites.map((invite, index) => (
+                                    <li key={index}>
+                                        <p>{invite.invite_code}</p>
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
+                    ) : (
+                        <p>You currently have no unused invites</p>
+                    )
+                }
             </div>
             {
                 purchase != null ? (
