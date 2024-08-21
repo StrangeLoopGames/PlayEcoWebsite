@@ -81,7 +81,7 @@ function LoginForm(props : {error: string, redirect: string}) {
     }
 
     return (
-        <div className='login-wrap d-flex flex-column align-items-center w-25'>
+        <div className='login-wrap d-flex flex-column align-items-center w-25 position-relative'>
             <h1>Eco Login</h1>
             <p>Log in to access your account</p>
             {error && <p className="alert alert-info">{error}</p>}
@@ -95,7 +95,10 @@ function LoginForm(props : {error: string, redirect: string}) {
                 <button className="btn login-button w-100" type="submit">{loginMutate.isPending ? "Logging In" : "Login"}</button>
             </form>
             <div className="d-flex flex-wrap justify-content-center gap-2 mt-2 login-footer">
+                <span className='fw-bolder'>OR</span> 
+                <hr className="w-100 position-absolute" />
                 <a className="btn steam-login w-100" href={`${import.meta.env.VITE_CLOUD_API_URL}api/Registration/RegisterWithSteam`}>Login with Steam</a>
+                <span className='w-100 text-center'>Use this option if you bought the game on steam but don't yet have a play.eco account</span> 
                 <Link to="/forgot" className="login-forgot">Forgot Password</Link>
                 <Link to="/register" className="login-forgot">Register an Account</Link>             
             </div>
