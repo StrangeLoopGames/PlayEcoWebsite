@@ -38,7 +38,7 @@ function generateColumns(data: User[]): any[] {
 }
 
 
-const subTableColumns = ['achievements', 'items', 'icons'];
+const subTableColumns = ['achievements', 'items', 'icons', 'twitchEntitlements'];
 const copyButton = ['id'];
 const booleanIcons: { true: JSX.Element, false: JSX.Element } = {
     true: <FontAwesomeIcon className="table-icon true" icon={faSquareCheck} />,
@@ -46,7 +46,7 @@ const booleanIcons: { true: JSX.Element, false: JSX.Element } = {
 };
 export function formatCell(key: string, cell: any, info: any) {
     if (subTableColumns.includes(key)) {
-        return <button className={`${cell != "null" ? "enabled" : "disabled"}`}>View {key}</button>;
+        return <button className={`${cell != "null" ? "enabled" : "disabled"}`}>View {splitCamelCaseAndCapitalize(key)}</button>;
     } else if (copyButton.includes(key)) {
         return <button className={cell.index} onClick={() => { navigator.clipboard.writeText(cell) }}>Copy {key}</button>
     }
@@ -101,17 +101,15 @@ export default function CorsTable({ users, selectedKey, toggleModalEvent, update
 
     function selectUser(user: User, cell: any) {
         return () => {
-            if (user[cell].length > 0) {
-                setSelectedUser({ cell: cell, user: user });
-                setToggleModal(true);
-            }
+            setSelectedUser({ cell: cell, user: user });
+            setToggleModal(true);
         }
     }
 
     function toggleEditModal() {
         setToggleModal(!toggleModal);
     }
-
+    
     return (
         <div className="p-2 table-container">
             {sorting.length > 0 && (

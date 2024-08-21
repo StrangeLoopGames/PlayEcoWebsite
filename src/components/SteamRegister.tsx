@@ -28,7 +28,7 @@ function SteamRegister() {
         passwordConfirm: "",
     });
     const [showRegister, setShowRegister] = useState(true);
-    const { data: user, error: userError, isLoading: userLoading } = useUserQuery(userJwt as string);
+    const { data: user, error: userError, isLoading: userLoading } = useUserQuery(userJwt as string, true);
     // handle the submission of the form via mutation
     
     const registerMutate = useMutation({

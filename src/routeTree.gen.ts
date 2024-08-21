@@ -23,6 +23,7 @@ import { Route as UserConnectionsTwitchImport } from './routes/user.connections.
 const VerifyemailLazyImport = createFileRoute('/verifyemail')()
 const ResetpasswordLazyImport = createFileRoute('/resetpassword')()
 const RegisterLazyImport = createFileRoute('/register')()
+const RedeemLazyImport = createFileRoute('/redeem')()
 const LogoutLazyImport = createFileRoute('/logout')()
 const LoginLazyImport = createFileRoute('/login')()
 const JobsLazyImport = createFileRoute('/jobs')()
@@ -50,6 +51,11 @@ const RegisterLazyRoute = RegisterLazyImport.update({
   path: '/register',
   getParentRoute: () => rootRoute,
 } as any).lazy(() => import('./routes/register.lazy').then((d) => d.Route))
+
+const RedeemLazyRoute = RedeemLazyImport.update({
+  path: '/redeem',
+  getParentRoute: () => rootRoute,
+} as any).lazy(() => import('./routes/redeem.lazy').then((d) => d.Route))
 
 const LogoutLazyRoute = LogoutLazyImport.update({
   path: '/logout',
@@ -153,6 +159,10 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LogoutLazyImport
       parentRoute: typeof rootRoute
     }
+    '/redeem': {
+      preLoaderRoute: typeof RedeemLazyImport
+      parentRoute: typeof rootRoute
+    }
     '/register': {
       preLoaderRoute: typeof RegisterLazyImport
       parentRoute: typeof rootRoute
@@ -206,6 +216,7 @@ export const routeTree = rootRoute.addChildren([
   JobsLazyRoute,
   LoginLazyRoute,
   LogoutLazyRoute,
+  RedeemLazyRoute,
   RegisterLazyRoute,
   ResetpasswordLazyRoute,
   VerifyemailLazyRoute,

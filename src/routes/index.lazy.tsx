@@ -1,4 +1,4 @@
-import { createLazyFileRoute } from '@tanstack/react-router'
+import { createLazyFileRoute, Link } from '@tanstack/react-router'
 import { Newletter } from '../components/Newsletter'
 import "../assets/_landing.scss"
 import logo from '../assets/images/eco-logo.png';
@@ -59,8 +59,7 @@ function Index() {
                                         </div>
                                     </div>
                                     <div className="col-md-6 purchase-wrap d-flex flex-row">
-                                        <a href="/buy" className="btn btn col-6 justify-content-between fs-4 buyweb purchase-cta">
-                                            <span><FontAwesomeIcon className="icon download-icon" icon={faCartShopping} /> Buy Direct</span></a>
+                                            <Link to="/buy" id="home-link" className="btn btn col-6 justify-content-between fs-4 buyweb purchase-cta"><span><FontAwesomeIcon className="icon download-icon" icon={faCartShopping} /> Buy Direct</span></Link>
                                         <a href="https://store.steampowered.com/app/382310/Eco/" target="_blank"
                                             className="btn btn col-6 justify-content-between fs-4 purchase-cta">
                                             <span><FontAwesomeIcon className="icon download-icon icon" icon={faSteamSquare} /> Buy on Steam</span> </a>

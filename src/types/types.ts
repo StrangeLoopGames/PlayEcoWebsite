@@ -55,6 +55,7 @@ export type GroupedVersion = {
 export type marketItem = {
     id: string,
     sku: string,
+    description: string | null,
     name: string,
     price: number,
 }

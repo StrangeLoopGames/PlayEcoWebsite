@@ -49,25 +49,58 @@ section#buy {
         font-size: 1.5rem;
     }
 }
+.title-wrap {
+    z-index: 3;
+}
 .market-item{
     min-height: 300px;
     background-repeat: no-repeat;
     background-size: 100%;
     aspect-ratio: 1 / 2;
+    cursor: pointer;
+    position: relative;
     background-position: center center;
     .card-title {
         color: #ffffff;
         text-align: center;
-        font-size: 1.5rem;
+        font-size: 1.1rem;
+        background: #262a58;
+        border: 1px solid #ffffff;
+
+        &.subtitle {
+            font-size: 1.2rem;
+        }
+        z-index: 3;
     }
     .item-price {
-        color: #ffe100;
+        color: #000000;
         font-weight: 700;
         text-align: center;
-        font-size: 1.5rem;
+        z-index: 3;
+        font-size: 1.2rem;
+        background: #ffffff;
+        width: 100%;
+        padding: 0.2rem;
 
         p {
             margin-bottom: 0.3rem;
+        }
+    }
+
+    &:hover {
+        &::before {
+            content: "Buy";
+            background: rgba(0, 0, 0, 0.2196078431);
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            z-index: 2;
+            display: flex;
+            align-items: center;
+            color: #ffffff;
+            font-weight: 900;
+            justify-content: center;
+            font-size: 2rem;
         }
     }
 }

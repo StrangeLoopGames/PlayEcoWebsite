@@ -9,49 +9,56 @@ import { marketItem } from "../types/types";
 
 export function Buy() {
     const userJWT = (AuthenticatedUser()) ? AuthenticatedUser() : '';
-    const { data: user, error: userError, isLoading } = useUserQuery(userJWT as string);
+    const { data: user, error: userError, isLoading } = useUserQuery(userJWT as string, false);
     const [purchase, setPurchase] = useState<marketItem | null>(null)
     const marketItems: marketItem[] = [
         {
             id: "EcoCredits500",
             sku: "EcoCredits1",
             name: "500 Credits",
+            description: null,
             price: 5.00,
         },
         {
             id: "EcoCredits1000",
             sku: "EcoCredits2",
             name: "1000 Credits",
+            description: null,
             price: 10.00,
         },
         {
             id: "EcoCredits2800",
             sku: "EcoCredits3",
             name: "2800 Credits",
+            description: "2500 + 300 FREE",
             price: 25.00,
         },
         {
             id: "EcoCredits5700",
             sku: "EcoCredits4",
             name: "5700 Credits",
+            description: "5000 + 700 FREE",
             price: 50.00,
         },
         {
             id: "EcoCredits11500",
             sku: "EcoCredits5",
             name: "11500 Credits",
+            description: "10000 + 1500 FREE",
             price: 100.00,
         },
         {
             id: "EcoCredits18500",
             sku: "EcoCredits6",
             name: "18500 Credits",
+            description: "15000 + 3500 FREE",
             price: 150.00,
         },
     ];
     const gamePurchase: marketItem = {
         id: "game_purchase",
         name: "Eco",
+        description: null,
         sku: "game_eco_purchase",
         price: 30.00,
     }
@@ -80,7 +87,7 @@ export function Buy() {
                     <div className="buy-wrap d-flex flex-row game-banner overflow-hidden">
                         <div className="game-purchase col-6 d-flex flex-column text-white fw-bold p-2 zoomin">
                             <div className="purchase-option d-flex flex-column justify-content-end">
-                                <p className="info">Buy Eco from our store + get a key to unlock on Steam (best way to support us)</p>
+                                <p className="info">Buy Eco directly + get a key to unlock on Steam (best way to support us)</p>
                                 <button onClick={() => handlelePurchaseInit(gamePurchase)} className="btn btn-primary market-btn">{user && user.ownsEco ? "You already Own Eco" : "Buy Eco Directly" }</button>
                             </div>
                         </div>
@@ -95,16 +102,22 @@ export function Buy() {
                     <h4 className="pt-5 fw-bold">Eco Credits</h4>
                     <p className="pt-3 fs-3">Buy Eco Credits here and spend them on premium variants inside the game!</p>
                     <div id="marketplace" className="d-flex mt-4 gap-0 flex-wrap justify-content-between">
-                        {
+                    {
                             marketItems.map((item, index) => {
                                 return (
                                     <div className="buy-credits d-flex flex-column p-1 zoomin" key={index} >
-                                        <div className="card market-item" style={{ backgroundImage: `url(images/buy/${item.id}.jpg)` }}>
+                                        <div className="card market-item" onClick={() => handlelePurchaseInit(item)} style={{ backgroundImage: `url(images/buy/${item.id}.jpg)` }}>
                                             <div className="card-body d-flex flex-column justify-content-between">
+                                                <div className="title-wrap">
                                                 <h3 className="card-title">{splitCamelCaseAndCapitalize(item.name)}</h3>
+                                                {
+                                                    item.description ? (
+                                                        <h3 className="card-title subtitle">{item.description}</h3>
+                                                    ) : null
+                                                }
+                                                </div>
                                                 <div className="buy-wrap d-flex flex-column align-items-center">
                                                     <p className="item-price">${item.price.toFixed(2)}</p>
-                                                    <button className="w-100 market-btn" onClick={() => handlelePurchaseInit(item)}>Buy</button>
                                                 </div>
                                             </div>
                                         </div>

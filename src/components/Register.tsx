@@ -119,6 +119,15 @@ function RegisterForm() {
         <div className='login-wrap d-flex flex-column align-items-center'>
             <h1>Eco Login</h1>
             <p>Register an Eco account</p>
+            {
+                errors ? (
+                    Object.values(errors).map((error, index) => {
+                        return (
+                            <p key={index} className="alert alert-info">{error}</p>
+                        );
+                    })
+                ) : null
+            }
             {errors.form && <p className="alert alert-info">{errors.form}</p>}
             <form onSubmit={doRegistration}>
                 <div className="form-group mb-3">
