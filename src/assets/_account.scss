@@ -75,3 +75,13 @@ section#login {
         max-height: 800px;
     }
 }
+.invites {
+    display: flex !important;
+    flex-direction: row !important;
+    width: 100%;
+    flex-wrap: wrap;
+
+    .invite-item {
+        width: 49% !important;
+    }
+}

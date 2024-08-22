@@ -73,10 +73,10 @@ function InviteCard({ user }: { user: User }) {
                     <div className="account-label">
                         <p>You currently have <span className="fw-bold">{userInvites.length}</span> unused invites</p>
                         <p>Your invites:</p>
-                        <ul className="d-flex flex-column gap-2 px-0">
+                        <ul className="gap-2 px-0 invites">
                             {userInvites.map((invite, index) => (
-                                <li key={index} className="d-flex gap-2 w-75">
-                                    <input title="invite" className="w-50" type="text" value={invite.show ? invite.code : "*******************"} readOnly />
+                                <li key={index} className="d-flex gap-2 w-100 invite-item">
+                                    <input title="invite" className="w-75" type="text" value={invite.show ? invite.code : "*******************"} readOnly />
                                     <button title="Show Invite" onClick={() => displayInvite(index)} className="btn btn-small">
                                         <FontAwesomeIcon icon={invite.show ? faEyeSlash : faEye} />
                                     </button>
