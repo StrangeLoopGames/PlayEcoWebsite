@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { storeToken } from '../utils/authentication';
 import { Modal } from 'react-bootstrap';
 import { useMutation } from '@tanstack/react-query';
-
+import {alertsMap} from '../data/alerts';
 function LoginForm(props : {error: string, redirect: string}) {
     const [loginData, setLoginData] = useState({
         username: "",
@@ -14,19 +14,7 @@ function LoginForm(props : {error: string, redirect: string}) {
 
     useEffect(() => {
         if(props.error && props.error != '') {
-            switch (props.error) {
-                case "authenication_error":
-                    setError("There was an error authenicating your, please login again,");
-                    break;
-                case "unverified":
-                    setError("Your account is not verified, please check your email for a verification link.");
-                    break;
-                case "purchase_login":
-                    setError("You must be logged in to make a purchase.");
-                    break;
-                default:
-                    break;
-            }
+            setError(alertsMap[props.error]);
         }
     }, [props.error]);
 

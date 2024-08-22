@@ -4,17 +4,9 @@ import { UserEditor } from '../../components/admin/UserEditor';
 import "../../assets/admin.scss";
 
 export const Route = createFileRoute('/account/admin')({
-  beforeLoad: async ({ location }) => {
-    if (!AuthenticatedUser() && useIsUserAdmin(AuthenticatedUser() as string)) {
-      throw redirect({
-        to: '/login',
-        search: {
-          error: 'authenication_error',
-          redirect: location.href,
-        },
-      })
-    }
-  },
+  // beforeLoad: async ({ location }) => {
+
+  // },
   component: () => {
     document.title = 'Eco - Admin';   
     // hide header

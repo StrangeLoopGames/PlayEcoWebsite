@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Modal } from "../Modal";
 import CorsTable from "../CorsTable";
 import { useFetchCrud, crudUpdateById, useSearchCrud } from "../../utils/api";
-import { AuthenticatedUser } from "../../utils/authentication";
+import { AuthenticatedUser, useIsUserAdmin } from "../../utils/authentication";
 import { splitCamelCaseAndCapitalize } from "../../utils/stringUtils";
 import { components as types } from '../../types/api';
 import { Link } from "@tanstack/react-router";
@@ -17,6 +17,10 @@ const menuItems = {
 };
 
 export function UserEditor() {
+    const isAdmin = useIsUserAdmin(AuthenticatedUser() as string);
+    if (!AuthenticatedUser() && !isAdmin) {
+        location.href = '/login?error=authenication_error';
+    }
     const userJWT = AuthenticatedUser();
     const [isUpdating, setIsUpdating] = useState(false);
     const [pageNumber, setPageNumber] = useState(1);

@@ -119,6 +119,26 @@ export interface paths {
       };
     };
   };
+  "/Authentication/GetUserLoginToken": {
+    post: {
+      parameters: {
+        query: {
+          userId?: string;
+          "api-version"?: string;
+        };
+      };
+      responses: {
+        /** OK */
+        200: {
+          content: {
+            "text/plain": components["schemas"]["AuthenticationResult"];
+            "application/json": components["schemas"]["AuthenticationResult"];
+            "text/json": components["schemas"]["AuthenticationResult"];
+          };
+        };
+      };
+    };
+  };
   "/s3/public/{documentName}": {
     get: {
       parameters: {
@@ -338,11 +358,10 @@ export interface paths {
       };
     };
   };
-  "/Invites/GetInivtes": {
+  "/Invites/GetInvites": {
     get: {
       parameters: {
         query: {
-          userid?: string;
           "api-version"?: string;
         };
       };
@@ -363,6 +382,35 @@ export interface paths {
       parameters: {
         query: {
           inviteGuid?: string;
+          "api-version"?: string;
+        };
+      };
+      responses: {
+        /** OK */
+        200: unknown;
+      };
+    };
+  };
+  "/Invites/RemoveInvite": {
+    get: {
+      parameters: {
+        query: {
+          inviteGuid?: string;
+          "api-version"?: string;
+        };
+      };
+      responses: {
+        /** OK */
+        200: unknown;
+      };
+    };
+  };
+  "/Invites/RemoveInvitesByCount": {
+    get: {
+      parameters: {
+        query: {
+          userid?: string;
+          count?: number;
           "api-version"?: string;
         };
       };
@@ -484,6 +532,32 @@ export interface paths {
       };
     };
   };
+  "/Marketplace/RegisterItems": {
+    post: {
+      parameters: {
+        query: {
+          "api-version"?: string;
+        };
+      };
+      responses: {
+        /** OK */
+        200: {
+          content: {
+            "text/plain": boolean;
+            "application/json": boolean;
+            "text/json": boolean;
+          };
+        };
+      };
+      requestBody: {
+        content: {
+          "application/json": components["schemas"]["MarketplaceItemRegistration"][];
+          "text/json": components["schemas"]["MarketplaceItemRegistration"][];
+          "application/*+json": components["schemas"]["MarketplaceItemRegistration"][];
+        };
+      };
+    };
+  };
   "/PasswordReset/RequestReset": {
     post: {
       parameters: {
@@ -502,14 +576,19 @@ export interface paths {
     post: {
       parameters: {
         query: {
-          token?: string;
-          newpassword?: string;
           "api-version"?: string;
         };
       };
       responses: {
         /** OK */
         200: unknown;
+      };
+      requestBody: {
+        content: {
+          "application/json": components["schemas"]["UsertokenAndPassword"];
+          "text/json": components["schemas"]["UsertokenAndPassword"];
+          "application/*+json": components["schemas"]["UsertokenAndPassword"];
+        };
       };
     };
   };
@@ -556,6 +635,19 @@ export interface paths {
           "text/json": components["schemas"]["UsernameOrEmailAndPassword"];
           "application/*+json": components["schemas"]["UsernameOrEmailAndPassword"];
         };
+      };
+    };
+  };
+  "/api/Registration/RequestVerifyEmail": {
+    get: {
+      parameters: {
+        query: {
+          "api-version"?: string;
+        };
+      };
+      responses: {
+        /** OK */
+        200: unknown;
       };
     };
   };
@@ -823,6 +915,20 @@ export interface paths {
           "text/json": components["schemas"]["StrangeAchievement"];
           "application/*+json": components["schemas"]["StrangeAchievement"];
         };
+      };
+    };
+  };
+  "/UserAccount/TwitchCallback": {
+    post: {
+      parameters: {
+        query: {
+          code?: string;
+          "api-version"?: string;
+        };
+      };
+      responses: {
+        /** OK */
+        200: unknown;
       };
     };
   };
@@ -1138,6 +1244,45 @@ export interface paths {
       };
     };
   };
+  "/Transactions/GeneratePaymentToken": {
+    post: {
+      parameters: {
+        query: {
+          "api-version"?: string;
+        };
+      };
+      responses: {
+        /** OK */
+        200: unknown;
+      };
+      requestBody: {
+        content: {
+          "application/json": components["schemas"]["PaymentRequest"];
+          "text/json": components["schemas"]["PaymentRequest"];
+          "application/*+json": components["schemas"]["PaymentRequest"];
+        };
+      };
+    };
+  };
+  "/Transactions/HandleWebhook": {
+    post: {
+      parameters: {
+        query: {
+          "api-version"?: string;
+        };
+      };
+      responses: {
+        /** OK */
+        200: {
+          content: {
+            "text/plain": components["schemas"]["XsollaErrorResponse"];
+            "application/json": components["schemas"]["XsollaErrorResponse"];
+            "text/json": components["schemas"]["XsollaErrorResponse"];
+          };
+        };
+      };
+    };
+  };
 }
 
 export interface components {
@@ -1160,10 +1305,14 @@ export interface components {
       /** Format: uuid */
       worldID?: string | null;
       /** Format: date */
-      date?: string;
+      date?: string | null;
       /** Format: float */
-      totalCollected?: number;
+      totalCollected?: number | null;
       summaryType?: components["schemas"]["SummaryType"];
+    };
+    ErrorDetail: {
+      code?: string | null;
+      message?: string | null;
     };
     /** @description Info stored about a server in the cloud stroage db */
     FlagReported: {
@@ -1179,6 +1328,7 @@ export interface components {
       /** Format: uuid */
       reportedUserID?: string;
       circumventingPaidItems?: boolean | null;
+      autoDetectedItemUsage?: boolean | null;
     };
     FlaggedServerSummary: {
       /** Format: uuid */
@@ -1223,11 +1373,20 @@ export interface components {
       /** Format: int32 */
       steamID?: number;
     };
+    MarketplaceItemRegistration: {
+      name?: string | null;
+      /** Format: int32 */
+      quantity?: number;
+    };
     MarketplaceTransaction: {
       /** Format: uuid */
       id?: string;
+      /** Format: int32 */
+      xsollaTransactionId?: number | null;
+      xSollaStatus?: string | null;
       marketplaceItemName?: string | null;
       displayName?: string | null;
+      steamItemId?: string | null;
       steamOrderId?: string | null;
       steamTransactionId?: string | null;
       /** Format: uuid */
@@ -1252,6 +1411,11 @@ export interface components {
       completed?: boolean;
       /** Format: date-time */
       timeCompleted?: string;
+    };
+    PaymentRequest: {
+      item?: string | null;
+      /** Format: int32 */
+      quantity?: number | null;
     };
     ServerHeartbeatData: {
       world?: components["schemas"]["StrangeWorldCloudData"];
@@ -1287,18 +1451,23 @@ export interface components {
       twitchId?: string | null;
       twitchUsername?: string | null;
       username?: string | null;
+      latestSteamUsername?: string | null;
       avatarUrl?: string | null;
       avatarDna?: string | null;
       achievements?: components["schemas"]["StrangeAchievement"][] | null;
+      twitchEntitlements?: string[] | null;
       /** Format: float */
       ecoCredits?: number | null;
       ownsEco?: boolean;
+      /** Format: int32 */
+      tierId?: number | null;
       verified?: boolean | null;
       items?: components["schemas"]["InvItem"][] | null;
       blockPurchasing?: boolean | null;
       isDevTier?: boolean | null;
       isWolfWhisperer?: boolean | null;
       isSLG?: boolean | null;
+      isAlphaBaker?: boolean | null;
       isCloudAdmin?: boolean;
       /** Format: date-time */
       bannedUntil?: string | null;
@@ -1324,6 +1493,8 @@ export interface components {
       sumHostedUsersTime?: string | null;
       /** Format: date-time */
       lastEmailSent?: string | null;
+      /** Format: int32 */
+      oldId?: number | null;
     };
     /** @description Info stored about a server in the cloud stroage db */
     StrangeWorldCloudData: {
@@ -1376,6 +1547,10 @@ export interface components {
       email?: string | null;
       password?: string | null;
     };
+    UsertokenAndPassword: {
+      token?: string | null;
+      password?: string | null;
+    };
     /** @description Response for channel join request */
     VoiceJoinTokenResult: {
       token?: string | null;
@@ -1386,6 +1561,9 @@ export interface components {
       token?: string | null;
       accountId?: string | null;
       server?: string | null;
+    };
+    XsollaErrorResponse: {
+      error?: components["schemas"]["ErrorDetail"];
     };
   };
 }

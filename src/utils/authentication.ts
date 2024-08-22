@@ -37,7 +37,7 @@ export function checkTokenExpiry(): boolean {
 }
 
 // custom hook to get user data
-export function useUserQuery(userJWT: string): UseQueryResult<User>  {
+export function useUserQuery(userJWT: string, logout: boolean): UseQueryResult<User>  {
 	return useQuery({
 		queryKey: ["user"],
 		queryFn: () =>
@@ -49,14 +49,18 @@ export function useUserQuery(userJWT: string): UseQueryResult<User>  {
 			}).then((res) => {
 				if (!res.ok) {
 					if(res.status === 401) {
+					if(logout) {
 						removeToken();
-						location.href = '/login';
+						location.href = '/login?error=authenication_error';
+					}
 				}
 			}
 				return res.json();
 			}).catch((error) => {
-				removeToken();
-				location.href = '/login?error=authenication_error';
+				if(logout) {
+					removeToken();
+					location.href = '/login?error=authenication_error';
+				}
 			}),
 		refetchOnWindowFocus: false,
 		staleTime: 5 * 60 * 1000,
@@ -84,7 +88,7 @@ export function isValidPassword(password: string): boolean {
 }
 
 export function useIsUserAdmin(userJWT: string): boolean {
-	const {data: user} = useUserQuery(userJWT);
+	const {data: user} = useUserQuery(userJWT, true);
 	if(user && user.isSLG && user.isCloudAdmin) {
 		return true;
 	} else {
