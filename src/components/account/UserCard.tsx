@@ -92,7 +92,7 @@ function UserCard(props: any) {
     }
     function getGameTeir () {
         if (props.user.isSLG) {
-            return "SLG";
+            return (props.user.isCloudAdmin) ? "SLG Admin" : "SLG";
         }  else if (props.user.isDevTier) {
             return "Developer Tier";
         } else if (props.user.isWolfWhisperer) {
@@ -114,8 +114,9 @@ function UserCard(props: any) {
                     <ul className=''>
                         <li className=""><span className="account-label-front">Username:</span>{props.user.username}</li>
                         <li className="account-label-front"><span className="account-label-front">User ID:</span>{props.user.id}</li>
+                        <li className="account-label-front"><span className="account-label-front">Account Created:</span>{new Date(props.user.creationTime).toLocaleString()}</li>
                         <li className="account-label-front"><span className="account-label-front">Status:</span>{props.user.ownsEco ? "Owns Eco" : <Link to="/buy">Purchase Eco here</Link>}</li>
-                        <li className="account-label-front"><span className="account-label-front">Type:</span>{getGameTeir()}</li>
+                        <li className="account-label-front"><span className="account-label-front">Teir:</span>{getGameTeir()}</li>
                         <li className="account-label-front"><span className="account-label-front">Eco Credits Balance:</span>{props.user.ecoCredits}</li>
                     </ul>
                 </div>
