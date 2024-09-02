@@ -26,6 +26,7 @@ const RegisterLazyImport = createFileRoute('/register')()
 const LogoutLazyImport = createFileRoute('/logout')()
 const LoginLazyImport = createFileRoute('/login')()
 const JobsLazyImport = createFileRoute('/jobs')()
+const HostingLazyImport = createFileRoute('/hosting')()
 const GameversionsLazyImport = createFileRoute('/gameversions')()
 const ForgotLazyImport = createFileRoute('/forgot')()
 const BuyLazyImport = createFileRoute('/buy')()
@@ -65,6 +66,11 @@ const JobsLazyRoute = JobsLazyImport.update({
   path: '/jobs',
   getParentRoute: () => rootRoute,
 } as any).lazy(() => import('./routes/jobs.lazy').then((d) => d.Route))
+
+const HostingLazyRoute = HostingLazyImport.update({
+  path: '/hosting',
+  getParentRoute: () => rootRoute,
+} as any).lazy(() => import('./routes/hosting.lazy').then((d) => d.Route))
 
 const GameversionsLazyRoute = GameversionsLazyImport.update({
   path: '/gameversions',
@@ -141,6 +147,10 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof GameversionsLazyImport
       parentRoute: typeof rootRoute
     }
+    '/hosting': {
+      preLoaderRoute: typeof HostingLazyImport
+      parentRoute: typeof rootRoute
+    }
     '/jobs': {
       preLoaderRoute: typeof JobsLazyImport
       parentRoute: typeof rootRoute
@@ -203,6 +213,7 @@ export const routeTree = rootRoute.addChildren([
   BuyLazyRoute,
   ForgotLazyRoute,
   GameversionsLazyRoute,
+  HostingLazyRoute,
   JobsLazyRoute,
   LoginLazyRoute,
   LogoutLazyRoute,

@@ -79,6 +79,8 @@ export function Buy() {
             }
         }
     }
+    const urlParams = new URLSearchParams(window.location.search);
+    const hasTrackingId = urlParams.has('tracking_id');
     return (
         <>
             <section className='page-wrap-main d-flex col-lg-offset-2 col-lg-8 justify-content-center' id="buy">
@@ -87,17 +89,18 @@ export function Buy() {
                     <div className="buy-wrap d-flex flex-row game-banner overflow-hidden">
                         <div className="game-purchase col-6 d-flex flex-column text-white fw-bold p-2 zoomin">
                             <div className="purchase-option d-flex flex-column justify-content-end">
-                                <p className="info">Buy Eco directly + get a key to unlock on Steam (best way to support us)</p>
+                                <p className="info">Buy Eco directly + link steam to unlock it on steam to  (best way to support us)</p>
                                 <button onClick={() => handlelePurchaseInit(gamePurchase)} className="btn btn-primary market-btn">{user && user.ownsEco ? "You already Own Eco" : "Buy Eco Directly" }</button>
                             </div>
                         </div>
-                        <div className="game-purchase col-6 d-flex flex-column text-white fw-bold p-2 zoomin">
-                            <div className="purchase-option d-flex flex-column justify-content-end">
-                                <p className="info">Buy Eco on Steam and start playing today.</p>
-                                <a href="https://store.steampowered.com/app/382310/Eco/" target="_blank" className="btn btn-primary market-btn">Buy Eco on Steam</a>
+                        {!hasTrackingId && (
+                            <div className="game-purchase col-6 d-flex flex-column text-white fw-bold p-2 zoomin">
+                                <div className="purchase-option d-flex flex-column justify-content-end">
+                                    <p className="info">Buy Eco on Steam and start playing today.</p>
+                                    <a href="https://store.steampowered.com/app/382310/Eco/" target="_blank" className="btn btn-primary market-btn">Buy Eco on Steam</a>
+                                </div>
                             </div>
-                        </div>
-
+                        )}
                     </div>
                     <h4 className="pt-5 fw-bold">Eco Credits</h4>
                     <p className="pt-3 fs-3">Buy Eco Credits here and spend them on premium variants inside the game!</p>

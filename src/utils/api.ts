@@ -28,7 +28,14 @@ export function useFetchUserById(userJWT: string, user: string) {
     });
 }
 export function useFetchCrud(type: string, pageNumber: number, pageSize: number, userJWT: string) {
-    const url = `${import.meta.env.VITE_CLOUD_API_URL}${type}?pageNumber=${pageNumber}&pageSize=${pageSize}`;
+    let url;
+    switch (type) {
+        case "FlagReports":
+            url = `${import.meta.env.VITE_CLOUD_API_URL}Flags/FlagReport`;
+            break;
+        default:
+            url = `${import.meta.env.VITE_CLOUD_API_URL}${type}?pageNumber=${pageNumber}&pageSize=${pageSize}`;
+    }
     return useQuery({
         queryKey: ["users" , type],
         queryFn: () =>
@@ -51,8 +58,11 @@ export function useFetchCrud(type: string, pageNumber: number, pageSize: number,
     });
 }
 
-export function useSearchCrud(type: string, search: string, pageNumber: number, pageSize: number, adminJWT: string, options: { enabled?: boolean } = {}) {
-        const url = `${import.meta.env.VITE_CLOUD_API_URL}${type}/search?search=${search}&pageNumber=${pageNumber}&pageSize=${pageSize}`;
+export function useSearchCrud(type: string, search: string, pageNumber: number, 
+    pageSize: number, adminJWT: string, options: { enabled?: boolean } = {}, 
+    orderBy?: string, ascending?: boolean) {  
+    const url = `${import.meta.env.VITE_CLOUD_API_URL}${type}/search?search=${search}
+    &pageNumber=${pageNumber}&pageSize=${pageSize}&orderBy${orderBy}&ascending${ascending}`;
         return useQuery({
             queryKey: ["search", type, search],
             queryFn: () =>
@@ -71,14 +81,14 @@ export function useSearchCrud(type: string, search: string, pageNumber: number, 
                     }
                     return res.json();
                 }),
-            refetchOnWindowFocus: true,
+            refetchOnWindowFocus: false,
             staleTime: 5 * 60 * 1000,
             enabled: options.enabled !== undefined ? options.enabled : true,
         });
 }
 
-export async function crudUpdateById(type: string, adminJWT: string, updatedUser: User) {
-	const url = `${import.meta.env.VITE_CLOUD_API_URL}${type}`;
+export async function crudUpdateById(type: string, adminJWT: string, property: string, updatedUser: User) {
+	const url = `${import.meta.env.VITE_CLOUD_API_URL}${type}?propertyName=${property}`;
 	const response = await fetch(url, {
 		method: "PUT",
 		headers: {

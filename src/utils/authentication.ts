@@ -101,3 +101,24 @@ export function checkNewSteamUserStatus (user: User): boolean{
 	const regex = /^steam:/i; 
 	return regex.test(user.username);
 }
+// get server token 
+export function useGetServerToken(userJWT: string): UseQueryResult {
+    const url = `${import.meta.env.VITE_CLOUD_API_URL}Authentication/GenerateAuthToken`;
+    return useQuery({
+        queryKey: ["serverToken", userJWT],
+        queryFn: () =>
+            fetch(url, {
+                headers: {
+                    Authorization: `Bearer ${AuthenticatedUser() as string}`,
+                    "Content-Type": "application/json",
+                },
+            }).then((res) => {
+                if (!res.ok) {
+                    throw new Error("There was an error getting the server token");
+                }
+                return res.text();
+            }),
+        refetchOnWindowFocus: false,
+        staleTime: 5 * 60 * 1000,
+    });
+}

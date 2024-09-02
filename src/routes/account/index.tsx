@@ -20,6 +20,7 @@ type AccountParams = {
   redirect: string | null;
   product: string | null;
   error: string | null;
+  searh: string | null;
 }
 export const Route = createFileRoute('/account/')({
   validateSearch: (search: Record<string, unknown>): AccountParams => {
@@ -104,6 +105,7 @@ function Account() {
     }
       <UserCard user={user} />
       <DownloadsCard user={user} />
+      <ServerCard user={user} />
       <InviteCard user={user} />
       <TransactionsCard user={user} />
       <SteamCard user={user} />

@@ -12,6 +12,7 @@ import slgicon from '../assets/images/icons/slgicon.png';
 import bugicon from '../assets/images/icons/bugicon.png';
 import whitehaticon from '../assets/images/icons/whitehaticon.png';
 import tigericon from '../assets/images/icons/tigericon.png';
+import { AuthenticatedUser } from './authentication';
 type Icon = {
     name: string;
     file: string;
@@ -80,4 +81,31 @@ export function getIcons(icon: string): Icon[] {
     });
 
     return icons;
+}
+
+export async function downloadVersion(event: React.MouseEvent<HTMLAnchorElement>) {
+    event.preventDefault();
+    const href = event.currentTarget.href;
+
+    try {
+        const response = await fetch(href, {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${AuthenticatedUser()}`
+            }
+        });
+
+        if (response.ok) {
+            const presignedUrl = await response.text(); // Assuming the server returns the URL as plain text
+            if (presignedUrl) {
+                window.open(presignedUrl, '_blank'); // Open the presigned URL in a new tab
+            } else {
+                console.error('Presigned URL not found');
+            }
+        } else {
+            console.error('Download failed with status:', response.status);
+        }
+    } catch (error) {
+        console.error('Download failed:', error);
+    }
 }

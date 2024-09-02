@@ -18,7 +18,8 @@ function Menu() {
                         )
                     ))
                 }
-                <Link id="menu-login" to={isLoggedIn ? "/login" : "/account"} className="mx-1">{isLoggedIn ? "Login" : "Account"}</Link>
+                <a className="mx-1" href="mailto:support@strangeloopgames.com"> Contact </a>
+                <Link id="menu-login" to={isLoggedIn ? "/login" : "/account"} >{isLoggedIn ? "Login" : "Account"}</Link>
             </nav>
         </>
     );

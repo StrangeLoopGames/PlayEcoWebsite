@@ -16,19 +16,30 @@ import '../assets/table.scss';
 import { EditModal } from './admin/EditModal';
 
 type User = types["schemas"]["StrangeUser"];
+
+const columnFilter: string[] = ['heartBeatTime', 'secretKey']; // Add the keys you want to exclude
+const subTableColumns = [
+    'achievements', 
+    'items', 
+    'icons', 
+    'twitchEntitlements',
+    'availableIcons',
+    'serverInfoJson'];
+const copyButton = ['id'];
 interface Props {
     users: User[];
     selectedKey: string | null
     toggleModalEvent: (toggleModalEvent: void) => void | null;
     updateUserEvent: (updatedUser: User) => void;
     changePageEvent: (pageNumber: number) => void;
+    sortingEvent: (sorting: SortingState) => void; // New callback function
 }
 function generateColumns(data: User[]): any[] {
     const dataArray = !Array.isArray(data) ? [data] : data;
     if (!data || data.length === 0) {
         return []; // Return an empty array if data is undefined or empty
     }
-    const keys = Object.keys(dataArray[0]);
+    const keys = Object.keys(dataArray[0]).filter(key => !columnFilter.includes(key));
     return keys.map(key => ({
         id: key,
         accessorFn: row => `${row[key]}`, // Accessor function to get value by key
@@ -37,16 +48,13 @@ function generateColumns(data: User[]): any[] {
     }));
 }
 
-
-const subTableColumns = ['achievements', 'items', 'icons', 'twitchEntitlements'];
-const copyButton = ['id'];
 const booleanIcons: { true: JSX.Element, false: JSX.Element } = {
     true: <FontAwesomeIcon className="table-icon true" icon={faSquareCheck} />,
     false: <FontAwesomeIcon className="table-icon false" icon={faSquareXmark} />,
 };
 export function formatCell(key: string, cell: any, info: any) {
     if (subTableColumns.includes(key)) {
-        return <button className={`${cell != "null" ? "enabled" : "disabled"}`}>View {splitCamelCaseAndCapitalize(key)}</button>;
+        return <button className={`${cell != "null" && cell.length > 0 ? "enabled" : "disabled"}`} title={cell != "null" && cell.length > 0 ? `Double click to view and edit` : `No ${splitCamelCaseAndCapitalize(key)} `}>View {splitCamelCaseAndCapitalize(key)}</button>;
     } else if (copyButton.includes(key)) {
         return <button className={cell.index} onClick={() => { navigator.clipboard.writeText(cell) }}>Copy {key}</button>
     }
@@ -54,7 +62,7 @@ export function formatCell(key: string, cell: any, info: any) {
         return cell === "true" || cell === "false" ? booleanIcons[cell] : cell;
     }
 }
-export default function CorsTable({ users, selectedKey, toggleModalEvent, updateUserEvent, changePageEvent }: Props) {
+export default function CorsTable({ users, selectedKey, toggleModalEvent, updateUserEvent, changePageEvent, sortingEvent }: Props) {
     const [sorting, setSorting] = useState<SortingState>([]);
     const [selectedUser, setSelectedUser] = useState<{ cell: string, user: User } | null>(null);
     const [toggleModal, setToggleModal] = useState(false);
@@ -67,7 +75,14 @@ export default function CorsTable({ users, selectedKey, toggleModalEvent, update
     const userArray = Array.isArray(users) ? users : [users];
 
     const data = useMemo(() => (selectedKey == null ? userArray : userArray[selectedKey] || []), [selectedKey, userArray]);
-
+    useEffect(() => {
+        if (selectedKey && selectedKey != null) {
+            console.log(`key: ${selectedKey}`);
+            
+            console.log(userArray[selectedKey]);
+            
+        }
+    }, [selectedKey, userArray]);
 
     const columns = useMemo(() => generateColumns(data), [data]);
 
@@ -99,6 +114,11 @@ export default function CorsTable({ users, selectedKey, toggleModalEvent, update
         };
     }, [toggleModal]);
 
+    useEffect(() => {
+        if( sorting != null && sorting.length > 0) {
+            sortingEvent(sorting);
+        }
+    }, [sorting, sortingEvent]);
     function selectUser(user: User, cell: any) {
         return () => {
             setSelectedUser({ cell: cell, user: user });
@@ -119,7 +139,7 @@ export default function CorsTable({ users, selectedKey, toggleModalEvent, update
             )}
             <TablePagnation table={table} />
             <div className="table-container">
-                <table>
+                <table className='w-100'>
                     <thead>
                         {table.getHeaderGroups().map((headerGroup) => (
                             <tr key={headerGroup.id}>
@@ -159,7 +179,7 @@ export default function CorsTable({ users, selectedKey, toggleModalEvent, update
                     </thead>
                     <tbody>
                         {table.getRowModel().rows.map((row) => (
-                            <tr key={row.id} className={row.index}>
+                            <tr key={row.id} className={`${row.index}`}>
                                 {row.getVisibleCells().map((cell) => (
                                     <td key={cell.id} className={cell.id} onDoubleClick={selectUser(row.original, cell.column.id)}>
                                         {flexRender(cell.column.columnDef.cell, cell.getContext())}

@@ -9,8 +9,10 @@ body {
     background: #4688c0;
     overflow-x: hidden;
 }
-body.not-found .content-wrap, .content-wrap.account, .content-wrap.accountadmin, .content-wrap.buy,.content-wrap.verifyemail, .content-wrap.gameregister_cd_key,
-.content-wrap.jobs, .content-wrap.login, .content-wrap.register, .content-wrap.forgot, .content-wrap.resetpassword, .content-wrap.accountpurchase {
+body.not-found .content-wrap, .content-wrap.account, .content-wrap.accountadmin, .content-wrap.buy,
+.content-wrap.verifyemail, .content-wrap.gameregister_cd_key, .content-wrap.jobs, .content-wrap.login, 
+.content-wrap.register, .content-wrap.forgot, .content-wrap.resetpassword, 
+.content-wrap.accountpurchase, .content-wrap.hosting {
     background-color: #f9f9f9 !important;
     background : url("../assets/images/textures/cubes.png");
 }

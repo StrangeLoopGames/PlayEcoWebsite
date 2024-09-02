@@ -9,4 +9,5 @@ export const alertsMap = {
     "invite_redeem_success": "Invite redeemed successfully!",
     "invite_redem_login": "You must be logged in to an account to redeem an invite.",
     "invite_redeem_error": "There was an error redeeming your invite.",
+    "tokens_revoked": "All tokens have been revoked, please login again.",
 }

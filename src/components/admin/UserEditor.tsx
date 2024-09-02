@@ -6,6 +6,7 @@ import { AuthenticatedUser, useIsUserAdmin } from "../../utils/authentication";
 import { splitCamelCaseAndCapitalize } from "../../utils/stringUtils";
 import { components as types } from '../../types/api';
 import { Link } from "@tanstack/react-router";
+import { SortingState } from "@tanstack/react-table";
 
 type User = types["schemas"]["StrangeUser"];
 
@@ -14,6 +15,7 @@ const menuItems = {
     "World Editor": 'Worlds',
     "Transaction Editor": 'Transactions',
     "Flags Editor": 'Flags',
+    "Flag Report": 'FlagReports',
 };
 
 export function UserEditor() {
@@ -27,12 +29,21 @@ export function UserEditor() {
     const [pageSize, setPageSize] = useState(100);
     const [crudType, setCrudType] = useState("UserAccount");
     const [search, setSearch] = useState<string | null>(null);
+    const [sorting, setSorting] = useState<SortingState>([]);
 
     const { data: users, error, isLoading, refetch } = useFetchCrud(crudType, pageNumber, pageSize, userJWT as string);
-    const { data: userSearch, error: searchError, isLoading: searchIsLoading, refetch: searchRefetch } = useSearchCrud(crudType, search || "" , pageNumber, pageSize, userJWT as string, {
-        enabled: !!search,
-    });
-
+    const { data: userSearch, error: searchError, isLoading: searchIsLoading, refetch: searchRefetch } = useSearchCrud(
+        crudType,
+        search || "",
+        pageNumber,
+        pageSize,
+        userJWT as string,
+        {
+            enabled: !!search,
+        },
+        sorting && sorting[0]?.id ? sorting[0].id : "",
+        sorting && sorting[0]?.desc !== undefined ? sorting[0].desc : true
+    );
     const [userTable, setUserTable] = useState<User[]>([]);
 
     useEffect(() => {
@@ -43,18 +54,13 @@ export function UserEditor() {
         } else {
             setUserTable(users || []);
         }
-    }, [users, userSearch, search]);
+    }, [users, userSearch, search, sorting]);
 
-    const updateUserEvent = async (updatedUser: User) => {
-        const updatedUsers = users?.map((user: User) =>
-            user.id === updatedUser.id ? updatedUser : user
-        ) || [];
-
-        setUserTable(updatedUsers);
+    const updateUserEvent = async (updatedUser: User, property: string) => {
         setIsUpdating(true);
 
         try {
-            await crudUpdateById(crudType, userJWT as string, updatedUser);
+            await crudUpdateById(crudType, userJWT as string, property, updatedUser);
             refetch();
         } catch (error) {
             console.error('Error:', error);
@@ -62,7 +68,10 @@ export function UserEditor() {
             setIsUpdating(false);
         }
     };
-
+    const handleSortingChange = (newSorting: SortingState) => {
+        setSorting(newSorting);
+        console.log('Sorting changed to:', newSorting);
+    };
     const handleSearch = () => {
         const searchString = (document.querySelector('.search-input') as HTMLInputElement).value;
         setSearch(searchString);
@@ -105,7 +114,7 @@ export function UserEditor() {
 
     return (
         <>
-            <Link className="accounts-back btn btn-small" to="/account">Go Back</Link>
+            <Link className="accounts-back btn btn-small" to="/account" title="Go Back">Go Back</Link>
             <h2 className="title-medium-white account-feature-title">
                 {splitCamelCaseAndCapitalize(crudType)} Editor
             </h2>
@@ -114,7 +123,7 @@ export function UserEditor() {
                     <button
                         key={type}
                         onClick={() => handleCrudTypeChange(type)}
-                        className={`mx-1 ${crudType === type ? 'active' : ''}`}
+                        className={`mx-1 admin-menu btn btn-small ${crudType === type ? 'active' : ''}`}
                     >
                         {label}
                     </button>
@@ -131,7 +140,7 @@ export function UserEditor() {
                     </details>
                 </div>
                 <div className="user-search">
-                    <input className="search-input" name="search" type="text" placeholder="ENTER GUID HERE" />
+                    <input className="search-input" name="search" type="text" placeholder="ENTER SEARCH HERE" />
                     <button className="button" onClick={handleSearch}>Lookup</button>
                 </div>
                 <div className="results-info">
@@ -145,6 +154,7 @@ export function UserEditor() {
                     toggleModalEvent={null}
                     updateUserEvent={updateUserEvent}
                     changePageEvent={setPageSize}
+                    sortingEvent={handleSortingChange}
                 />
             </div>
             {(isLoading || searchIsLoading) && (
