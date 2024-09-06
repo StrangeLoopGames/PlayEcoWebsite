@@ -4,6 +4,46 @@
  */
 
 export interface paths {
+  "/Admin/UploadSteamKeys": {
+    post: {
+      parameters: {
+        query: {
+          "api-version"?: string;
+        };
+      };
+      responses: {
+        /** OK */
+        200: unknown;
+      };
+      requestBody: {
+        content: {
+          "multipart/form-data": {
+            /** Format: binary */
+            file?: string;
+          };
+        };
+      };
+    };
+  };
+  "/Admin/GetUnusedSteamKeysCount": {
+    get: {
+      parameters: {
+        query: {
+          "api-version"?: string;
+        };
+      };
+      responses: {
+        /** OK */
+        200: {
+          content: {
+            "text/plain": number;
+            "application/json": number;
+            "text/json": number;
+          };
+        };
+      };
+    };
+  };
   "/Authentication/AuthenticateSLGUser": {
     post: {
       parameters: {
@@ -78,6 +118,38 @@ export interface paths {
       };
     };
   };
+  "/Authentication/GenerateAuthToken": {
+    get: {
+      parameters: {
+        query: {
+          "api-version"?: string;
+        };
+      };
+      responses: {
+        /** OK */
+        200: {
+          content: {
+            "text/plain": string;
+            "application/json": string;
+            "text/json": string;
+          };
+        };
+      };
+    };
+  };
+  "/Authentication/RevokeAllTokens": {
+    get: {
+      parameters: {
+        query: {
+          "api-version"?: string;
+        };
+      };
+      responses: {
+        /** OK */
+        200: unknown;
+      };
+    };
+  };
   "/Authentication/GetWorldTicket": {
     get: {
       parameters: {
@@ -119,7 +191,7 @@ export interface paths {
       };
     };
   };
-  "/Authentication/GetUserLoginToken": {
+  "/Authentication/GetUserAuthToken": {
     post: {
       parameters: {
         query: {
@@ -158,9 +230,6 @@ export interface paths {
         path: {
           documentName: string;
         };
-        query: {
-          token?: string;
-        };
       };
       responses: {
         /** OK */
@@ -173,9 +242,6 @@ export interface paths {
       parameters: {
         path: {
           documentName: string;
-        };
-        query: {
-          token?: string;
         };
       };
       responses: {
@@ -213,6 +279,41 @@ export interface paths {
       };
     };
   };
+  "/Flags/FlagReport": {
+    post: {
+      parameters: {
+        query: {
+          "api-version"?: string;
+        };
+      };
+      responses: {
+        /** OK */
+        200: {
+          content: {
+            "text/plain": components["schemas"]["ServerReportSummary"][];
+            "application/json": components["schemas"]["ServerReportSummary"][];
+            "text/json": components["schemas"]["ServerReportSummary"][];
+          };
+        };
+      };
+    };
+  };
+  "/Flags/FlagSelf": {
+    post: {
+      parameters: {
+        query: {
+          worldId?: string;
+          problemDescription?: string;
+          circumventingPaidItems?: boolean;
+          "api-version"?: string;
+        };
+      };
+      responses: {
+        /** OK */
+        200: unknown;
+      };
+    };
+  };
   "/Flags/FlagServer": {
     post: {
       parameters: {
@@ -226,48 +327,6 @@ export interface paths {
       responses: {
         /** OK */
         200: unknown;
-      };
-    };
-  };
-  "/Flags/GetRecentlyFlaggedServers": {
-    get: {
-      parameters: {
-        query: {
-          days?: number;
-          "api-version"?: string;
-        };
-      };
-      responses: {
-        /** OK */
-        200: {
-          content: {
-            "text/plain": components["schemas"]["FlaggedServerSummary"][];
-            "application/json": components["schemas"]["FlaggedServerSummary"][];
-            "text/json": components["schemas"]["FlaggedServerSummary"][];
-          };
-        };
-      };
-    };
-  };
-  "/Flags/GetAllFlagsForServer/{worldId}": {
-    get: {
-      parameters: {
-        path: {
-          worldId: string;
-        };
-        query: {
-          "api-version"?: string;
-        };
-      };
-      responses: {
-        /** OK */
-        200: {
-          content: {
-            "text/plain": components["schemas"]["FlaggedServerSummary"];
-            "application/json": components["schemas"]["FlaggedServerSummary"];
-            "text/json": components["schemas"]["FlaggedServerSummary"];
-          };
-        };
       };
     };
   };
@@ -285,6 +344,11 @@ export interface paths {
       };
     };
     put: {
+      parameters: {
+        query: {
+          propertyName: string;
+        };
+      };
       responses: {
         /** OK */
         200: unknown;
@@ -328,9 +392,11 @@ export interface paths {
     get: {
       parameters: {
         query: {
-          search: string;
+          search?: string;
           pageNumber?: number;
           pageSize?: number;
+          orderBy?: string[];
+          ascending?: boolean[];
         };
       };
       responses: {
@@ -558,6 +624,85 @@ export interface paths {
       };
     };
   };
+  "/Mods": {
+    get: {
+      parameters: {
+        query: {
+          pageNumber?: number;
+          pageSize?: number;
+        };
+      };
+      responses: {
+        /** OK */
+        200: unknown;
+      };
+    };
+    put: {
+      parameters: {
+        query: {
+          propertyName: string;
+        };
+      };
+      responses: {
+        /** OK */
+        200: unknown;
+      };
+      requestBody: {
+        content: {
+          "application/json": components["schemas"]["StrangeMod"];
+        };
+      };
+    };
+  };
+  "/Mods/{id}": {
+    get: {
+      parameters: {
+        path: {
+          id: string;
+        };
+      };
+      responses: {
+        /** OK */
+        200: {
+          content: {
+            "application/json": components["schemas"]["StrangeMod"];
+          };
+        };
+      };
+    };
+    delete: {
+      parameters: {
+        path: {
+          id: string;
+        };
+      };
+      responses: {
+        /** OK */
+        200: unknown;
+      };
+    };
+  };
+  "/Mods/search": {
+    get: {
+      parameters: {
+        query: {
+          search?: string;
+          pageNumber?: number;
+          pageSize?: number;
+          orderBy?: string[];
+          ascending?: boolean[];
+        };
+      };
+      responses: {
+        /** OK */
+        200: {
+          content: {
+            "application/json": components["schemas"]["StrangeMod"][];
+          };
+        };
+      };
+    };
+  };
   "/PasswordReset/RequestReset": {
     post: {
       parameters: {
@@ -588,6 +733,26 @@ export interface paths {
           "application/json": components["schemas"]["UsertokenAndPassword"];
           "text/json": components["schemas"]["UsertokenAndPassword"];
           "application/*+json": components["schemas"]["UsertokenAndPassword"];
+        };
+      };
+    };
+  };
+  "/PasswordReset/AdminChangePassword": {
+    post: {
+      parameters: {
+        query: {
+          "api-version"?: string;
+        };
+      };
+      responses: {
+        /** OK */
+        200: unknown;
+      };
+      requestBody: {
+        content: {
+          "application/json": components["schemas"]["AdminChangePassword"];
+          "text/json": components["schemas"]["AdminChangePassword"];
+          "application/*+json": components["schemas"]["AdminChangePassword"];
         };
       };
     };
@@ -665,21 +830,6 @@ export interface paths {
       };
     };
   };
-  "/api/Registration/LinkSteamAccount": {
-    /** Details about Steam's OAuth flow can be found here https://partner.steamgames.com/doc/webapi_overview/oauth. */
-    post: {
-      parameters: {
-        query: {
-          token?: string;
-          "api-version"?: string;
-        };
-      };
-      responses: {
-        /** OK */
-        200: unknown;
-      };
-    };
-  };
   "/api/Registration/RegisterWithSteam": {
     get: {
       parameters: {
@@ -708,6 +858,11 @@ export interface paths {
       };
     };
     put: {
+      parameters: {
+        query: {
+          propertyName: string;
+        };
+      };
       responses: {
         /** OK */
         200: unknown;
@@ -751,9 +906,11 @@ export interface paths {
     get: {
       parameters: {
         query: {
-          search: string;
+          search?: string;
           pageNumber?: number;
           pageSize?: number;
+          orderBy?: string[];
+          ascending?: boolean[];
         };
       };
       responses: {
@@ -952,6 +1109,21 @@ export interface paths {
       };
     };
   };
+  "/UserAccount/AddSteamToSlgUser": {
+    get: {
+      parameters: {
+        query: {
+          /** The Access token provided by steam after redirect to be used to redeem a key and check steam information */
+          token?: string;
+          "api-version"?: string;
+        };
+      };
+      responses: {
+        /** OK */
+        200: unknown;
+      };
+    };
+  };
   "/UserAccount": {
     get: {
       parameters: {
@@ -966,6 +1138,11 @@ export interface paths {
       };
     };
     put: {
+      parameters: {
+        query: {
+          propertyName: string;
+        };
+      };
       responses: {
         /** OK */
         200: unknown;
@@ -1009,9 +1186,11 @@ export interface paths {
     get: {
       parameters: {
         query: {
-          search: string;
+          search?: string;
           pageNumber?: number;
           pageSize?: number;
+          orderBy?: string[];
+          ascending?: boolean[];
         };
       };
       responses: {
@@ -1146,6 +1325,32 @@ export interface paths {
       };
     };
   };
+  "/Worlds/GetMods": {
+    post: {
+      parameters: {
+        query: {
+          "api-version"?: string;
+        };
+      };
+      responses: {
+        /** OK */
+        200: {
+          content: {
+            "text/plain": components["schemas"]["StrangeMod"][];
+            "application/json": components["schemas"]["StrangeMod"][];
+            "text/json": components["schemas"]["StrangeMod"][];
+          };
+        };
+      };
+      requestBody: {
+        content: {
+          "application/json": string[];
+          "text/json": string[];
+          "application/*+json": string[];
+        };
+      };
+    };
+  };
   "/Worlds/AddOrUpdate": {
     post: {
       parameters: {
@@ -1186,6 +1391,11 @@ export interface paths {
       };
     };
     put: {
+      parameters: {
+        query: {
+          propertyName: string;
+        };
+      };
       responses: {
         /** OK */
         200: unknown;
@@ -1229,9 +1439,11 @@ export interface paths {
     get: {
       parameters: {
         query: {
-          search: string;
+          search?: string;
           pageNumber?: number;
           pageSize?: number;
+          orderBy?: string[];
+          ascending?: boolean[];
         };
       };
       responses: {
@@ -1287,6 +1499,12 @@ export interface paths {
 
 export interface components {
   schemas: {
+    AdminChangePassword: {
+      email?: string | null;
+      /** Format: uuid */
+      userId?: string | null;
+      password?: string | null;
+    };
     AuthenticateSlgUser: {
       username?: string | null;
       password?: string | null;
@@ -1329,13 +1547,6 @@ export interface components {
       reportedUserID?: string;
       circumventingPaidItems?: boolean | null;
       autoDetectedItemUsage?: boolean | null;
-    };
-    FlaggedServerSummary: {
-      /** Format: uuid */
-      worldID?: string;
-      /** Format: int32 */
-      flagCount?: number;
-      recentProblems?: string[] | null;
     };
     GameVersion: {
       /** Format: uuid */
@@ -1405,9 +1616,14 @@ export interface components {
       /** Format: float */
       worldOwnerReceived?: number;
       /** Format: float */
-      charityReceived?: number;
+      moddersReceived?: number | null;
+      /** Format: float */
+      streamersReceived?: number | null;
+      /** Format: float */
+      charityReceived?: number | null;
       realMoney?: boolean;
-      badTransaction?: boolean;
+      badTransaction?: boolean | null;
+      divisionDecription?: string | null;
       completed?: boolean;
       /** Format: date-time */
       timeCompleted?: string;
@@ -1424,6 +1640,18 @@ export interface components {
     ServerHeartbeatResult: {
       result?: components["schemas"]["StrangeWorldRegistrationResult"];
       usersToKick?: components["schemas"]["UserToKick"][] | null;
+      streamInfo?: components["schemas"]["StreamInfo"][] | null;
+    };
+    ServerReportSummary: {
+      serverName?: string | null;
+      ownerName?: string | null;
+      /** Format: int32 */
+      userFlags?: number;
+      /** Format: int32 */
+      serverWatchdogFlags?: number;
+      /** Format: int32 */
+      clientWatchdogFlags?: number;
+      textReports?: string | null;
     };
     StrangeAchievement: {
       name?: string | null;
@@ -1438,9 +1666,30 @@ export interface components {
       /** Format: uuid */
       id?: string;
       /** Format: float */
+      percentCutForMods?: number;
+      /** Format: float */
+      percentCutForStreamers?: number;
+      /** Format: float */
       percentCutForHosts?: number;
       /** Format: float */
       percentCutForCharity?: number;
+      /** Format: int32 */
+      minViewersToGetStreamerCut?: number;
+    };
+    StrangeMod: {
+      /** Format: uuid */
+      id?: string;
+      /** Format: uuid */
+      owner?: string;
+      name?: string | null;
+      displayName?: string | null;
+      description?: string | null;
+      /** Format: float */
+      percentCut?: number;
+      /** Format: int32 */
+      totalTransactionsCollected?: number;
+      /** Format: float */
+      totalCreditsCollectedForOwner?: number;
     };
     /** @description A user stored in the StrangeCloud. */
     StrangeUser: {
@@ -1459,11 +1708,15 @@ export interface components {
       /** Format: float */
       ecoCredits?: number | null;
       ownsEco?: boolean;
+      /** Format: uuid */
+      invitedByUser?: string | null;
       /** Format: int32 */
       tierId?: number | null;
       verified?: boolean | null;
       items?: components["schemas"]["InvItem"][] | null;
       blockPurchasing?: boolean | null;
+      availableIcons?: string | null;
+      selectedIcon?: string | null;
       isDevTier?: boolean | null;
       isWolfWhisperer?: boolean | null;
       isSLG?: boolean | null;
@@ -1473,6 +1726,8 @@ export interface components {
       bannedUntil?: string | null;
       bannedReason?: string | null;
       isBanned?: boolean;
+      /** Format: float */
+      totalReceivedInTax?: number | null;
       /** Format: uuid */
       currentWorldID?: string | null;
       /** Format: date-time */
@@ -1526,17 +1781,25 @@ export interface components {
       totalUserTimeOfOwner?: string | null;
       /** Format: date-span */
       timeHostingMoreThanOne?: string | null;
+      installedModNameList?: string[] | null;
     };
     /**
      * Format: int32
      * @enum {integer}
      */
     StrangeWorldRegistrationResult: 200 | 501;
+    StreamInfo: {
+      username?: string | null;
+      twitchID?: string | null;
+      streamTitle?: string | null;
+      /** Format: int32 */
+      viewerCount?: number;
+    };
     /**
      * Format: int32
      * @enum {integer}
      */
-    SummaryType: 0 | 1 | 2;
+    SummaryType: 0 | 1 | 2 | 3 | 4;
     UserToKick: {
       /** Format: uuid */
       userId?: string;

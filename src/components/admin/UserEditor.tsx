@@ -1,12 +1,13 @@
 import { useEffect, useState } from "react";
 import { Modal } from "../Modal";
 import CorsTable from "../CorsTable";
-import { useFetchCrud, crudUpdateById, useSearchCrud } from "../../utils/api";
+import { useFetchCrud, crudUpdateById, useSearchCrud, putNewCrud } from "../../utils/api";
 import { AuthenticatedUser, useIsUserAdmin } from "../../utils/authentication";
 import { splitCamelCaseAndCapitalize } from "../../utils/stringUtils";
 import { components as types } from '../../types/api';
 import { Link } from "@tanstack/react-router";
 import { SortingState } from "@tanstack/react-table";
+import ModalWrapper from "../ModalWrapper";
 
 type User = types["schemas"]["StrangeUser"];
 
@@ -31,6 +32,7 @@ export function UserEditor() {
     const [crudType, setCrudType] = useState("UserAccount");
     const [search, setSearch] = useState<string | null>(null);
     const [sorting, setSorting] = useState<SortingState>([]);
+    const [crudAction, setCrudAction] = useState<string | null>(null);
 
     const { data: users, error, isLoading, refetch } = useFetchCrud(crudType, pageNumber, pageSize, userJWT as string);
     const { data: userSearch, error: searchError, isLoading: searchIsLoading, refetch: searchRefetch } = useSearchCrud(
@@ -59,7 +61,6 @@ export function UserEditor() {
 
     const updateUserEvent = async (updatedUser: User, property: string) => {
         setIsUpdating(true);
-
         try {
             await crudUpdateById(crudType, userJWT as string, property, updatedUser);
             refetch();
@@ -86,13 +87,34 @@ export function UserEditor() {
             handleSearch();
         }
     };
-
+    const toggleModal = (setState: React.Dispatch<React.SetStateAction<any>>) => {
+        setState(null);
+    };
     const handleCrudTypeChange = (newCrudType: string) => {
         setCrudType(newCrudType);
         setPageNumber(1); // Reset page number when crudType changes
         setSearch(null);  // Reset search when crudType changes
         refetch();        // Refetch data for the new CRUD type
     };
+
+    const addNewMod = (event: React.FormEvent<HTMLFormElement>) => {
+        event.preventDefault();
+        const form = event.currentTarget;
+        const mod: types["schemas"]["StrangeMod"] = {
+            owner: form.owner.value,
+            name: form.name.value,
+            displayName: form.displayName.value,
+            description: form.description.value,
+            percentCut: Number(form.percentCut.value),
+            totalTransactionsCollected: 0,
+            totalCreditsCollectedForOwner: 0,
+        };
+        setIsUpdating(true);       
+        putNewCrud("Mods", userJWT as string, mod);
+        refetch();
+        setIsUpdating(false);
+        toggleModal(setCrudAction);
+    }
 
     useEffect(() => {
         const searchInput = document.querySelector('.search-input') as HTMLInputElement;
@@ -144,6 +166,13 @@ export function UserEditor() {
                     <input className="search-input" name="search" type="text" placeholder="ENTER SEARCH HERE" />
                     <button className="button" onClick={handleSearch}>Lookup</button>
                 </div>
+                {
+                    crudType === "Mods" ? (
+                    <div className="crud-actions d-flex flex-row justify-content-center">
+                        <button className="btn btn-small" onClick={ () => setCrudAction("add")}>Add New Mod</button>
+                    </div>
+                    ) : null
+                }
                 <div className="results-info">
                     {search && (
                         <p>Search results for: {search}</p>
@@ -167,6 +196,42 @@ export function UserEditor() {
             {(error || searchError) && (
                 <Modal type="Error" message="There was an error, please try again" data={undefined} />
             )}
+            {
+                (crudAction != null) ? (
+                    <ModalWrapper toggleModal={()=> toggleModal(setCrudAction)} dismissable={true}>
+                        <div className="d-flex flex-column w-100">
+                            <h2>Add a new {splitCamelCaseAndCapitalize(crudType)} record</h2>
+                            <form onSubmit={addNewMod} className="crud-add py-3 m-0 w-100 gap-3">
+                            <label className="d-flex flex-column" htmlFor="owner">
+                                Owner
+                            <input className="d-flex flex-column" type="text" name="owner" id="onwer" />
+                            </label>
+                            <label className="d-flex flex-column" htmlFor="name">
+                                Name
+                            <input type="text" name="name" id="name" />
+                            </label>
+                            <label className="d-flex flex-column" htmlFor="displayName">
+                                Display Name
+                            <input type="text" name="displayName" id="displayName" />
+                            </label>
+                            <label className="d-flex flex-column" htmlFor="description">
+                                Description
+                                <textarea name="description" id="description"></textarea>
+                            </label>
+                            <label className="d-flex flex-column" htmlFor="percentCut">
+                                Percent Cut
+                            <input type="number" name="percentCut" id="percentCut" />
+                            </label>
+                            <div className="btn-wrap d-flex flex-row justify-content-between w-100 gap-2 py-2">
+                            <button className="btn btn-small bg-danger text-white" onClick={() => setCrudAction(null)}>Cancel</button>
+                            <button className="btn btn-small bg-success text-white" type="submit">Submit</button>
+                            </div>
+                            </form>
+                        </div>
+                    </ModalWrapper>
+                ) : null
+
+            }
         </>
     );
 }

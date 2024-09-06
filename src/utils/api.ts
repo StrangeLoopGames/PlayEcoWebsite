@@ -87,7 +87,7 @@ export function useSearchCrud(type: string, search: string, pageNumber: number,
         });
 }
 
-export async function crudUpdateById(type: string, adminJWT: string, property: string, updatedUser: User) {
+export async function crudUpdateById(type: string, adminJWT: string, property: string, object: unknown) {
 	const url = `${import.meta.env.VITE_CLOUD_API_URL}${type}?propertyName=${property}`;
 	const response = await fetch(url, {
 		method: "PUT",
@@ -95,7 +95,7 @@ export async function crudUpdateById(type: string, adminJWT: string, property: s
 			Authorization: `Bearer ${adminJWT}`,
 			"Content-Type": "application/json",
 		},
-		body: JSON.stringify(updatedUser),
+		body: JSON.stringify(object),
 	});
 
 	if (!response.ok) {
@@ -104,6 +104,23 @@ export async function crudUpdateById(type: string, adminJWT: string, property: s
 
 	return response.json();
 }
+
+export async function putNewCrud(type: string, adminJWT: string , object: unknown) {
+    const url = `${import.meta.env.VITE_CLOUD_API_URL}${type}?propertyName=null`;
+    const response = await fetch(url, {
+        method: "PUT",
+        headers: {
+            Authorization: `Bearer ${adminJWT}`,
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify(object),
+    });
+    if (!response.ok) {
+        throw new Error("Network response was not ok");
+    }
+    return response.json();
+}
+    
 // Transactions 
 export function useGetUserTransactions(user: string) {
     const url = `${import.meta.env.VITE_CLOUD_API_URL}UserAccount/GetTransactionSummaries`;
