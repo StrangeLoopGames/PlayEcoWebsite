@@ -16,6 +16,7 @@ const menuItems = {
     "Transaction Editor": 'Transactions',
     "Flags Editor": 'Flags',
     "Flag Report": 'FlagReports',
+    "Mods Report": 'Mods',
 };
 
 export function UserEditor() {
