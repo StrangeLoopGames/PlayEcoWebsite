@@ -60,7 +60,7 @@ export function UserEditor() {
     }, [users, userSearch, search, sorting]);
 
     const updateUserEvent = async (updatedUser: User, property: string) => {
-        setIsUpdating(true);
+        setIsUpdating(true); 
         try {
             await crudUpdateById(crudType, userJWT as string, property, updatedUser);
             refetch();

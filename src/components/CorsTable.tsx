@@ -75,15 +75,6 @@ export default function CorsTable({ users, selectedKey, toggleModalEvent, update
     const userArray = Array.isArray(users) ? users : [users];
 
     const data = useMemo(() => (selectedKey == null ? userArray : userArray[selectedKey] || []), [selectedKey, userArray]);
-    useEffect(() => {
-        if (selectedKey && selectedKey != null) {
-            console.log(`key: ${selectedKey}`);
-            
-            console.log(userArray[selectedKey]);
-            
-        }
-    }, [selectedKey, userArray]);
-
     const columns = useMemo(() => generateColumns(data), [data]);
 
     const table = useReactTable({

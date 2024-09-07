@@ -61,8 +61,8 @@ export function useFetchCrud(type: string, pageNumber: number, pageSize: number,
 export function useSearchCrud(type: string, search: string, pageNumber: number, 
     pageSize: number, adminJWT: string, options: { enabled?: boolean } = {}, 
     orderBy?: string, ascending?: boolean) {  
-    const url = `${import.meta.env.VITE_CLOUD_API_URL}${type}/search?search=${search}
-    &pageNumber=${pageNumber}&pageSize=${pageSize}&orderBy${orderBy}&ascending${ascending}`;
+    const url = `${import.meta.env.VITE_CLOUD_API_URL}${type}/search?search=${search}&pageNumber=${pageNumber}\
+    &pageSize=${pageSize}&orderBy${orderBy}&ascending=${ascending}`;
         return useQuery({
             queryKey: ["search", type, search],
             queryFn: () =>
@@ -88,21 +88,19 @@ export function useSearchCrud(type: string, search: string, pageNumber: number,
 }
 
 export async function crudUpdateById(type: string, adminJWT: string, property: string, object: unknown) {
-	const url = `${import.meta.env.VITE_CLOUD_API_URL}${type}?propertyName=${property}`;
-	const response = await fetch(url, {
-		method: "PUT",
-		headers: {
-			Authorization: `Bearer ${adminJWT}`,
-			"Content-Type": "application/json",
-		},
-		body: JSON.stringify(object),
-	});
-
-	if (!response.ok) {
-		throw new Error("Network response was not ok");
-	}
-
-	return response.json();
+    const url = `${import.meta.env.VITE_CLOUD_API_URL}${type}?propertyName=${property}`;
+    const response = await fetch(url, {
+        method: "PUT",
+        headers: {
+            Authorization: `Bearer ${adminJWT}`,
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify(object),
+    });
+    if (!response.ok) {
+        throw new Error("Network response was not ok");
+    }
+    return response.json();
 }
 
 export async function putNewCrud(type: string, adminJWT: string , object: unknown) {
