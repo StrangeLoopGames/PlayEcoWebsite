@@ -117,14 +117,12 @@ function UserCard(props: any) {
                         <li className="account-label-front"><span className="account-label-front">Account Created:</span>{new Date(props.user.creationTime).toLocaleString()}</li>
                         <li className="account-label-front"><span className="account-label-front">Status:</span>{props.user.ownsEco ? "Owns Eco" : <Link to="/buy">Purchase Eco here</Link>}</li>
                         <li className="account-label-front"><span className="account-label-front">Teir:</span>{getGameTeir()}</li>
-                        <li className="account-label-front"><span className="account-label-front">Eco Credits Balance:</span>{props.user.ecoCredits}</li>
                     </ul>
                 </div>
             </div>
             <div className="btn-corner">
                 { !props.user.ownsEco ? <Link className="btn btn-small" to="/buy">Purchase Eco</Link> : null 
                 }
-                <Link className="btn btn-small" to="/buy">Buy Eco Credits</Link>
                 <button className="btn btn-small">Change Icon</button>
                 <button className="btn btn-small" id="account-edit" onClick={enableEdit}>Edit Account</button>
                 {

@@ -279,8 +279,21 @@ export interface paths {
       };
     };
   };
-  "/Flags/FlagReport": {
+  "/Flags/ClearAllFlags": {
     post: {
+      parameters: {
+        query: {
+          "api-version"?: string;
+        };
+      };
+      responses: {
+        /** OK */
+        200: unknown;
+      };
+    };
+  };
+  "/Flags/FlagReport": {
+    get: {
       parameters: {
         query: {
           "api-version"?: string;
@@ -327,85 +340,6 @@ export interface paths {
       responses: {
         /** OK */
         200: unknown;
-      };
-    };
-  };
-  "/Flags": {
-    get: {
-      parameters: {
-        query: {
-          pageNumber?: number;
-          pageSize?: number;
-        };
-      };
-      responses: {
-        /** OK */
-        200: unknown;
-      };
-    };
-    put: {
-      parameters: {
-        query: {
-          propertyName: string;
-        };
-      };
-      responses: {
-        /** OK */
-        200: unknown;
-      };
-      requestBody: {
-        content: {
-          "application/json": components["schemas"]["FlagReported"];
-        };
-      };
-    };
-  };
-  "/Flags/{id}": {
-    get: {
-      parameters: {
-        path: {
-          id: string;
-        };
-      };
-      responses: {
-        /** OK */
-        200: {
-          content: {
-            "application/json": components["schemas"]["FlagReported"];
-          };
-        };
-      };
-    };
-    delete: {
-      parameters: {
-        path: {
-          id: string;
-        };
-      };
-      responses: {
-        /** OK */
-        200: unknown;
-      };
-    };
-  };
-  "/Flags/search": {
-    get: {
-      parameters: {
-        query: {
-          search?: string;
-          pageNumber?: number;
-          pageSize?: number;
-          orderBy?: string[];
-          ascending?: boolean[];
-        };
-      };
-      responses: {
-        /** OK */
-        200: {
-          content: {
-            "application/json": components["schemas"]["FlagReported"][];
-          };
-        };
       };
     };
   };
@@ -476,6 +410,20 @@ export interface paths {
       parameters: {
         query: {
           userid?: string;
+          count?: number;
+          "api-version"?: string;
+        };
+      };
+      responses: {
+        /** OK */
+        200: unknown;
+      };
+    };
+  };
+  "/Invites/BuyInvitesWithCredits": {
+    get: {
+      parameters: {
+        query: {
           count?: number;
           "api-version"?: string;
         };
@@ -557,6 +505,28 @@ export interface paths {
       };
     };
   };
+  "/Marketplace/TransferCredits": {
+    post: {
+      parameters: {
+        query: {
+          userTargetId?: string;
+          amount?: number;
+          worldId?: string;
+          "api-version"?: string;
+        };
+      };
+      responses: {
+        /** OK */
+        200: {
+          content: {
+            "text/plain": components["schemas"]["MarketplaceTransaction"];
+            "application/json": components["schemas"]["MarketplaceTransaction"];
+            "text/json": components["schemas"]["MarketplaceTransaction"];
+          };
+        };
+      };
+    };
+  };
   "/Marketplace/StartStorePurchase": {
     post: {
       parameters: {
@@ -621,6 +591,20 @@ export interface paths {
           "text/json": components["schemas"]["MarketplaceItemRegistration"][];
           "application/*+json": components["schemas"]["MarketplaceItemRegistration"][];
         };
+      };
+    };
+  };
+  "/Marketplace/BuyThirdPartyHosting": {
+    get: {
+      parameters: {
+        query: {
+          amount?: number;
+          "api-version"?: string;
+        };
+      };
+      responses: {
+        /** OK */
+        200: unknown;
       };
     };
   };
@@ -992,6 +976,19 @@ export interface paths {
             "text/json": string;
           };
         };
+      };
+    };
+  };
+  "/UserAccount/ClearNotifications": {
+    post: {
+      parameters: {
+        query: {
+          "api-version"?: string;
+        };
+      };
+      responses: {
+        /** OK */
+        200: unknown;
       };
     };
   };
@@ -1532,22 +1529,6 @@ export interface components {
       code?: string | null;
       message?: string | null;
     };
-    /** @description Info stored about a server in the cloud stroage db */
-    FlagReported: {
-      /** Format: uuid */
-      id?: string;
-      /** Format: date-time */
-      reportTime?: string;
-      /** Format: uuid */
-      reportingUserID?: string;
-      problemDescription?: string | null;
-      /** Format: uuid */
-      reportedWorldID?: string;
-      /** Format: uuid */
-      reportedUserID?: string;
-      circumventingPaidItems?: boolean | null;
-      autoDetectedItemUsage?: boolean | null;
-    };
     GameVersion: {
       /** Format: uuid */
       id?: string;
@@ -1602,6 +1583,8 @@ export interface components {
       steamTransactionId?: string | null;
       /** Format: uuid */
       purchaser?: string;
+      /** Format: uuid */
+      targetUser?: string | null;
       purchaserSteamId?: string | null;
       /** Format: uuid */
       worldPurchasedOn?: string | null;
@@ -1622,6 +1605,7 @@ export interface components {
       /** Format: float */
       charityReceived?: number | null;
       realMoney?: boolean;
+      transactionType?: components["schemas"]["TransactionTypeEnum"];
       badTransaction?: boolean | null;
       divisionDecription?: string | null;
       completed?: boolean;
@@ -1673,6 +1657,8 @@ export interface components {
       percentCutForHosts?: number;
       /** Format: float */
       percentCutForCharity?: number;
+      /** Format: float */
+      transferTax?: number;
       /** Format: int32 */
       minViewersToGetStreamerCut?: number;
     };
@@ -1741,6 +1727,7 @@ export interface components {
       timeOnlineTotal?: string | null;
       /** Format: date-span */
       totalOnlineHostingTime?: string | null;
+      notifications?: components["schemas"]["UserNotification"][] | null;
       /**
        * Format: date-span
        * @description Sum of all time played on all servers hosted by this user.
@@ -1800,6 +1787,18 @@ export interface components {
      * @enum {integer}
      */
     SummaryType: 0 | 1 | 2 | 3 | 4;
+    /**
+     * Format: int32
+     * @enum {integer}
+     */
+    TransactionTypeEnum: 0 | 1 | 2 | 3;
+    UserNotification: {
+      message?: string | null;
+      /** Format: date-time */
+      time?: string;
+      /** Format: float */
+      amount?: number;
+    };
     UserToKick: {
       /** Format: uuid */
       userId?: string;

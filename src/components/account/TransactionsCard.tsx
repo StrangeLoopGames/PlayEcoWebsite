@@ -13,79 +13,80 @@ import {
     useReactTable,
 } from '@tanstack/react-table';
 import { useMemo, useState } from "react";
+import { useMutation } from "@tanstack/react-query";
+import { AuthenticatedUser } from "../../utils/authentication";
 type User = types["schemas"]["StrangeUser"];
-type MarketplaceTransaction = types["schemas"]["MarketplaceTransaction"];
+type UserNotifications = types["schemas"]["UserNotification"];
 
 function TransactionsCard({user}:{user: User}) {
-    //const [data, setData] = useState(() => transactions);
-    const [pagination, setPagination] = useState<PaginationState>({
-        pageIndex: 0,
-        pageSize: 5,
-    })
-    const userId = user.id;
-    const { data, error, isLoading } = useGetUserTransactions(userId as string);
-    
-    const columns = useMemo<ColumnDef<MarketplaceTransaction>[]>(
+    const [clearing, setClearing] = useState<boolean>(false);
+    const columns = useMemo<ColumnDef<UserNotifications>[]>(
         () => [
             {
-                accessorKey: 'timeCompleted',
-                header: () => <span>Date of Transaction</span>,
+                accessorKey: 'time',
+                header: () => <span>Date</span>,
                 cell: info => info.getValue(),
             },
             {
-                accessorKey: 'displayName',
-                header: () => <span>Item Name</span>,
+                accessorKey: 'message',
+                header: () => <span>Information</span>,
                 cell: info => info.getValue(),
             },
             {
-                accessorKey: 'worldPurchasedOn',
-                header: () => <span>World Purchased</span>,
-                cell: info => info.getValue(),
-            },
-            {
-                accessorKey: 'quantity',
-                header: () => <span>Item Quantity</span>,
-                cell: info => info.getValue(),
-            },
-            {
-                accessorKey: 'spentTotal',
-                header: () => <span>Spent Total</span>,
-                cell: info => info.getValue(),
-            },
-            {
-                accessorKey: 'id',
-                header: () => <span>Transaction ID</span>,
+                accessorKey: 'amount',
+                header: () => <span>Amount</span>,
                 cell: info => info.getValue(),
             },
     
         ],
         []
     );
+    async function clearNotificationsMutate () {
+        const url = `${import.meta.env.VITE_CLOUD_API_URL}UserAccount/ClearNotifications`;
+        setClearing(true);
+        const response = fetch(
+            url,
+            {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${AuthenticatedUser()}`,
+                },
+            }
+        );
+
+        if (!(await response).ok) {
+            throw new Error('Network response was not ok');
+        }
+        setClearing(false);
+    }
 
     return (
         <div className="account-feature">
-            <h2 className="title-medium-white account-feature-title">Transactions</h2>
+            <h2 className="title-medium-white account-feature-title">Notifications</h2>
             <div className="account-feature-description">
-                Below is a summary of your recent transactions. If you have any questions or concerns, please contact us at
+                Below is a summary of notifications. If you have any questions or concerns, please <a href="mailto:support@strangeloopgames.com">contact us</a>.
             </div>
-            {
-                isLoading ? (
-                    <div className="text-left">Loading...</div>
-                ) : error ? (
-                    <div className="text-left text-danger">An error occurred</div>
-                ) :
-                data.length === 0 ? (
-                    <div className="text-left py-2">You have no recent transactions</div>
+            <div className="btn-corner">
+                <button onClick={clearNotificationsMutate} className="btn btn-small">{ clearing ? "Clearing" : "Clear Nofications"}</button>
+                </div>
+            <div className="transactions-wrap">
+                <div className="transaction-body">
+                {
+                user.notifications == null ? (
+                    <div className="text-left py-2">You have no notifications</div>
                 ) : 
-                data.length > 0 ? (
-                    <TransactionTable columns={columns} data={data} pagination={pagination} setPagination={setPagination} />
+                user.notifications != null && user.notifications.length > 0 ? (
+                    <TransactionTable columns={columns} data={user} />
                 ) : null
             }
+                </div>
+            </div>
         </div>
     )
 
 }
-function TransactionTable ({ columns, data, pagination, setPagination }) {
+function TransactionTable ({ columns, data}) {
     const table = useReactTable({
         columns,
         data,
@@ -93,12 +94,8 @@ function TransactionTable ({ columns, data, pagination, setPagination }) {
         getCoreRowModel: getCoreRowModel(),
         getSortedRowModel: getSortedRowModel(),
         getFilteredRowModel: getFilteredRowModel(),
-        getPaginationRowModel: getPaginationRowModel(),
-        onPaginationChange: setPagination,
+        getPaginationRowModel: getPaginationRowModel(), 
         //no need to pass pageCount or rowCount with client-side pagination as it is calculated automatically
-        state: {
-            pagination,
-        },
         // autoResetPageIndex: false, // turn off page index reset when sorting or filtering
     })
     return (

@@ -13,6 +13,7 @@ import TwitchCard from '../../components/account/TwitchCard';
 import { useState } from 'react';
 import ServerCard from '../../components/account/ServerCard';
 import { alertsMap } from '../../data/alerts';
+import { CreditsCard } from '../../components/account/CreditsCard';
 
 type AccountParams = {
   refType: string | null;
@@ -104,6 +105,7 @@ function Account() {
       ) : null
     }
       <UserCard user={user} />
+      <CreditsCard user={user} />
       <DownloadsCard user={user} />
       <ServerCard user={user} />
       <InviteCard user={user} />
