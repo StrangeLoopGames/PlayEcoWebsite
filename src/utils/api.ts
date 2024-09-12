@@ -2,6 +2,7 @@ import { useMutation, useQuery, QueryClient } from "@tanstack/react-query";
 import { AuthenticatedUser, removeToken } from "./authentication";
 import { components as types } from '../types/api'
 import { AuthenticatedUser as AuthUser } from "../types/types";
+import { t } from "@lingui/macro";
 type User = types["schemas"]["StrangeUser"];
 export function useFetchUserById(userJWT: string, user: string) {
     const url = `${import.meta.env.VITE_CLOUD_API_URL}UserAccount/${user}`;
@@ -50,10 +51,14 @@ export function useFetchCrud(type: string, pageNumber: number, pageSize: number,
                         removeToken();
                         location.href = '/login';
                     }
+                    if(res.status === 404) {
+                        throw new Error('Resource not found');
+                    }
+                    throw new Error('Network response was not ok');
                 }
                 return res.json();
             }),
-        refetchOnWindowFocus: true,
+        refetchOnWindowFocus: false,
         staleTime: 5 * 60 * 1000,
     });
 }
@@ -88,7 +93,8 @@ export function useSearchCrud(type: string, search: string, pageNumber: number,
 }
 
 export async function crudUpdateById(type: string, adminJWT: string, property: string, object: unknown) {
-    const url = `${import.meta.env.VITE_CLOUD_API_URL}${type}?propertyName=${property}`;
+    const propertyCapitalized = property.charAt(0).toUpperCase() + property.slice(1);
+    const url = `${import.meta.env.VITE_CLOUD_API_URL}${type}?propertyName=${propertyCapitalized}`;
     const response = await fetch(url, {
         method: "PUT",
         headers: {

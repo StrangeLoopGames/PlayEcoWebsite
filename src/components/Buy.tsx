@@ -6,6 +6,10 @@ import ModalWrapper from "../components/ModalWrapper";
 import Payments from "./account/Payments";
 import { useState } from "react";
 import { marketItem } from "../types/types";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faSteamSquare } from "@fortawesome/free-brands-svg-icons";
+import { faCartShopping } from "@fortawesome/free-solid-svg-icons";
+import { Carousel } from "./Carousel ";
 
 export function Buy() {
     const userJWT = (AuthenticatedUser()) ? AuthenticatedUser() : '';
@@ -64,7 +68,7 @@ export function Buy() {
     }
     const toggleModal = () => {
         console.log('toggleModal');
-        
+
         setPurchase(null);
     };
     function handlelePurchaseInit(item: marketItem) {
@@ -73,12 +77,25 @@ export function Buy() {
             location.href = `/login?redirect=${location.href}&error=purchase_login`;
         } else {
             if (item.sku == "game_eco_purchase") {
-            user && user.ownsEco ? setPurchase(null) : setPurchase(item);
+                user && user.ownsEco ? setPurchase(null) : setPurchase(item);
             } else {
                 setPurchase(item);
             }
         }
     }
+    const screenshots = [
+        "screenshot_1.jpg",
+        "screenshot_2.jpg",
+        "screenshot_3.jpg",
+        "screenshot_4.jpg",
+        "screenshot_5.jpg",
+        "screenshot_6.jpg",
+        "screenshot_7.jpg",
+        "screenshot_8.jpg",
+        "screenshot_9.jpg",
+        "screenshot_10.jpg",
+        "screenshot_11.jpg",
+    ]
     const urlParams = new URLSearchParams(window.location.search);
     const hasTrackingId = urlParams.has('tracking_id');
     return (
@@ -86,38 +103,62 @@ export function Buy() {
             <section className='page-wrap-main d-flex col-lg-offset-2 col-lg-8 justify-content-center' id="buy">
                 <div className="col-md-12">
                     <h1 className="mb-4">Purchase Eco</h1>
-                    <div className="buy-wrap d-flex flex-row game-banner overflow-hidden">
-                        <div className="game-purchase col-6 d-flex flex-column text-white fw-bold p-2 zoomin">
-                            <div className="purchase-option d-flex flex-column justify-content-end">
-                                <p className="info">Buy Eco directly + link steam to unlock it on steam to  (best way to support us)</p>
-                                <button onClick={() => handlelePurchaseInit(gamePurchase)} className="btn btn-primary market-btn">{user && user.ownsEco ? "You already Own Eco" : "Buy Eco Directly" }</button>
-                            </div>
-                        </div>
-                        {!hasTrackingId && (
-                            <div className="game-purchase col-6 d-flex flex-column text-white fw-bold p-2 zoomin">
-                                <div className="purchase-option d-flex flex-column justify-content-end">
-                                    <p className="info">Buy Eco on Steam and start playing today.</p>
-                                    <a href="https://store.steampowered.com/app/382310/Eco/" target="_blank" className="btn btn-primary market-btn">Buy Eco on Steam</a>
+                    <div className="d-flex gap-2 py-4">
+                        <div className="col-md-7">
+                            <div className="image trailer-main">
+                                <div className="auto-resizable-iframe">
+                                    <div>
+                                        <iframe id="youtube" width="745" height="419" data-src="https://www.youtube.com/embed/d6zvBdUDMPY?autoplay=1&amp;mute=1&amp;loop=1&amp;rel=0&amp;modestbranding=1&amp;autohide=1" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen="" src="https://www.youtube.com/embed/d6zvBdUDMPY?autoplay=1&amp;mute=1&amp;loop=1&amp;rel=0&amp;modestbranding=1&amp;autohide=1"></iframe>
+                                    </div>
                                 </div>
                             </div>
-                        )}
+                        </div>
+                        <div className="col-md-5 px-2">
+                            <h2 className='text-left'>Create a virtual society</h2>
+                            <p className="fs-3">Build a civilization of real people, working together to advance society and stop a meteor, all without destroying the ecosystem in the process.</p>
+                            <div className="d-flex flex-column gap-2">
+                                <button onClick={() => handlelePurchaseInit(gamePurchase)} className="btn justify-content-between fs-4 purchase-cta position-relative">
+                                    <span>
+                                        <span className="icon-wrap"><FontAwesomeIcon className="icon download-icon icon" icon={faCartShopping} /></span>
+                                        {user && user.ownsEco ? "You already Own Eco" : "Buy Eco directly + unlock on Steam"}
+                                    </span>
+                                </button>
+                                {!hasTrackingId && (
+                                    <a href="https://store.steampowered.com/app/382310/Eco/" target="_blank"
+                                        className="btn justify-content-between fs-4 purchase-cta position-relative">
+                                        <span>
+                                            <span className="icon-wrap"><FontAwesomeIcon className="icon download-icon icon" icon={faSteamSquare} /></span>
+                                            Buy Eco on Steam.
+                                        </span>
+                                    </a>
+                                )}
+                            </div>
+                        </div>
+                    </div>
+                    <div className="d-flex gap-2 py-4">
+                    <div className="col-md-12"> 
+                    <h4 className="py-2 fw-bold">Screenshots</h4>
+                        <Carousel images={screenshots} slidesPer={3} />
+                    </div>
+                    <div className="col-md-6"> 
+                    </div>
                     </div>
                     <h4 className="pt-5 fw-bold">Eco Credits</h4>
                     <p className="pt-3 fs-3">Buy Eco Credits here and spend them on premium variants inside the game!</p>
                     <div id="marketplace" className="d-flex mt-4 gap-0 flex-wrap justify-content-between">
-                    {
+                        {
                             marketItems.map((item, index) => {
                                 return (
                                     <div className="buy-credits d-flex flex-column p-1 zoomin" key={index} >
                                         <div className="card market-item" onClick={() => handlelePurchaseInit(item)} style={{ backgroundImage: `url(images/buy/${item.id}.jpg)` }}>
                                             <div className="card-body d-flex flex-column justify-content-between">
                                                 <div className="title-wrap">
-                                                <h3 className="card-title">{splitCamelCaseAndCapitalize(item.name)}</h3>
-                                                {
-                                                    item.description ? (
-                                                        <h3 className="card-title subtitle">{item.description}</h3>
-                                                    ) : null
-                                                }
+                                                    <h3 className="card-title">{splitCamelCaseAndCapitalize(item.name)}</h3>
+                                                    {
+                                                        item.description ? (
+                                                            <h3 className="card-title subtitle">{item.description}</h3>
+                                                        ) : null
+                                                    }
                                                 </div>
                                                 <div className="buy-wrap d-flex flex-column align-items-center">
                                                     <p className="item-price">${item.price.toFixed(2)}</p>

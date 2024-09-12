@@ -15,8 +15,7 @@ const menuItems = {
     "User Editor": 'UserAccount',
     "World Editor": 'Worlds',
     "Transaction Editor": 'Transactions',
-    "Flags Editor": 'Flags',
-    "Flag Report": 'FlagReports',
+    "Flags": 'FlagReports',
     "Mods Report": 'Mods',
 };
 
@@ -33,6 +32,7 @@ export function UserEditor() {
     const [search, setSearch] = useState<string | null>(null);
     const [sorting, setSorting] = useState<SortingState>([]);
     const [crudAction, setCrudAction] = useState<string | null>(null);
+    const [hideModal, setHideModal] = useState<boolean | null>(true);
 
     const { data: users, error, isLoading, refetch } = useFetchCrud(crudType, pageNumber, pageSize, userJWT as string);
     const { data: userSearch, error: searchError, isLoading: searchIsLoading, refetch: searchRefetch } = useSearchCrud(
@@ -50,17 +50,17 @@ export function UserEditor() {
     const [userTable, setUserTable] = useState<User[]>([]);
 
     useEffect(() => {
-        if (search && search !== "") {
+        if (search && search !== "" && !error) {
             if (userSearch) {
                 setUserTable(userSearch);
             }
         } else {
             setUserTable(users || []);
         }
-    }, [users, userSearch, search, sorting]);
+    }, [users, userSearch, search, sorting, error]);
 
     const updateUserEvent = async (updatedUser: User, property: string) => {
-        setIsUpdating(true); 
+        setIsUpdating(true);
         try {
             await crudUpdateById(crudType, userJWT as string, property, updatedUser);
             refetch();
@@ -109,7 +109,7 @@ export function UserEditor() {
             totalTransactionsCollected: 0,
             totalCreditsCollectedForOwner: 0,
         };
-        setIsUpdating(true);       
+        setIsUpdating(true);
         putNewCrud("Mods", userJWT as string, mod);
         refetch();
         setIsUpdating(false);
@@ -130,10 +130,10 @@ export function UserEditor() {
 
     useEffect(() => {
         // When `search` changes to null, we should ensure userTable is reset
-        if (search === null) {
+        if (search === null && !searchError && !error) {
             setUserTable(users || []);
         }
-    }, [search, users]);
+    }, [search, users, error, searchError]);
 
     return (
         <>
@@ -168,9 +168,9 @@ export function UserEditor() {
                 </div>
                 {
                     crudType === "Mods" ? (
-                    <div className="crud-actions d-flex flex-row justify-content-center">
-                        <button className="btn btn-small" onClick={ () => setCrudAction("add")}>Add New Mod</button>
-                    </div>
+                        <div className="crud-actions d-flex flex-row justify-content-center">
+                            <button className="btn btn-small" onClick={() => setCrudAction("add")}>Add New Mod</button>
+                        </div>
                     ) : null
                 }
                 <div className="results-info">
@@ -178,54 +178,77 @@ export function UserEditor() {
                         <p>Search results for: {search}</p>
                     )}
                 </div>
-                <CorsTable
-                    users={userTable}
-                    selectedKey={null}
-                    toggleModalEvent={null}
-                    updateUserEvent={updateUserEvent}
-                    changePageEvent={setPageSize}
-                    sortingEvent={handleSortingChange}
-                />
+                {
+                    !error || !searchError ? (
+                        <CorsTable
+                        users={userTable}
+                        selectedKey={null}
+                        toggleModalEvent={null}
+                        updateUserEvent={updateUserEvent}
+                        changePageEvent={setPageSize}
+                        sortingEvent={handleSortingChange}
+                    />
+                    ) : (
+                        <p className="error">Error fetching data</p>
+                    )
+                }
+
             </div>
-            {(isLoading || searchIsLoading) && (
-                <Modal type="Loading" message="Fetching Users from the database." data={undefined} />
-            )}
-            {isUpdating && (
-                <Modal type="Loading" message="Updating User in the database." data={undefined} />
-            )}
-            {(error || searchError) && (
-                <Modal type="Error" message="There was an error, please try again" data={undefined} />
-            )}
+            {
+                isLoading || searchIsLoading || isUpdating ? (
+                    <ModalWrapper toggleModal={() => toggleModal(setHideModal)} dismissable={false}>
+                    <>
+                        {
+                            isLoading || searchIsLoading ? (
+                                <div className="spinner-border text-primary" role="status">
+                                </div>
+                            ) : null
+                        }
+                        <div className="pt-3" role="status">
+                            <span className="">
+                                {(isLoading || searchIsLoading) && (
+                                    `Fetching Users from the database`
+                                )}
+                                {isUpdating && (
+                                    `Updating User in the database.`
+                                )}
+                            </span>
+                        </div>
+                    </>
+                </ModalWrapper>
+                ) : null
+            }
+
             {
                 (crudAction != null) ? (
-                    <ModalWrapper toggleModal={()=> toggleModal(setCrudAction)} dismissable={true}>
+                    <ModalWrapper toggleModal={() => toggleModal(setCrudAction)} dismissable={true}>
                         <div className="d-flex flex-column w-100">
                             <h2>Add a new {splitCamelCaseAndCapitalize(crudType)} record</h2>
                             <form onSubmit={addNewMod} className="crud-add py-3 m-0 w-100 gap-3">
-                            <label className="d-flex flex-column" htmlFor="owner">
-                                Owner
-                            <input className="d-flex flex-column" type="text" name="owner" id="onwer" />
-                            </label>
-                            <label className="d-flex flex-column" htmlFor="name">
-                                Name
-                            <input type="text" name="name" id="name" />
-                            </label>
-                            <label className="d-flex flex-column" htmlFor="displayName">
-                                Display Name
-                            <input type="text" name="displayName" id="displayName" />
-                            </label>
-                            <label className="d-flex flex-column" htmlFor="description">
-                                Description
-                                <textarea name="description" id="description"></textarea>
-                            </label>
-                            <label className="d-flex flex-column" htmlFor="percentCut">
-                                Percent Cut
-                            <input type="number" name="percentCut" id="percentCut" />
-                            </label>
-                            <div className="btn-wrap d-flex flex-row justify-content-between w-100 gap-2 py-2">
-                            <button className="btn btn-small bg-danger text-white" onClick={() => setCrudAction(null)}>Cancel</button>
-                            <button className="btn btn-small bg-success text-white" type="submit">Submit</button>
-                            </div>
+                                <label className="d-flex flex-column" htmlFor="owner">
+                                    Owner
+                                    <input className="d-flex flex-column" type="text" name="owner" id="onwer" />
+                                </label>
+                                <label className="d-flex flex-column" htmlFor="name">
+                                    Name
+                                    <input type="text" name="name" id="name" />
+                                </label>
+                                <label className="d-flex flex-column" htmlFor="displayName">
+                                    Display Name
+                                    <input type="text" name="displayName" id="displayName" />
+                                </label>
+                                <label className="d-flex flex-column" htmlFor="description">
+                                    Description
+                                    <textarea name="description" id="description"></textarea>
+                                </label>
+                                <label className="d-flex flex-column" htmlFor="percentCut">
+                                    Percent Cut
+                                    <input type="number" name="percentCut" id="percentCut" />
+                                </label>
+                                <div className="btn-wrap d-flex flex-row justify-content-between w-100 gap-2 py-2">
+                                    <button className="btn btn-small bg-danger text-white" onClick={() => setCrudAction(null)}>Cancel</button>
+                                    <button className="btn btn-small bg-success text-white" type="submit">Submit</button>
+                                </div>
                             </form>
                         </div>
                     </ModalWrapper>

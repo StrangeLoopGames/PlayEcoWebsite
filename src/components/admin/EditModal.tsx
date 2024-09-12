@@ -24,7 +24,7 @@ export function EditModal(props: { type: string | null, message: string | null, 
     const selectedKey: string = data.cell;
     const user: User = data.user;
     const [updatedUser, setUpdatedUser] = useState<User | null>(null);
-
+    const disabledKeys = ["id", "createdAt", "updatedAt", "totalTransactionsCollected", "totalCreditsCollectedForOwner"];
     useEffect(() => {
         if (user && updatedUser == null) {
             setUpdatedUser(user);
@@ -60,7 +60,7 @@ export function EditModal(props: { type: string | null, message: string | null, 
                                     <div className="modal-edit-row">
                                         <p><span>Current Value:</span> {user[selectedKey]}</p>
                                         {
-                                            !inputType ? (
+                                            disabledKeys.includes(selectedKey) ? (
                                                 <p className="text-danger fw-bold text-center">This value cannot be changed</p>
                                             ) :
                                                 inputType === "checkbox" ? (

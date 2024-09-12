@@ -59,3 +59,11 @@ export type marketItem = {
     name: string,
     price: number,
 }
+export type hostingVoucher = {
+    id: string,
+    sku: string,
+    description: string | null,
+    name: string,
+    dollarAmound: number,
+    credits: number,
+}
