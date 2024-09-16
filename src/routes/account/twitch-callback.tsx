@@ -11,7 +11,7 @@ export const Route = createFileRoute('/account/twitch-callback')({
       throw redirect({
         to: '/login',
         search: {
-          error: 'authenication_error',
+          error: 'authentication_error',
           redirect: location.href,
         },
       });

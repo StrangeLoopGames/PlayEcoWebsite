@@ -77,7 +77,7 @@ function TransactionsCard({user}:{user: User}) {
                     <div className="text-left py-2">You have no notifications</div>
                 ) : 
                 user.notifications != null && user.notifications.length > 0 ? (
-                    <TransactionTable columns={columns} data={user} />
+                    <TransactionTable columns={columns} data={user.notifications} />
                 ) : null
             }
                 </div>

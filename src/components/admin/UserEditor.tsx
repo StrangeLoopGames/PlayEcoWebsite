@@ -22,7 +22,7 @@ const menuItems = {
 export function UserEditor() {
     const isAdmin = useIsUserAdmin(AuthenticatedUser() as string);
     if (!AuthenticatedUser() && !isAdmin) {
-        location.href = '/login?error=authenication_error';
+        location.href = '/login?error=authentication_error';
     }
     const userJWT = AuthenticatedUser();
     const [isUpdating, setIsUpdating] = useState(false);

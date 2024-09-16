@@ -1,5 +1,5 @@
 export const alertsMap = {
-    "authenication_error": "There was an error authenicating your, please login again.",
+    "authentication_error": "There was an error authenticating your, please login again.",
     "purchase_login": "You must be logged in to make a purchase.",
     "unverified": "Your account is not verified, please check your email for a verification link.",
     "steam_linked": "Steam linked successfully!",

@@ -51,7 +51,7 @@ export function useUserQuery(userJWT: string, logout: boolean): UseQueryResult<U
 					if(res.status === 401) {
 					if(logout) {
 						removeToken();
-						location.href = '/login?error=authenication_error';
+						location.href = '/login?error=authentication_error';
 					}
 				}
 			}
@@ -59,7 +59,7 @@ export function useUserQuery(userJWT: string, logout: boolean): UseQueryResult<U
 			}).catch((error) => {
 				if(logout) {
 					removeToken();
-					location.href = '/login?error=authenication_error';
+					location.href = '/login?error=authentication_error';
 				}
 			}),
 		refetchOnWindowFocus: false,
