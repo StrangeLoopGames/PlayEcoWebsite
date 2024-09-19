@@ -24,7 +24,9 @@ const subTableColumns = [
     'icons', 
     'twitchEntitlements',
     'availableIcons',
-    'serverInfoJson'];
+    'serverInfoJson',
+    'notifications',
+];
 const copyButton = ['id'];
 interface Props {
     users: User[];

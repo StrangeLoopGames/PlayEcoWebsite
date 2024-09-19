@@ -85,3 +85,11 @@ section#login {
         width: 49% !important;
     }
 }
+.pagnation{
+    display: flex;
+    justify-content: left;
+    align-items: center;
+}
+.transaction-table-wrap {
+    max-height: 700px;
+}

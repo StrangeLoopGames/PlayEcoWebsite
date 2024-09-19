@@ -1,10 +1,8 @@
 import { useGetUserTransactions } from "../../utils/api";
 import { components as types } from '../../types/api';
 import {
-    Column,
     ColumnDef,
-    PaginationState,
-    Table,
+    SortingState,
     flexRender,
     getCoreRowModel,
     getFilteredRowModel,
@@ -17,7 +15,6 @@ import { useMutation } from "@tanstack/react-query";
 import { AuthenticatedUser } from "../../utils/authentication";
 type User = types["schemas"]["StrangeUser"];
 type UserNotifications = types["schemas"]["UserNotification"];
-
 function TransactionsCard({user}:{user: User}) {
     const [clearing, setClearing] = useState<boolean>(false);
     const columns = useMemo<ColumnDef<UserNotifications>[]>(
@@ -25,7 +22,12 @@ function TransactionsCard({user}:{user: User}) {
             {
                 accessorKey: 'time',
                 header: () => <span>Date</span>,
-                cell: info => info.getValue(),
+                cell: info => {
+                    const date = new Date(info.getValue() as string);
+                    return date.toLocaleString();
+                },
+                sortingFn: 'datetime',
+                sortDescFirst: true,
             },
             {
                 accessorKey: 'message',
@@ -60,7 +62,6 @@ function TransactionsCard({user}:{user: User}) {
         }
         setClearing(false);
     }
-
     return (
         <div className="account-feature">
             <h2 className="title-medium-white account-feature-title">Notifications</h2>
@@ -87,6 +88,16 @@ function TransactionsCard({user}:{user: User}) {
 
 }
 function TransactionTable ({ columns, data}) {
+    const [sorting, setSorting] = useState<SortingState>([
+        {
+          id: 'time',
+          desc: true, // sort by name in descending order by default
+        },
+      ]);
+    const [pagination, setPagination] = useState({
+        pageIndex: 0,
+        pageSize: 10,
+    });
     const table = useReactTable({
         columns,
         data,
@@ -95,10 +106,19 @@ function TransactionTable ({ columns, data}) {
         getSortedRowModel: getSortedRowModel(),
         getFilteredRowModel: getFilteredRowModel(),
         getPaginationRowModel: getPaginationRowModel(), 
+        onPaginationChange: setPagination,
+        onSortingChange: setSorting,
+        state: {
+            pagination,
+            sorting,
+        },
         //no need to pass pageCount or rowCount with client-side pagination as it is calculated automatically
         // autoResetPageIndex: false, // turn off page index reset when sorting or filtering
     })
     return (
+        <>
+                <TablePagnation table={table} />
+        <div className="transaction-table-wrap overflow-auto">
         <table className="table table-striped table-bordered w-100 table-sm">
         <thead className="table-secondary">
             {table.getHeaderGroups().map(headerGroup => (
@@ -132,7 +152,7 @@ function TransactionTable ({ columns, data}) {
         <tbody>
             {table.getRowModel().rows.map(row => {
                 return (
-                    <tr key={row.id}>
+                    <tr key={row.id} className="fs-6">
                         {row.getVisibleCells().map(cell => {
                             return (
                                 <td key={cell.id}>
@@ -147,7 +167,76 @@ function TransactionTable ({ columns, data}) {
                 )
             })}
         </tbody>
-    </table>
+        </table>
+        </div>
+        </>
+    )
+}
+function TablePagnation(props: any) {
+    const { table } = props;
+    return (
+        <div className="flex items-center gap-2 pagnation">
+            <button
+                className="border rounded p-1 btn btn-small"
+                onClick={() => table.setPageIndex(0)}
+                disabled={!table.getCanPreviousPage()}
+            >
+                {'<<'}
+            </button>
+            <button
+                className="border rounded p-1 btn btn-small"
+                onClick={() => table.previousPage()}
+                disabled={!table.getCanPreviousPage()}
+            >
+                {'<'}
+            </button>
+            <button
+                className="border rounded p-1 btn btn-small"
+                onClick={() => table.nextPage()}
+                disabled={!table.getCanNextPage()}
+            >
+                {'>'}
+            </button>
+            <button
+                className="border rounded p-1 btn btn-small"
+                onClick={() => table.setPageIndex(table.getPageCount() - 1)}
+                disabled={!table.getCanNextPage()}
+            >
+                {'>>'}
+            </button>
+            <span className="flex items-center gap-1">
+                <div>Page</div>
+                <strong>
+                    {table.getState().pagination.pageIndex + 1} of{' '}
+                    {table.getPageCount()}
+                </strong>
+            </span>
+            <span className="flex items-center gap-1">
+                | Go to page:
+                <input
+                    type="number"
+                    defaultValue={table.getState().pagination.pageIndex + 1}
+                    onChange={e => {
+                        const page = e.target.value ? Number(e.target.value) - 1 : 0
+                        table.setPageIndex(page)
+                    }}
+                    className="border p-1 rounded w-16"
+                />
+            </span>
+            <select
+                value={table.getState().pagination.pageSize}
+                onChange={e => {
+                    table.setPageSize(Number(e.target.value))
+                    table.changePageEvent(Number(e.target.value));
+                }}
+            >
+                {[5, 10, 20, 30, 40, 50].map(pageSize => (
+                    <option key={pageSize} value={pageSize}>
+                        Show {pageSize}
+                    </option>
+                ))}
+            </select>
+        </div>
     )
 }
 export default TransactionsCard

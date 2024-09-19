@@ -100,7 +100,7 @@ function Index() {
                                     <div className="testimonial-author">Sir Spooki - 306 hours</div>
                                 </div>
                                 <div className="col-md-5 col-12 p-2">
-                                    <p className="testimonial-quote"><span className="srt-mark">“</span>The only game that truly does cooperative properly” –Army Mom Strong, 995 hours<span className="end-mark">”</span></p>
+                                    <p className="testimonial-quote"><span className="srt-mark">“</span>The only game that truly does cooperative properly”<span className="end-mark">”</span></p>
                                     <div className="testimonial-author">Army Mom Strong - 995 hours</div>
                                 </div>
                                 <div className="col-md-5 col-12 p-2">
