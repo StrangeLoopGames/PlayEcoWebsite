@@ -5,20 +5,22 @@ import ModalWrapper from "../ModalWrapper";
 import Payments from "./Payments";
 import { AuthenticatedUser } from "../../utils/authentication";
 import { InviteRedeem } from "./InviteRedeem";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCopy, faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 import ToggleInput from "../ToggleInput";
+import { useMutation } from "@tanstack/react-query";
 
 type Invite = {
     code: string;
     show: boolean;
 }
-
+type PaymentObject = {
+    item: string | null | undefined;
+    quantity: number | null | undefined;
+};
 function InviteCard({ user }: { user: User }) {
     const [purchase, setPurchase] = useState<marketItem | null>(null);
     const [useCredits, setUseCredits] = useState<boolean>(false);
     const [userInvites, setUserInvites] = useState<Invite[]>([]);
-    const { data: invites, error, isLoading } = useGetUserInvites();
+    const { data: invites, error, isLoading, refetch: inviteRefetch } = useGetUserInvites();
 
     const invitePurchase: marketItem = {
         id: "eco_invite_purchase",
@@ -111,15 +113,17 @@ function InviteCard({ user }: { user: User }) {
             )}
             { useCredits && (
                 <ModalWrapper toggleModal={()=> toggleModal(setUseCredits)} dismissable={true}>
-                    <PurchaseWithCredits credits={user.ecoCredits} />
+                    <PurchaseWithCredits credits={user.ecoCredits} refetch={inviteRefetch} setUseCredits={setUseCredits} />
                 </ModalWrapper>
             )}
         </div>
     );
 }
     
-export function PurchaseWithCredits({credits}: {credits: number | null}) {
+export function PurchaseWithCredits({ credits, refetch, setUseCredits }: { credits: number | null, refetch: () => void, setUseCredits: React.Dispatch<React.SetStateAction<boolean>> }) {
     const [quantity, setQuantity] = useState<number>(1);
+    const [error, setError] = useState<string | null>(null);
+    const [alert, setAlert] = useState<string | null>(null);
     const item: marketItem = {
         id: "eco_invite_purchase",
         name: "Eco Invites",
@@ -127,12 +131,41 @@ export function PurchaseWithCredits({credits}: {credits: number | null}) {
         price: 3000,
         description: null
     };
+
+    const inviteWithCreditsMutate = useMutation({
+        mutationFn: async () => {
+            const response = await fetch(
+                `${import.meta.env.VITE_CLOUD_API_URL}Invites/BuyInvitesWithCredits?count=${quantity}`,
+                {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${AuthenticatedUser()}`,
+                    },
+                }
+            );
+
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return;
+        },
+        onSuccess: () => {
+            refetch();
+            setAlert('Invite purchased successfully, if you do not see your invites please refresh the page');
+            setTimeout(() => {
+                setUseCredits(false);
+            }, 1000);
+        },
+        onError: (error: any) => {
+            setError(error.message);
+        }
+    });
     function purchaseInviteWithCredits() {
-        const inviteQuantity = quantity;
         if (!AuthenticatedUser()) {
             location.href = `/login?redirect=${location.href}&error=purchase_login`;
         } else {
-            console.log('purchase with credits');
+            inviteWithCreditsMutate.mutate();
         }
     }
 
@@ -161,10 +194,12 @@ export function PurchaseWithCredits({credits}: {credits: number | null}) {
                     <p className="pt-2">You do not have enough credits, you only have {credits} credits</p>
                 )
             }
-            {/* {error && <p>Error: {error}</p>}
-            {purchaseTokenMutate.isError && (
-                <p>Error: {purchaseTokenMutate.error.message}</p>
-            )} */}
+            {error ? (
+                <p className="alert alert-danger mt-2">Error: {error}</p>
+            ) : alert ? (
+                <p className="alert alert-success mt-2">{alert}</p>
+            ) : null
+        }
         </>
     );
 }
