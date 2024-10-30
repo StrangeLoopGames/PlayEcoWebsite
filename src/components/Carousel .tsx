@@ -1,27 +1,38 @@
-import React, { useRef, useState } from 'react';
-import { Swiper, SwiperSlide } from 'swiper/react';
-import 'swiper/css';
-import 'swiper/css/navigation';
-import { Navigation } from 'swiper/modules';
+import Slider from "react-slick";
+import 'slick-carousel/slick/slick.css';
+import 'slick-carousel/slick/slick-theme.css';
 
-export function Carousel(props: { images: string[], slidesPer: number }) {
+export function Carousel(props: { images: string[] }) {
+    const settings = {
+        dots: true,
+        infinite: true,
+        speed: 500,
+        slidesToShow: 3,  // Shows 3 images per slide by default
+        slidesToScroll: 1,
+        adaptiveHeight: true,
+        responsive: [
+            {
+                breakpoint: 1024,
+                settings: {
+                    slidesToShow: 2,
+                    slidesToScroll: 1,
+                    infinite: true,
+                    dots: true,
+                },
+            },
+        ],
+    };
     return (
-        <Swiper
-        slidesPerView={props.slidesPer ? props.slidesPer : 3}
-        spaceBetween={30}
-        navigation={true}
-        modules={[Navigation]}
-        className="screenshot-gallery"
-    >
-        {
-            props.images.map((image, index) => {
-                return (
-                    <SwiperSlide key={index}>
-                        <img src={`images/screenshots/${image}`} alt={`slide ${index}`} />
-                    </SwiperSlide>
-                );
-            })
-        }
-    </Swiper>
+        <Slider {...settings}>
+            {
+                props.images.map((image, index) => {
+                    return (
+                        <div className="px-1">
+                            <img className='screenshot-slider' src={`images/screenshots/${image}`} alt={`slide ${index}`} />
+                        </div>
+                    );
+                })
+            }
+        </Slider>
     );
 }

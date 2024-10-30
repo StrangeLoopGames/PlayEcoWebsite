@@ -10,10 +10,11 @@
     "preview": "vite preview",
     "extract": "lingui extract",
     "compile": "lingui compile",
-    "build-types": "npx openapi-typescript@5.4.1 https://cloud.strangeloopgames.com/swagger/v1/swagger.json --output ./src/types/api.ts"
+    "build-types": "npx openapi-typescript@5.4.1 https://cloud.strangeloopgames.com/swagger/v1/swagger.json --output ./src/types/api.ts",
+    "build-local-types": "set NODE_TLS_REJECT_UNAUTHORIZED=0 && npx openapi-typescript@5.4.1 https://localhost:7094/swagger/v1/swagger.json --output ./src/types/api.ts"
   },
   "dependencies": {
-    "@fortawesome/fontawesome-svg-core": "^6.5.2",
+    "@fortawesome/fontawesome-svg-core": "^6.6.0",
     "@fortawesome/free-brands-svg-icons": "^6.5.2",
     "@fortawesome/free-regular-svg-icons": "^6.5.2",
     "@fortawesome/free-solid-svg-icons": "^6.5.2",
@@ -28,6 +29,8 @@
     "react": "^18.2.0",
     "react-bootstrap": "^2.10.3",
     "react-dom": "^18.2.0",
+    "react-slick": "^0.30.2",
+    "slick-carousel": "^1.8.1",
     "swiper": "^11.1.12"
   },
   "devDependencies": {
@@ -42,6 +45,7 @@
     "@types/node": "^20.12.6",
     "@types/react": "^18.2.66",
     "@types/react-dom": "^18.2.22",
+    "@types/react-slick": "^0.23.13",
     "@typescript-eslint/eslint-plugin": "^7.2.0",
     "@typescript-eslint/parser": "^7.2.0",
     "@vitejs/plugin-react": "^4.2.1",

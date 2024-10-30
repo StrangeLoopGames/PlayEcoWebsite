@@ -39,6 +39,11 @@ section#buy {
         }
     }
 }
+iframe#youtube {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 16 / 9;
+}
 #requirements {
     padding: 70px 0px;
     width: 100%;
@@ -239,4 +244,57 @@ span.icon-wrap {
             }
           }
     }
+}
+
+@media screen and (max-width: 1400px) {
+    #marketplace {
+        justify-content: flex-start !important;
+        .buy-credits {
+            width: 20%;
+        }
+    }
+}
+@media screen and (max-width: 1100px) {
+    #marketplace {
+
+        .buy-credits {
+            width: 25%;
+        }
+    }
+}
+@media screen and (max-width: 999px) {
+    #marketplace {
+        
+        .buy-credits {
+            width: 33.33%;
+        }
+    }
+    .hide-mobile {
+        display: none;
+    }
+    .purchase-cta span {
+        font-size: 17px;
+        font-weight: bold;
+    }
+
+}
+@media screen and (max-width: 500px) {
+    #marketplace {
+        
+        .buy-credits {
+            width: 50%;
+        }
+    }
+    h2 {
+        font-size: 28px;
+        font-weight: bolder;
+    }
+    .hide-mobile {
+        display: none;
+    }
+    .purchase-cta span {
+        font-size: 17px;
+        font-weight: bold;
+    }
+
 }

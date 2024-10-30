@@ -101,23 +101,19 @@ export function Buy() {
     return (
         <>
             <section className='page-wrap-main d-flex col-lg-offset-2 col-lg-8 justify-content-center' id="buy">
-                <div className="col-md-12">
+                <div className="col-md-12 pt-5 pt-lg-0">
                     <h1 className="mb-4">Purchase Eco</h1>
-                    <div className="d-flex gap-2 py-4">
-                        <div className="col-md-7">
-                            <div className="image trailer-main">
-                                <div className="auto-resizable-iframe">
-                                    <div>
-                                        <iframe id="youtube" width="745" height="419" data-src="https://www.youtube.com/embed/d6zvBdUDMPY?autoplay=1&amp;mute=1&amp;loop=1&amp;rel=0&amp;modestbranding=1&amp;autohide=1" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen="" src="https://www.youtube.com/embed/d6zvBdUDMPY?autoplay=1&amp;mute=1&amp;loop=1&amp;rel=0&amp;modestbranding=1&amp;autohide=1"></iframe>
-                                    </div>
-                                </div>
-                            </div>
+                    <div className="d-flex flex-column flex-lg-row align-items-center align-items-lg-start gap-2 py-4">
+                        <div className="col-11 col-lg-7">
+                        <div className="trailer-parent">
+                            <iframe id="youtube" data-src="https://www.youtube.com/embed/d6zvBdUDMPY?autoplay=1&amp;mute=1&amp;loop=1&amp;rel=0&amp;modestbranding=1&amp;autohide=1" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen="" src="https://www.youtube.com/embed/d6zvBdUDMPY?autoplay=1&amp;mute=1&amp;loop=1&amp;rel=0&amp;modestbranding=1&amp;autohide=1"></iframe>
                         </div>
-                        <div className="col-md-5 px-2">
+                        </div>
+                        <div className="col-11 col-lg-5 px-2">
                             <h2 className='text-left'>Create a virtual society</h2>
                             <p className="fs-3">Build a civilization of real people, working together to advance society and stop a meteor, all without destroying the ecosystem in the process.</p>
-                            <div className="d-flex flex-column gap-2">
-                                <button onClick={() => handlelePurchaseInit(gamePurchase)} className="btn justify-content-between fs-4 purchase-cta position-relative">
+                            <div className="d-flex flex-column flex-sm-row flex-lg-column gap-2">
+                                <button onClick={() => handlelePurchaseInit(gamePurchase)} className="btn justify-content-between col-12 col-sm-6 col-lg-12 fs-4 purchase-cta position-relative">
                                     <span>
                                         <span className="icon-wrap"><FontAwesomeIcon className="icon download-icon icon" icon={faCartShopping} /></span>
                                         {user && user.ownsEco ? "You already Own Eco" : "Buy Eco directly + unlock on Steam"}
@@ -125,7 +121,7 @@ export function Buy() {
                                 </button>
                                 {!hasTrackingId && (
                                     <a href="https://store.steampowered.com/app/382310/Eco/" target="_blank"
-                                        className="btn justify-content-between fs-4 purchase-cta position-relative">
+                                        className="btn justify-content-between col-12 col-sm-6 col-lg-12 fs-4 purchase-cta position-relative">
                                         <span>
                                             <span className="icon-wrap"><FontAwesomeIcon className="icon download-icon icon" icon={faSteamSquare} /></span>
                                             Buy Eco on Steam.
@@ -136,13 +132,14 @@ export function Buy() {
                         </div>
                     </div>
                     <div className="d-flex gap-2 py-4">
-                    <div className="col-md-12"> 
+                    <div className="col-md-12 hide-mobile"> 
                     <h4 className="py-2 fw-bold">Screenshots</h4>
-                        <Carousel images={screenshots} slidesPer={3} />
+                        <Carousel images={screenshots}/>
                     </div>
                     <div className="col-md-6"> 
                     </div>
                     </div>
+                    <div className="marketplace-section px-3 px-lg-0">
                     <h4 className="pt-5 fw-bold">Eco Credits</h4>
                     <p className="pt-3 fs-3">Buy Eco Credits here and spend them on premium variants inside the game!</p>
                     <div id="marketplace" className="d-flex mt-4 gap-0 flex-wrap justify-content-between">
@@ -169,6 +166,7 @@ export function Buy() {
                                 );
                             })
                         }
+                    </div>
                     </div>
                 </div>
             </section>
